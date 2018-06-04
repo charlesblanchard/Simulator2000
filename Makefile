@@ -9,4 +9,4 @@ simulateur.o : simulateur.c
 
 
 clean :
-	rm *.o code
+	rm *.o simulateur
