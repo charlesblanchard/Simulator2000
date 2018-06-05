@@ -6,7 +6,7 @@ int main(int argc, char *argv[]){
     
     char *nom_fichier[];
     int i=0;
-    int y=0;
+
     while (argv[1][i]!='.') {
 		nom_fichier[i]=argv[1][i];
 		i++;
