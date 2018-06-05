@@ -1,4 +1,4 @@
-void decompo_hexa(char fic_hexa, Machine *m){
+void decompo_hexa(Machine *m, char fic_hexa[]){
     
     FILE *f;
     f = fopen(fic_hexa, "r");
