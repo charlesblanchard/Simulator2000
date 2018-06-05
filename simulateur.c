@@ -13,13 +13,10 @@ void init_machine(Machine *m){
         m->PSR[i] = 0;
     }
     
-    eeeee
+    
     
 }
 
-void afficher_machine(Machine m){
-    
-}
 
 void afficher_memoire(Machine m){
 	
@@ -42,14 +39,21 @@ void afficher_memoire(Machine m){
 		}
 		printf("\n");
 	}
-	
+}
+
+void afficher_registres(Machine m){
 	
 	/* registres */
+	printf("Registres: ");
+	for (int i=0; i<15;i++){
+	printf("r%d = %d \n",i, m->REG[i]); }
+	printf("PC= %d \n", m->REG[PC]);
+	}
 	
-	printf("Registres:  ACC [hex=%04 dec=%6d]  PC [%04x]  HALT [%x]\n" , m->ACC, m->ACC, m->PC, m->HALT); }
+void afficher_PSR(Machine m){
+    printf("Z=[%d] \n N=[%d] \n C=[%d] \n V=[%d]\n" , m->PSR[0],m->PSR[1], m->PSR[2],m->PSR[3]); }
+}	
 	
 	
 	
-	
-	
-}
+
