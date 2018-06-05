@@ -53,6 +53,12 @@ void afficher_registres(Machine m){
 void afficher_PSR(Machine m){
     printf("Z=[%d] \n N=[%d] \n C=[%d] \n V=[%d]\n" , m->PSR[0],m->PSR[1], m->PSR[2],m->PSR[3]); }
 }	
+
+void afficher_machine(Machine m){
+	afficher_registres(m);
+	afficher_PSR(m);
+	afficher_memoire(m);
+}
 	
 	
 	
