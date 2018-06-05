@@ -15,9 +15,9 @@ int main(int argc, char *argv[]){
     i++;
     if (argv[1][i]==h)        /* Si le fichier est en hexa */
     /*charger .hex */
-    else 
+    else if (argv[1][i]==s)
     /* traduire en hexa puis charger */                   
-		
+	else printf("Erreure chargement du fichier ");	
     
     return 0;
 }
