@@ -1,6 +1,8 @@
-#include "simulateur.h"
+#include <stdio.h>
+#include <stdint.h>
+#include <stdbool.h>
+
 #include "arm.h"
-#include "math.h"
 
 /* Calcul du PSR */
 void calcul_PSR(Machine *M, int16_t res){

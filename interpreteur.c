@@ -1,12 +1,21 @@
-#include "stdio.h"
+#include <stdio.h>
+#include <stdint.h>
+#include <stdbool.h>
+
+#include "simulateur.h"
+
 #include "interpreteur.h"
 
-#define PC_DER_LIGNE 4031713024 + T_MEM
 
-int lecture_memoire(Machine *m){
+#define T_MEM 0
+#define PC_DER_LIGNE 4031713024 + T_MEM 
+
+
+
+int interpreter(Machine *m){
     
-    int i=0;
-    int instruction = 0;
+    int32_t i=0;
+    int32_t instruction = 0;
     
     
     do{
@@ -15,6 +24,7 @@ int lecture_memoire(Machine *m){
         instruction = instruction || m->M[i+3] << 2;
         instruction = instruction || m->M[i+2];
         
-    }while(instruction != PC_DER_LIGNE)/*while pc ne revoit pas vers la derniere case*/
+    }while(instruction != PC_DER_LIGNE); 
+    /*while pc ne revoit pas vers la derniere case*/
     
 }

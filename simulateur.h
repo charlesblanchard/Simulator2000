@@ -1,6 +1,5 @@
-#include <stdint.h>
-#include <stdbool.h>
-
+#ifndef _SIMU_
+#define _SIMU_
 
 #define SP 13 /* Stack Pointer */
 #define LR 14 /* Link Register */
@@ -30,3 +29,5 @@ void init_machine(Machine *m);
 void afficher_machine(Machine m);
 void afficher_registres(Machine m);
 void afficher_PSR(Machine m);
+
+#endif

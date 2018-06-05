@@ -1,3 +1,9 @@
+#include <stdio.h>
+#include <stdint.h>
+#include <stdbool.h>
+
+#include "simulateur.h"
+
 #include "lecture.h"
 
 void flasher_prgm(Machine *m, char fic_hexa[]){
@@ -7,15 +13,15 @@ void flasher_prgm(Machine *m, char fic_hexa[]){
     
     if (f == NULL){
         printf("Impossible d'ouvrir le fichier");
-        return 0;
+        return;
     }
     
-    //     Ré-arrangement des mots de 32 bits (avec little endian)  //
+    /* Ré-arrangement des mots de 32 bits (avec little endian) */
 
     uint32_t mot_haut, mot_bas, mot_haut_dupli, mot_bas_dupli;
     int i = 0;
     
-    while (feof(flux) == 0){
+    /*while (feof(f) == 0){
         scanf("%" SCNx16, &mot_haut);
         scanf("%" SCNx16, &mot_bas);
         
@@ -36,9 +42,9 @@ void flasher_prgm(Machine *m, char fic_hexa[]){
         
         m->M[i] = mot;
         i++;
-    }
+    }*/
     
-//  m->M[i] = ???
+/* m->M[i] = ??? */
     i++;
     
     while (i<256){

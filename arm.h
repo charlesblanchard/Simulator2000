@@ -1,3 +1,7 @@
+#ifndef _ARM_
+#define _ARM_
+
+#include "math.h"
 
 /* Calcul du PSR */
 void calcul_PSR(Machine *M, int16_t res);
@@ -67,7 +71,7 @@ void lsr(Machine *M, int8_t rd, int32_t op1, int32_t op2, bool s);
 void asr(Machine *M, int8_t rd, int32_t op1, int32_t op2, bool s);
 
 
-
+#endif
 
 
 
