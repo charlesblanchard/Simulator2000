@@ -9,11 +9,17 @@
 
 typedef registre int32_t;
 
-struct Machine {
+typedef struct label{
+    uint16_t ADR;
+    int8_t NAME[20];    
+} Label;
+
+typedef struct machine{
   uint16_t M[256]; /* memory */
   registre REG[16];
   bool PSR[4];
-};
+  Label LBL[100];
+} Machine;
 
 void init_machine(Machine *m);
 
