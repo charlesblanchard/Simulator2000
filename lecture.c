@@ -1,7 +1,7 @@
-void lecture_fichier_hexa(char txt, Machine *m){
+void decompo_hexa(char fic_hexa, Machine *m){
     
     FILE *f;
-    f = fopen(txt, "r");
+    f = fopen(fic_hexa, "r");
     
     if (f == NULL){
         printf("Impossible d'ouvrir le fichier");
@@ -33,6 +33,15 @@ void lecture_fichier_hexa(char txt, Machine *m){
         mot = mot_haut & mot_bas;
         
         m->M[i] = mot;
-        i ++;
+        i++;
+    }
+    
+//  m->M[i] = ???
+    i++;
+    
+    while (i<256){
+        m->M[i] = 0;
     }
 }
+
+    
