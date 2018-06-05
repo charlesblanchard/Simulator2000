@@ -1,4 +1,6 @@
-void decompo_hexa(Machine *m, char fic_hexa[]){
+#include "lecture.h"
+
+void flasher_prgm(Machine *m, char fic_hexa[]){
     
     FILE *f;
     f = fopen(fic_hexa, "r");
