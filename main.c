@@ -12,7 +12,6 @@ int main(int argc, char *argv[]){
     
     Machine *m = init_machine();
     
-    
     /*if( argv[1][strlen(argv[1]-1] == 's'){
         assembleur_to_hex(argv[1]);
     }*/
