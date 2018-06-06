@@ -16,41 +16,35 @@ void flasher_prgm(Machine *m, char fic_hexa[]){
         return;
     }
     
-    /* Ré-arrangement des mots de 32 bits (avec little endian) */
-
-    uint32_t mot_haut, mot_bas, mot_haut_dupli, mot_bas_dupli;
+        /* Ré-arrangement des mots de 32 bits (avec little endian) */
+         
+    uint16_t mot_haut, mot_bas;
+    uint32_t mot_final;
     int i = 0;
     
-    /*while (feof(f) == 0){
-        scanf("%" SCNx16, &mot_haut);
-        scanf("%" SCNx16, &mot_bas);
+    while ((fscanf(f,"%" SCNx16, &mot_haut) == 1) & (fscanf(f,"%" SCNx16, &mot_bas) == 1)){
         
-        mot_haut_dupli = mot_haut;
-        mot_bas_dupli = mot_bas;
+        mot_haut = (mot_haut >> 8) | ((mot_haut &~ 0xff00) << 8);
+        printf("%x\t",mot_haut);
         
-        mot_haut = (mot_haut >> 8);
-        mot_haut_dupli = ((mot_haut_dupli &~ 0xff00) << 8);
-        mot_haut = mot_haut & mot_haut_dupli;
+        mot_bas = (mot_bas >> 8) | ((mot_bas &~ 0xff00) << 8);
+        printf("%x\n",mot_bas);
         
-        mot_bas = (mot_bas >> 8);
-        mot_bas_dupli = ((mot_bas_dupli &~ 0xff00) << 8);
-        mot_bas = mot_bas & mot_bas_dupli;
+        mot_final = (mot_haut << 16) | mot_bas;
+        printf("%x\n\n", mot_final);
         
-        uint32_t mot;
-        mot_haut = (mot_haut << 16);
-        mot = mot_haut & mot_bas;
-        
-        m->M[i] = mot;
+        m->FLASH[i] = mot_final;
         i++;
-    }*/
+    }
     
-/* m->M[i] = ??? */
+    /* m->M[i] = ??? */
     i++;
     
-    while (i<256){
-        m->RAM[i] = 0;
+    while (i<255){
+        m->FLASH[i] = 0;
+        i++;
     }
+    
     fclose(f);
 }
-
     
