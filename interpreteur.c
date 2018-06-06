@@ -42,5 +42,5 @@ int interpreter(Machine *m){
     if (erreur = 1){
         printf("Opération inconnue, interpretation %d intérrompue\n",i); 
         return OP_INCONNU;
-    
+    }
 }

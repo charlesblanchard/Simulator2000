@@ -1,0 +1,39 @@
+#define MOV 193463543
+#define MVN 193463766
+#define MOVW 6384297006
+#define MOVT 6384297003
+#define AND 193450424
+#define BIC 193451347
+#define ORR 193465816
+#define ORN 193465812
+#define ADD 193450094
+#define ADC 193450093
+#define SBC 193469629
+#define SUB 193470255
+#define RSB 193469100
+#define MUL 193463731
+#define TST 193471296
+#define CMP 193452581
+#define LSL 193462576
+#define LSR 193462582
+#define ASR 193450603
+
+/* printf("#define MOV %lu\n",hash("MOV"));
+        printf("#define MVN %lu\n",hash("MVN"));
+        printf("#define MOVW %lu\n",hash("MOVW"));
+        printf("#define MOVT %lu\n",hash("MOVT"));
+        printf("#define AND %lu\n",hash("AND"));
+        printf("#define BIC %lu\n",hash("BIC"));
+        printf("#define ORR %lu\n",hash("ORR"));
+        printf("#define ORN %lu\n",hash("ORN"));
+        printf("#define ADD %lu\n",hash("ADD"));
+        printf("#define ADC %lu\n",hash("ADC"));
+        printf("#define SBC %lu\n",hash("SBC"));
+        printf("#define SUB %lu\n",hash("SUB"));
+        printf("#define RSB %lu\n",hash("RSB"));
+        printf("#define MUL %lu\n",hash("MUL"));
+        printf("#define TST %lu\n",hash("TST"));
+        printf("#define CMP %lu\n",hash("CMP"));
+        printf("#define LSL %lu\n",hash("LSL"));
+        printf("#define LSR %lu\n",hash("LSR"));
+        printf("#define ASR %lu\n",hash("ASR"));*/
