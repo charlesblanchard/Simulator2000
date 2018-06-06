@@ -1,21 +1,30 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <stdlib.h>
 
 #include "simulateur.h"
 
-void init_machine(Machine *m){
+Machine *init_machine(){
     int i;
+    Machine *m = (Machine *) malloc(sizeof(Machine));
     
     for( i=0 ; i<256 ; i++){
-        m->M[i] = 0;
+        m->RAM[i] = 0;
     }
+    
+    for( i=0 ; i<256 ; i++){
+        m->FLASH[i] = 0;
+    }
+    
     for( i=0 ; i<16 ; i++){
         m->REG[i] = 0;
     }
+    
     for( i=0 ; i<4 ; i++){
         m->PSR[i] = 0;
-    }    
+    }
+    return m;
 }
 
 
@@ -37,7 +46,7 @@ void afficher_memoire(Machine m){
         adresse = 16*ligne;
         printf("%02x | ",adresse);
         for (colonne=0; colonne<16; colonne++) {
-            printf("%04x ", m.M[adresse + colonne]);
+            printf("%04x ", m.RAM[adresse + colonne]);
         }
         printf("\n");
     }

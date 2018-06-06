@@ -19,10 +19,10 @@ int interpreter(Machine *m){
     
     
     do{
-        instruction = instruction || m->M[i+1] << 6;
-        instruction = instruction || m->M[i] << 4;
-        instruction = instruction || m->M[i+3] << 2;
-        instruction = instruction || m->M[i+2];
+        instruction = instruction || m->RAM[i+1] << 6;
+        instruction = instruction || m->RAM[i] << 4;
+        instruction = instruction || m->RAM[i+3] << 2;
+        instruction = instruction || m->RAM[i+2];
         
     }while(instruction != PC_DER_LIGNE); 
     /*while pc ne revoit pas vers la derniere case*/

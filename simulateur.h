@@ -12,19 +12,19 @@
 
 typedef int32_t registre;
 
-typedef struct label{
-    uint16_t ADR;
-    int8_t NAME[20];    
-} Label;
-
 typedef struct machine{
-  uint16_t M[256]; /* memory */
-  registre REG[16];
-  bool PSR[4];
-  Label LBL[100];
+    
+    uint16_t FLASH[256]; /* Mémoire FLASH */
+    uint16_t RAM[256]; /* Mémoire RAM */
+  
+    registre REG[16];
+    
+    bool PSR[4];
+    
 } Machine;
 
-void init_machine(Machine *m);
+
+Machine *init_machine();
 
 void afficher_machine(Machine m);
 void afficher_registres(Machine m);

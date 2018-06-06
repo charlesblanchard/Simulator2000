@@ -9,8 +9,7 @@
 int main(int argc, char *argv[]){
     int i=0;
     
-    Machine *m;
-    init_machine(m);
+    Machine *m = init_machine();
     
     
     /*if( argv[1][strlen(argv[1]-1] == 's'){
