@@ -27,8 +27,10 @@ int interpreter(Machine *m){
         instruction = instruction || m->RAM[i+3] << 8;
         instruction = instruction || m->RAM[i+2];
         
-        if (instruction >> 28 == 0xE || instruction >> 28 == 0xF){
+        if (instruction >> 28 == 0xE){
             
+        } else if (instruction >> 28 == 0xF){
+        
         } else {
             erreur = 1;
             instruction = PC_DER_LIGNE;
