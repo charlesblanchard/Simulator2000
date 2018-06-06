@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <stdlib.h>
 
 #include "simulateur.h"
 #include "interpreteur.h"
@@ -22,5 +23,8 @@ int main(int argc, char *argv[]){
     /* Executer programme */
     interpreter(m);
     
+    
+    
+    free(m);
     return 0;
 }

@@ -3,9 +3,12 @@
 
 #include "math.h"
 
+
 /* Calcul du PSR */
 void calcul_PSR(Machine *M, int16_t res);
     
+
+
 /* Chargement d'une constante 8 bits */
 void mov(Machine *M, int8_t rd, int32_t op, bool s); 
     
@@ -54,11 +57,13 @@ void rsb(Machine *M, int8_t rd, int32_t op1, int32_t op2, bool s);
 void mul(Machine *M, int8_t rd, int32_t op1, int32_t op2);
 
 
+
 /* MAJ PSR TST op1 & op2 */ 
 void tst(Machine *M, int32_t op1, int32_t op2);
 
 /* MAJ PSR CMP op1 - op2 */ 
 void cmp(Machine *M, int32_t op1, int32_t op2);
+
 
 
 /* Logical left shift */
