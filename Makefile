@@ -4,12 +4,16 @@ CC 	?= gcc
 # Définition des paramètres de compilation
 FLAGS	?= -W -Wall -ansi
 
-# Exécutables
-all: exec
+# Définition des écutables
+EXEC	?= Simulateur2000 asm_to_hex
 
 
-exec : simulateur.o interpreteur.o lecture.o main.o
-	$(CC) $(FLAGS) simulateur.o interpreteur.o lecture.o main.o -o exec
+all: $(EXEC)
+
+# PROGRAMME PRINCIPAL
+
+Simulateur2000 : simulateur.o interpreteur.o lecture.o main.o
+	$(CC) $(FLAGS) simulateur.o interpreteur.o lecture.o main.o -o Simulateur2000
 
 
 main.o : main.c simulateur.h interpreteur.h lecture.h
@@ -32,5 +36,17 @@ arm.o : arm.c
 	$(CC) $(FLAGS) -c arm.c -o arm.o
 
 
+# PROGRAMME ASM_to_HEX
+
+asm_to_hex : asm_to_hex.o
+	$(CC) $(FLAGS) asm_to_hex.o -o asm_to_hex
+
+asm_to_hex.o : asm_to_hex.c
+	$(CC) $(FLAGS) -c asm_to_hex.c -o asm_to_hex.o
+
+
+
+# COMMANDES BONUS
+
 clean :
-	rm *.o exec
+	rm *.o $(EXEC)
