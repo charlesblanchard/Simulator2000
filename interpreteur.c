@@ -27,10 +27,22 @@ int interpreter(Machine *m){
         instruction = instruction || m->RAM[i+3] << 8;
         instruction = instruction || m->RAM[i+2];
         
+    int code = (instruction & ~(0xFFE1FFFF)) >>21
+    int psr = (instruction & ~(0xFFFEFFFF)) >>20
+    int rego_z = (instruction & ~(0xFFF0FFFF)) >>16
+    int xy = (instruction & ~(0xFFFF0FFF)) >>12
+    int regs = (instruction & ~(0xFFFFF0FF)) >>8
+    int val1 = (instruction & ~(0xFFFFFF0F)) >>4
+    int val2_regv = (instruction & ~(0xFFFFFF0))
+    
+        
         if (instruction >> 28 == 0xE){
+            /*mov(reg),mvm(reg),ops(reg),décalages(val)*/
+           
             
         } else if (instruction >> 28 == 0xF){
-        
+            /*movt(val),movw(val),décalages(reg),mul(reg),ops(val)*/
+            
         } else {
             erreur = 1;
             instruction = PC_DER_LIGNE;
