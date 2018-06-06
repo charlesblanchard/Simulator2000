@@ -28,9 +28,12 @@ int interpreter(Machine *m){
         instruction = instruction || m->RAM[i+2];
         
         if (instruction >> 28 == 0xE){
+            /*mov(reg),mvm(reg),ops(reg),décalages(val)*/
+            
             
         } else if (instruction >> 28 == 0xF){
-        
+            /*movt(val),movw(val),décalages(reg),mul(reg),ops(val)*/
+            
         } else {
             erreur = 1;
             instruction = PC_DER_LIGNE;
