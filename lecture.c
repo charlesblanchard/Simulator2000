@@ -25,13 +25,8 @@ void flasher_prgm(Machine *m, char fic_hexa[]){
     while ((fscanf(f,"%" SCNx16, &mot_haut) == 1) & (fscanf(f,"%" SCNx16, &mot_bas) == 1)){
         
         mot_haut = (mot_haut >> 8) | ((mot_haut &~ 0xff00) << 8);
-        printf("%x\t",mot_haut);
-        
         mot_bas = (mot_bas >> 8) | ((mot_bas &~ 0xff00) << 8);
-        printf("%x\n",mot_bas);
-        
         mot_final = (mot_haut << 16) | mot_bas;
-        printf("%x\n\n", mot_final);
         
         m->FLASH[i] = mot_final;
         i++;
