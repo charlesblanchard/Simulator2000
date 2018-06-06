@@ -50,6 +50,7 @@ void flasher_prgm(Machine *m, char fic_hexa[]){
     while (i<256){
         m->M[i] = 0;
     }
+    fclose(f);
 }
 
     
