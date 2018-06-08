@@ -2,7 +2,10 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <inttypes.h>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 26808e6af5f1f7cbfafb49f908c736a8cf60c26b
 
 #include "simulateur.h"
 
