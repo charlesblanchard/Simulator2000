@@ -8,13 +8,15 @@
 #include "lecture.h"
 
 int main(int argc, char *argv[]){
-    int i=0;
+    /* int i=0; */
     
     Machine *m = init_machine();
     
     /*if( argv[1][strlen(argv[1]-1] == 's'){
         assembleur_to_hex(argv[1]);
     }*/
+    argc = argc+1; /*tempo pour enlever wqrning*/
+    
     
     /* Charger en hexa */
     flasher_prgm(m, argv[1] );

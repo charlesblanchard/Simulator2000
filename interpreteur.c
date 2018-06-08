@@ -31,16 +31,8 @@ int interpreter(Machine *M){
         instruction = (instruction || M->RAM[i]) * pow(2,16);
         instruction = (instruction || M->RAM[i+3]) * pow(2,8);
         instruction = (instruction || M->RAM[i+2]);
-        
-<<<<<<< HEAD
-    int code = (instruction & ~(0xFFE1FFFF)) >>21;
-    int psr = (instruction & ~(0xFFFEFFFF)) >>20;
-    int rego_z = (instruction & ~(0xFFF0FFFF)) >>16;
-    int xy = (instruction & ~(0xFFFF0FFF)) >>12;
-    int regs = (instruction & ~(0xFFFFF0FF)) >>8;
-    int val1 = (instruction & ~(0xFFFFFF0F)) >>4;
-    int val2_regv = (instruction & ~(0xFFFFFF0));
-=======
+    
+
     int code = (instruction & ~(0xFE1FFFFF)) / pow(2,20); /*code d'une opération*/
     int psr = (instruction & ~(0xFFEFFFFF)) / pow(2,20); /*bit informant de l'actualisation duPSR*/
     int rego_z = (instruction & ~(0xFFF0FFFF)) / pow(2,16); /*bits informants du numéro du registre lu pour fournir une valeur stockée / bits constituants la valeur paramètre de l'opération movt et movw*/
@@ -57,7 +49,9 @@ int interpreter(Machine *M){
     int hex6 = (instruction & ~(0xFFFFF0FF)) / pow(2,8);
     int hex7 = (instruction & ~(0xFFFFFF0F)) / pow(2,4);
     int hex8 = (instruction & ~(0xFFFFFFF0));
->>>>>>> 26808e6af5f1f7cbfafb49f908c736a8cf60c26b
+    
+    
+
     
     printf("code : %x\tpsr : %x\trego_z : %x\txy : %x\tw : %x\tregd : %x\tval1 : %x\tval2_regv : %x",code,psr,rego_z,xy,w,regd,val1,val2_regv);
         
@@ -114,15 +108,10 @@ int interpreter(Machine *M){
     }while(instruction != PC_DER_LIGNE); 
     /*while pc ne revoit pas vers la derniere case*/
     
-<<<<<<< HEAD
-    if (erreur = 1){
-        printf("Opération inconnue, interpretation %d intérrompue\n",i); 
-        return OP_INCONNU;
-    }
-=======
+
     if (erreur == 1){
         return i;
     }
     
->>>>>>> 26808e6af5f1f7cbfafb49f908c736a8cf60c26b
+
 }
