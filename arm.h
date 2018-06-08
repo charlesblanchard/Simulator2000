@@ -1,7 +1,10 @@
 #ifndef _ARM_
 #define _ARM_
 
+#include "simulateur.h"
+
 #include "math.h"
+
 
 
 /* Calcul du PSR */

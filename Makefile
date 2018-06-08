@@ -16,12 +16,11 @@ Simulateur2000 : simulateur.o interpreteur.o lecture.o main.o
 	$(CC) $(FLAGS) simulateur.o arm.o interpreteur.o lecture.o main.o -o Simulateur2000
 
 
-main.o : main.c simulateur.h interpreteur.h lecture.h
+main.o : main.c simulateur.h interpreteur.h lecture.h arm.h
 	$(CC) $(FLAGS) -c main.c -o main.o
 
 arm.o : arm.c
-	$(CC) $(FLAGS) -c arm.c -o arm.o
-
+	gcc -W -Wall -ansi -c arm.c -o arm.o
 
 simulateur.o : simulateur.c
 	$(CC) $(FLAGS) -c simulateur.c -o simulateur.o

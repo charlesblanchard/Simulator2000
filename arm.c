@@ -4,6 +4,8 @@
 
 #include "arm.h"
 
+
+
 /* Calcul du PSR */
 void calcul_PSR(Machine *M, int16_t res){
     M->PSR[Z] = res==0;

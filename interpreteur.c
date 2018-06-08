@@ -4,8 +4,9 @@
 #include <math.h>
 
 #include "simulateur.h"
-#include "interpreteur.h"
 #include "arm.h"
+#include "interpreteur.h"
+
 
 
 #define T_MEM 0
