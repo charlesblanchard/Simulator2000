@@ -293,7 +293,7 @@ int main(int argc, char *argv[]){
                 case MUL:
                     /* mul rd,rn,rm */
                     /* 11111011 0000nnnn 1111dddd 0000mmmm */
-                    fprintf(f_hex,"FB 0%x 1%x 0%x\n",ope2,ope1,ope3);
+                    fprintf(f_hex,"FB 0%x F%x 0%x\n",ope2,ope1,ope3);
                     break;
                     
             }        
