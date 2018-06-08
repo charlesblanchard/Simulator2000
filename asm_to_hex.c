@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdint.h>
 
+#include "math.h"
 #include "asm_to_hex.h"
 
 #define EXIT_SUCCESS 0
@@ -21,6 +22,9 @@ void nettoyage_instruction(char instruction[]);
 unsigned long hash(char *src);
 
 int main(int argc, char *argv[]){
+    FILE* f_s;
+    FILE* f_hex;
+    
     char instruction[50];
     char mnemonique[5];
     char operande1[20];
@@ -31,24 +35,26 @@ int main(int argc, char *argv[]){
     int ope2=0;
     int ope3=0;
     
+    int x,y,z,w;
+    
     int s=0;
     int type;
     
     char trash;
     
-    if(argc != 2 || argv[1][strlen(argv[1])-1] != 's' || argv[1][strlen(argv[1])-2] != '.'    ){
+    if(argc != 2 || argv[1][strlen(argv[1])-1] != 's' || argv[1][strlen(argv[1])-2] != '.'){
         printf("Mauvaise synthaxe: veuillez utiliser ./asm_to_hex nom_de_ficher.s\n");
         return ERR_SYNTHAXE;
     }
     
     /* Ouverture des fichiers */
     
-    FILE* f_s = fopen(argv[1],"r");
+    f_s = fopen(argv[1],"r");
     
     argv[1][strlen(argv[1])-1] = '\0';
     strcat(argv[1],"hex");
     
-    FILE* f_hex = fopen(argv[1],"w+");
+    f_hex = fopen(argv[1],"w+");
     
     if(f_s == NULL){
         printf("Erreur ouverture fichier f_s.\n");
@@ -69,11 +75,9 @@ int main(int argc, char *argv[]){
         if( strcmp(mnemonique,"ldr") == 0 || strcmp(mnemonique,"str") == 0 ){
             sscanf(instruction,"%s %s %s %s",mnemonique,operande1,operande2,operande3);
             
-            
         } else {
             sscanf(instruction,"%s %s %s %s",mnemonique,operande1,operande2,operande3);
-        
-        
+                
             /* RECUPERATION TYPE */
         
             if(operande2[0]=='r' && operande3[0]=='r')
@@ -94,8 +98,7 @@ int main(int argc, char *argv[]){
             } else {
                 s=0;
             }
-            
-    
+                
             
             /* RECUPERATION OPERANDE */
             sscanf(operande1,"%c%i",&trash,&ope1);
@@ -136,14 +139,24 @@ int main(int argc, char *argv[]){
                     }
                     break;
                 case MOVW:
-                    /* movw rd,#x       avec x = zzzzwyyy xxxxxxxx*/
+                    /* movw rd,#x       avec ope2 = zzzzwyyy xxxxxxxx*/
                     /* 11110w10 0100zzzz 0yyydddd xxxxxxxx */
-                    printf("F");
+                    w = (ope2 & 0x0800)/pow(2,11);
+                    z = (ope2 & 0xF000)/pow(2,12);
+                    y = (ope2 & 0x0700)/pow(2,8);
+                    x = (ope2 & 0x00FF);
+                        
+                    fprintf(f_hex,"F%x 4%x %x%x %0*x",2+w,z,y,ope1,2,x);
                     break;
                 case MOVT:
                     /* movt rd,#x       avec x = zzzzwyyy xxxxxxxx*/
                     /* 11110w10 1100zzzz 0yyydddd xxxxxxxx */
-                    printf("F");
+                    w = (ope2 & 0x0800)/pow(2,11);
+                    z = (ope2 & 0xF000)/pow(2,12);
+                    y = (ope2 & 0x0700)/pow(2,8);
+                    x = (ope2 & 0x00FF);
+                    
+                    fprintf(f_hex,"F%x C%x %x%x %0*x",2+w,z,y,ope1,2,x);
                     break;
                 
                     
@@ -304,7 +317,6 @@ int main(int argc, char *argv[]){
             ope3=0;
         }
     }
-
     
     /* Fermeture des fichiers */
     fclose(f_s);
