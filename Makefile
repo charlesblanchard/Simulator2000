@@ -13,11 +13,14 @@ all: $(EXEC)
 # PROGRAMME PRINCIPAL
 
 Simulateur2000 : simulateur.o interpreteur.o lecture.o main.o
-	$(CC) $(FLAGS) simulateur.o interpreteur.o lecture.o main.o -o Simulateur2000
+	$(CC) $(FLAGS) simulateur.o arm.o interpreteur.o lecture.o main.o -o Simulateur2000
 
 
 main.o : main.c simulateur.h interpreteur.h lecture.h
 	$(CC) $(FLAGS) -c main.c -o main.o
+
+arm.o : arm.c
+	$(CC) $(FLAGS) -c arm.c -o arm.o
 
 
 simulateur.o : simulateur.c
@@ -28,12 +31,9 @@ lecture.o : lecture.c simulateur.h
 	$(CC) $(FLAGS) -c lecture.c -o lecture.o
 
 
-interpreteur.o : interpreteur.c simulateur.h
+interpreteur.o : interpreteur.c simulateur.h arm.h arm.c
 	$(CC) $(FLAGS) -c interpreteur.c -o interpreteur.o
 
-
-arm.o : arm.c
-	$(CC) $(FLAGS) -c arm.c -o arm.o
 
 
 # PROGRAMME ASM_to_HEX

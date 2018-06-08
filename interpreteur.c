@@ -4,8 +4,8 @@
 #include <math.h>
 
 #include "simulateur.h"
-#include "arm.h"
 #include "interpreteur.h"
+#include "arm.h"
 
 
 #define T_MEM 0
@@ -48,6 +48,8 @@ int interpreter(Machine *M){
     int hex6 = (instruction & ~(0xFFFFF0FF)) / pow(2,8);
     int hex7 = (instruction & ~(0xFFFFFF0F)) / pow(2,4);
     int hex8 = (instruction & ~(0xFFFFFFF0));
+    
+    printf("code : %x\tpsr : %x\trego_z : %x\txy : %x\tw : %x\tregd : %x\tval1 : %x\tval2_regv : %x",code,psr,rego_z,xy,w,regd,val1,val2_regv);
         
         if (instruction / pow(2,28) == 0xE){
             /*mov(reg),mvm(reg),ops(reg),décalages(val)*/
@@ -66,10 +68,12 @@ int interpreter(Machine *M){
             if (hex2 == 0x0 && hex4 == 0x0){
                 if (hex3 / pow(2,1) == 2){
                     /*mov(val)*/
-                    mov (M, regd, (val1 * pow(2,4)) || val2_regv, psr);
+                    printf("mov(val)\n");
+                    mov(M, regd, (val1 * pow(2,4)) || val2_regv, psr);
                 } else if (hex3 / pow(2,1) == 0x3){
                     /*mvn(val)*/
-                    mvn (M, regd, (val1 * pow(2,4)) || val2_regv, psr);
+                    printf("mvn(val)\n");
+                    mvn(M, regd, (val1 * pow(2,4)) || val2_regv, psr);
                 } else {
                     erreur = 1;
                     instruction = PC_DER_LIGNE;
@@ -80,10 +84,12 @@ int interpreter(Machine *M){
             if (hex2 == 0x2 || hex2 == 0x6) {
                 if (hex3 == 0xC){
                     /*movt(val)*/
-                    movt (M, regd, (((((rego_z * pow(2,12)) || (w * pow(2,11) )) || (xy * pow(2,8))) || (val1 * pow(2,4))) || (val2_regv * pow(2,16)))); /*val = zzzzwyyy xxxxxxxx*/
+                    printf("movt(val)\n");
+                    movt(M, regd, (((((rego_z * pow(2,12)) || (w * pow(2,11) )) || (xy * pow(2,8))) || (val1 * pow(2,4))) || (val2_regv * pow(2,16)))); /*val = zzzzwyyy xxxxxxxx*/
                 } else if (hex3 == 0x4){
                     /*movw(val)*/
-                    movw (M, regd, ((((rego_z * pow(2,12)) || (w * pow(2,11))) || (xy * pow(2,8))) || (val1 * pow(2,4))) || val2_regv); /*val = zzzzwyyy xxxxxxxx*/
+                    printf("movw(val)\n");
+                    movw(M, regd, ((((rego_z * pow(2,12)) || (w * pow(2,11))) || (xy * pow(2,8))) || (val1 * pow(2,4))) || val2_regv); /*val = zzzzwyyy xxxxxxxx*/
                 } else {
                     erreur = 1;
                     instruction = PC_DER_LIGNE;
