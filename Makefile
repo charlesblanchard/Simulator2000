@@ -2,7 +2,7 @@
 CC 	?= gcc
 
 # Définition des paramètres de compilation
-FLAGS	?= -W -Wall -ansi
+FLAGS	?= -Wall -ansi
 
 # Définition des écutables
 EXEC	?= simulateur conversion_assembleur_hexa
