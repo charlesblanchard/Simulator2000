@@ -501,11 +501,12 @@ void nettoyage_instruction(char instruction[]){
     }
 }
 
+
 unsigned long hash(char *src){
     unsigned long res = 5381;
     int c;
     while(c = *src++){
-        res = ((res << 5) + res) + c; /* hash * 33 + c */
+        res = ((res << 5) + res) + c; 
     }
     return res;
 }

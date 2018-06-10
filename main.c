@@ -9,6 +9,8 @@
 #include "lecture.h"
 
 int main(int argc, char *argv[]){
+    (void)argc; /* Supprimer warning */
+    
     Machine *m = init_machine();
         
     /* Charger programme en mémoire */
