@@ -169,7 +169,35 @@ void asr(Machine *M, int8_t rd, int32_t op1, int32_t op2, bool s){
     M->REG[PC] = M->REG[PC]+1;
 }
 
+/* Store Register byte */
+void strb(Machine *M, int8_t rd, int8_t rn){
+    M->RAM[rd] = rn;
+}
 
+/* Store Register halfword */
+void strh(Machine *M, int8_t rd, int16_t rn){
+    M->RAM[rd] = rn;
+}
+
+/* Store Register word */
+void str(Machine *M, int8_t rd, int32_t rn){
+    M->RAM[rd] = rn;
+}
+
+/* Load Register byte */
+void ldrb(Machine *M, int8_t rd, int8_t rn){
+    rd = M->RAM[rn];
+}
+
+/* Load Register halfword */
+void ldrh(Machine *M, int16_t rd, int8_t rn){
+    rd = M->RAM[rn];
+}
+
+/* Load Register word */
+void ldr(Machine *M, int32_t rd, int8_t rn){
+    rd = M->RAM[rn];
+}
 
 
 
