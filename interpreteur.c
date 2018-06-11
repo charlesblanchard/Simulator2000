@@ -41,9 +41,6 @@ int interpreter(Machine *M){
         instruction = instruction + M->FLASH[i] * pow(2,16);
         instruction = instruction + M->FLASH[i+3] * pow(2,8);
         instruction = instruction + M->FLASH[i+2];
-        
-    printf("instruction: %x\n",instruction);
-    
 
     int code = (instruction & ~(0xFE1FFFFF)) / pow(2,20); /*code d'une opération*/
     int psr = (instruction & ~(0xFFEFFFFF)) / pow(2,20); /*bit informant de l'actualisation duPSR*/
@@ -58,18 +55,20 @@ int interpreter(Machine *M){
     int hex3 = (instruction & ~(0xFF0FFFFF)) / pow(2,20);
     int hex4 = (instruction & ~(0xFFF0FFFF)) / pow(2,16);
     int hex5 = (instruction & ~(0xFFFF0FFF)) / pow(2,12);
-    /*int hex6 = (instruction & ~(0xFFFFF0FF)) / pow(2,8);*/ /*unused variable*/
+    int hex6 = (instruction & ~(0xFFFFF0FF)) / pow(2,8);
     int hex7 = (instruction & ~(0xFFFFFF0F)) / pow(2,4);
-    /* hex8 = (instruction & ~(0xFFFFFFF0));*/ /*unused variable*/
+    int hex8 = (instruction & ~(0xFFFFFFF0));
     int zzzzwyyyxxxxxxxx = rego_z * pow(2,12) + w * pow(2,11) + xy * pow(2,8) + val1 * pow(2,4) + val2_regv;
     int pp_reg = (instruction & ~(0xFF6FFFFF)) / pow(2,21);
     int s = (instruction & ~(0xFFEFFFFF)) / pow(2,20);
     int pp = (hex7 & 0x3);
     int xxxyy = ((hex5*pow(2,2)) + (hex7 & 0xC));
     int val = (val1 * pow(2,4)) + val2_regv;
+    int XYZ = hex8 * pow(2,8) + hex5 * pow(2,4) + hex6;
     
-    /*mov(reg),mvm(reg),ops(reg),décalages(val),tests(reg)*/
-        if (hex1 == 0xE){
+    switch (hex1){
+        /*mov(reg),mvm(reg),ops(reg),décalages(val),tests(reg)*/
+        case 0xE:
             /*test(reg)*/
            	if (regd == 0xf && rego_z != 0xF){
             
@@ -155,10 +154,9 @@ int interpreter(Machine *M){
                 }
             }
     
-        }
-    
-    /*mov(val),movn(val),movt(val),movw(val),décalages(reg),mul(reg),ops(val)*/
-        else if (hex1 == 0xF){
+            break;
+        /*mov(val),movn(val),movt(val),movw(val),décalages(reg),mul(reg),ops(val)*/
+        case 0xF:
             /*mov(val),movn(val)*/
             if (hex2 == 0x0 && hex4 == 0xF){
                 if (hex3 == 0x5 || hex3 == 0x4){
@@ -268,19 +266,45 @@ int interpreter(Machine *M){
                 }
             }
             
-        /*opération innexistante*/
-        else {
-                erreur = 1;
-            }
-        } 
+            break;
+            
+        case 0xD:
+        /*ldr*/
+            ldr (M, hex7, hex2 + XYZ);
+            break;
+            
+        case 0x9:
+        /*ldrb*/
+            ldrb (M, hex7, hex2 + XYZ);
+            break;
         
-    /*opération inexistante*/
-        else {
+        case 0xB:
+        /*ldrh*/
+            ldrh (M, hex7, hex2 + XYZ);
+            break;
+            
+        case 0xC:
+        /*str*/
+            str (M, hex7, hex2 + XYZ);
+            break;
+            
+        case 0xA:
+        /*strh*/
+            strh (M, hex7, hex2 + XYZ);
+            break;
+            
+        case 0x8:
+        /*strb*/
+            strb (M, hex7, hex2 + XYZ);
+            break;
+            
+        default:
             erreur = 1;
             instruction = PC_DER_LIGNE;
-        }
+            break;
         
-        
+    }
+    
     }while(i != 0); 
     /*while pc ne revoit pas vers la derniere case*/
     
