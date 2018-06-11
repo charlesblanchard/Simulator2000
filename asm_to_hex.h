@@ -13,6 +13,7 @@
 #define DEUX_REGISTRES_UNE_VALEUR 1
 #define DEUX_REGISTRES 2
 #define UN_REGISTRE_UNE_VALEUR 3
+#define UN_REGISTRE 4
 
 int ouverture_fichier(char *nom, FILE** f_s, FILE** f_hex);
 int fermeture_fichier(FILE* f_s, FILE* f_hex);
@@ -55,6 +56,8 @@ typedef struct label{
 #define STR 193506174
 #define STRH 6385703846
 #define STRB 6385703840
+#define PUSH 6385597157
+#define POP 193502740
 
-/* printf("#define mov %lu\n",hash("mov")); */
+/* printf("#define PUSH %lu\n",hash("push")); */
 
