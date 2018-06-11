@@ -207,7 +207,18 @@ void ldr(Machine *M, int32_t rd, int8_t rn){
     rd = (M->RAM[rn] << 16) | (M->RAM[rn+1] << 24) | (M->RAM[rn+2]) | (M->RAM[rn+3] << 8);
 }
 
+/* push */
+void push(Machine *M, int32_t rt){
+    str(M, SP, rt);
+    M->REG[SP] = M->REG[SP]-4;
+}
 
+/* pop */
+void pop(Machine *M, int32_t rt){
+    ldr(M, rt, SP);
+    M->REG[SP] = M->REG[SP]+4;
+}
+    
 
 
 
