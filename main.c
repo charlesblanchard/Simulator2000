@@ -16,8 +16,10 @@ int main(int argc, char *argv[]){
     /* Charger programme en mémoire */
     flasher_prgm(m, argv[1]);
     
+    afficher_flash(*m);
+    
     /* Executer programme */
-    interpreter(m);
+    /*interpreter(m);*/
     
     free(m);
     return 0;

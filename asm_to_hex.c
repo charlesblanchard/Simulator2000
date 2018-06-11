@@ -192,7 +192,7 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
                         case DEUX_REGISTRES:
                             /* mov(s) rd,rm */
                             /* 11101010 010s1111 0000dddd 0000mmmm */
-                            fprintf(f_hex,"eA%xf0%x0%x\n",4+s,ope1,ope2);
+                            fprintf(f_hex,"ea%xf0%x0%x\n",4+s,ope1,ope2);
                             break;                        
                     }
                     break;

@@ -10,14 +10,12 @@
 #define C 2
 #define V 3
 
-typedef int32_t registre;
 
 typedef struct machine{
-    
-    uint16_t FLASH[256]; /* Mémoire FLASH */
-    uint16_t RAM[256]; /* Mémoire RAM */
+    uint8_t FLASH[256]; /* Mémoire FLASH */
+    uint8_t RAM[256]; /* Mémoire RAM */
   
-    registre REG[16];
+    int32_t REG[16];
     
     bool PSR[4];
     
@@ -27,6 +25,8 @@ typedef struct machine{
 Machine *init_machine();
 
 void afficher_machine(Machine m);
+void afficher_memoire(Machine m);
+void afficher_flash(Machine m);
 void afficher_registres(Machine m);
 void afficher_PSR(Machine m);
 

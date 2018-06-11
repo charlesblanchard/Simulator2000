@@ -32,25 +32,51 @@ void afficher_memoire(Machine m){
     int colonne, ligne, adresse;
     
     printf("ADR ");
-    for(colonne =0; colonne<16; colonne++)
-        printf("    %x",colonne);
-    printf("\n   +");
-    for (colonne=0; colonne<16; colonne++)	
-        printf("−−−−−");
+    for(colonne =0; colonne<4; colonne++)
+        printf("  %x",colonne);
+    printf("\n   +-");
+    for (colonne=0; colonne<4; colonne++)	
+        printf("−−-");
     printf("\n");
 
 
     /*16 lignes de 16 nombres de chiffres hexa */
 
-    for (ligne =0;ligne<16;ligne++) {
-        adresse = 16*ligne;
+    for (ligne =0;ligne<64;ligne++) {
+        adresse = 4*ligne;
         printf("%02x | ",adresse);
-        for (colonne=0; colonne<16; colonne++) {
-            printf("%04x ", m.RAM[adresse + colonne]);
+        for (colonne=0; colonne<4; colonne++) {
+            printf("%02x ", m.RAM[adresse + colonne]);
         }
         printf("\n");
     }
 }
+
+
+void afficher_flash(Machine m){
+    int colonne, ligne, adresse;
+    
+    printf("ADR ");
+    for(colonne =0; colonne<4; colonne++)
+        printf("  %x",colonne);
+    printf("\n   +-");
+    for (colonne=0; colonne<4; colonne++)	
+        printf("−−-");
+    printf("\n");
+
+
+    /*16 lignes de 16 nombres de chiffres hexa */
+
+    for (ligne =0;ligne<64;ligne++) {
+        adresse = 4*ligne;
+        printf("%02x | ",adresse);
+        for (colonne=0; colonne<4; colonne++) {
+            printf("%02x ", m.FLASH[adresse + colonne]);
+        }
+        printf("\n");
+    }
+}
+
 
 void afficher_registres(Machine m){
     int i;
