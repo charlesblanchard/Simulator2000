@@ -212,7 +212,7 @@ void push(Machine *M, int32_t rt){
 /* pop */
 void pop(Machine *M, int32_t rt){
     ldr(M, rt, SP);
-    M->REG[SP] = M->REG[SP]+4
+    M->REG[SP] = M->REG[SP]+4;
 }
     
 
