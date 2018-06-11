@@ -9,17 +9,16 @@
 #include "lecture.h"
 
 int main(int argc, char *argv[]){
-    (void)argc; /* Supprimer warning */
+    (void)argc; /* Supprimer warning argc innutilisé*/
     
     Machine *m = init_machine();
         
     /* Charger programme en mémoire */
     flasher_prgm(m, argv[1]);
     
-    afficher_flash(*m);
     
     /* Executer programme */
-    /*interpreter(m);*/
+    interpreter(m);
     
     free(m);
     return 0;

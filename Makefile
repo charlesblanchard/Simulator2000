@@ -50,3 +50,6 @@ asm_to_hex.o : asm_to_hex.c
 
 clean :
 	rm *.o $(EXEC)
+
+clear : 
+	rm *.o
