@@ -80,401 +80,407 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
             
             /* CONSTRUCTION */
             switch(hash(mnemonique)){
-            case LDR:
-                switch(type){
-                    case DEUX_REGISTRES:
-                        /* ldr rd, [rm] */
-                        /* 1101mmmm 11111000 00000000 dddd0000 */
-                        fprintf(f_hex,"d%x f8 00 %x0\n",ope2,ope1);
-                        break;   
-                    case DEUX_REGISTRES_UNE_VALEUR:
-                        /* ldr rd, [rm,#x] avec ope3 = xxxxyyyyzzzz*/
-                        /* 1101mmmm 11111000 yyyyzzzz ddddxxxx */
-                        x= (ope3 & 0xF00) / pow(2,8);
-                        y= (ope3 & 0xF0) / pow(2,4);
-                        z= (ope3 & 0xF);
-                        fprintf(f_hex,"d%x f8 %x%x %x%x\n",ope2,y,z,ope1,x);
-                        break;
-                }
-                break;
-            case LDRH:
-                switch(type){
-                    case DEUX_REGISTRES:
-                        /* ldrh rd, [rm] */
-                        /* 1011mmmm 11111000 00000000 dddd0000 */
-                        fprintf(f_hex,"b%x f8 00 %x0\n",ope2,ope1);
-                        break;   
-                    case DEUX_REGISTRES_UNE_VALEUR:
-                        /* ldrh rd, [rm,#x] avec ope3 = xxxxyyyyzzzz*/
-                        /* 1011mmmm 11111000 yyyyzzzz ddddxxxx */
-                        x= (ope3 & 0xF00) / pow(2,8);
-                        y= (ope3 & 0xF0) / pow(2,4);
-                        z= (ope3 & 0xF);
-                        fprintf(f_hex,"b%x f8 %x%x %x%x\n",ope2,y,z,ope1,x);
-                        break;
-                }
-                break;
-            case LDRB:
-                switch(type){
-                    case DEUX_REGISTRES:
-                        /* ldrb rd, [rm] */
-                        /* 1001mmmm 11111000 00000000 dddd0000 */
-                        fprintf(f_hex,"9%x f8 00 %x0\n",ope2,ope1);
-                        break;   
-                    case DEUX_REGISTRES_UNE_VALEUR:
-                        /* ldrb rd, [rm,#x] avec ope3 = xxxxyyyyzzzz*/
-                        /* 1001mmmm 11111000 yyyyzzzz ddddxxxx */
-                        x= (ope3 & 0xF00) / pow(2,8);
-                        y= (ope3 & 0xF0) / pow(2,4);
-                        z= (ope3 & 0xF);
-                        fprintf(f_hex,"9%x f8 %x%x %x%x\n",ope2,y,z,ope1,x);
-                        break;
-                }
-                break;
-            case STR:
-                switch(type){
-                    case DEUX_REGISTRES:
-                        /* str rd, [rm] */
-                        /* 1100mmmm 11111000 00000000 dddd0000 */
-                        fprintf(f_hex,"c%x f8 00 %x0\n",ope2,ope1);
-                        break;   
-                    case DEUX_REGISTRES_UNE_VALEUR:
-                        /* str rd, [rm,#x] avec ope3 = xxxxyyyyzzzz*/
-                        /* 1100mmmm 11111000 yyyyzzzz ddddxxxx */
-                        x= (ope3 & 0xF00) / pow(2,8);
-                        y= (ope3 & 0xF0) / pow(2,4);
-                        z= (ope3 & 0xF);
-                        fprintf(f_hex,"c%x f8 %x%x %x%x\n",ope2,y,z,ope1,x);
-                        break;
-                }                
-                break;
-            case STRH:
-                switch(type){
-                    case DEUX_REGISTRES:
-                        /* strh rd, [rm] */
-                        /* 1010mmmm 11111000 00000000 dddd0000 */
-                        fprintf(f_hex,"a%x f8 00 %x0\n",ope2,ope1);
-                        break;   
-                    case DEUX_REGISTRES_UNE_VALEUR:
-                        /* strh rd, [rm,#x] avec ope3 = xxxxyyyyzzzz*/
-                        /* 1010mmmm 11111000 yyyyzzzz ddddxxxx */
-                        x= (ope3 & 0xF00) / pow(2,8);
-                        y= (ope3 & 0xF0) / pow(2,4);
-                        z= (ope3 & 0xF);
-                        fprintf(f_hex,"a%x f8 %x%x %x%x\n",ope2,y,z,ope1,x);
-                        break;
-                }                
-                break;
-            case STRB:
-                switch(type){
-                    case DEUX_REGISTRES:
-                        /* strb rd, [rm] */
-                        /* 1000mmmm 11111000 00000000 dddd0000 */
-                        fprintf(f_hex,"8%x f8 00 %x0\n",ope2,ope1);
-                        break;   
-                    case DEUX_REGISTRES_UNE_VALEUR:
-                        /* strb rd, [rm,#x] avec ope3 = xxxxyyyyzzzz*/
-                        /* 1000mmmm 11111000 yyyyzzzz ddddxxxx */
-                        x= (ope3 & 0xF00) / pow(2,8);
-                        y= (ope3 & 0xF0) / pow(2,4);
-                        z= (ope3 & 0xF);
-                        fprintf(f_hex,"8%x f8 %x%x %x%x\n",ope2,y,z,ope1,x);
-                        break;
-                }                
-                break;
-            case MOV:
-                switch(type){
-                    case UN_REGISTRE_UNE_VALEUR:
-                        /* mov(s) rd,#ope2 */
-                        /* 11110000 010s1111 0000dddd xxxxxxxx */
-                        fprintf(f_hex,"f0 %xf 0%x %0*x\n",4+s,ope1,2,ope2);
-                        break;
-                    case DEUX_REGISTRES:
-                        /* mov(s) rd,rm */
-                        /* 11101010 010s1111 0000dddd 0000mmmm */
-                        fprintf(f_hex,"eA %xf 0%x 0%x\n",4+s,ope1,ope2);
-                        break;                        
-                }
-                break;
-            case MVN:
-                switch(type){
-                    case UN_REGISTRE_UNE_VALEUR:
-                        /* mvn(s) rd,#ope2 */
-                        /* 11110000 011s1111 0000dddd xxxxxxxx */
-                        fprintf(f_hex,"f0 %xf 0%x %0*x\n",6+s,ope1,2,ope2);
-                        break;
-                    case DEUX_REGISTRES:
-                        /* mvn(s) rd,rm */
-                        /* 11101010 011s1111 0000dddd 0000mmmm */
-                        fprintf(f_hex,"fA %xf 0%x 0%x\n",6+s,ope1,ope2);
-                        break;                        
-                }
-                break;
-            case MOVW:
-                /* movw rd,#ope2       avec ope2 = zzzzwyyy xxxxxxxx*/
-                /* 11110w10 0100zzzz 0yyydddd xxxxxxxx */
-                w = (ope2 & 0x0800)/pow(2,11);
-                z = (ope2 & 0xF000)/pow(2,12);
-                y = (ope2 & 0x0700)/pow(2,8);
-                x = (ope2 & 0x00FF);
-                        
-                fprintf(f_hex,"f%x 4%x %x%x %0*x\n",2+w,z,y,ope1,2,x);
-                break;
-            case MOVT:
-                /* movt rd,#ope2       avec ope2 = zzzzwyyy xxxxxxxx*/
-                /* 11110w10 1100zzzz 0yyydddd xxxxxxxx */
-                w = (ope2 & 0x0800)/pow(2,11);
-                z = (ope2 & 0xF000)/pow(2,12);
-                y = (ope2 & 0x0700)/pow(2,8);
-                x = (ope2 & 0x00FF);
-                
-                fprintf(f_hex,"f%x c%x %x%x %0*x\n",2+w,z,y,ope1,2,x);
-                break;
-                
-                    
-                    
-                    
-            case AND:
-                switch(type){
-                    case TROIS_REGISTRES:
-                        /* op(s) rd,rn,rm */
-                        /* 11101010 000snnnn 0000dddd 0000mmmm */
-                        fprintf(f_hex,"ea %x%x 0%x 0%x\n",s,ope2,ope1,ope3);
-                        break;
-                    case DEUX_REGISTRES_UNE_VALEUR:
-                        /* op(s) rd,rn,#x */
-                        /* 11110000 000snnnn 0000dddd xxxxxxxx */
-                        fprintf(f_hex,"f0 %x%x 0%x %0*x\n",s,ope2,ope1,2,ope3);
-                        break;                        
-                    }
-                break;
-            case BIC:
-                switch(type){
-                    case TROIS_REGISTRES:
-                        /* op(s) rd,rn,rm */
-                        /* 11101010 001snnnn 0000dddd 0000mmmm */
-                        fprintf(f_hex,"ea %x%x 0%x 0%x\n",2+s,ope2,ope1,ope3);
-                        break;
-                    case DEUX_REGISTRES_UNE_VALEUR:
-                        /* op(s) rd,rn,#x */
-                        /* 11110000 001snnnn 0000dddd xxxxxxxx */
-                        fprintf(f_hex,"f0 %x%x 0%x %0*x\n",2+s,ope2,ope1,2,ope3);
-                        break;                        
-                }
-                break;
-            case ORR:
-                switch(type){
-                    case TROIS_REGISTRES:
-                            /* op(s) rd,rn,rm */
-                            /* 11101010 010snnnn 0000dddd 0000mmmm */
-                            fprintf(f_hex,"ea %x%x 0%x 0%x\n",4+s,ope2,ope1,ope3);
-                            break;
+                case LDR:
+                    switch(type){
+                        case DEUX_REGISTRES:
+                            /* ldr rd, [rm] */
+                            /* 1101mmmm 11111000 00000000 dddd0000 */
+                            fprintf(f_hex,"d%xf800%x0\n",ope2,ope1);
+                            break;   
                         case DEUX_REGISTRES_UNE_VALEUR:
-                            /* op(s) rd,rn,#x */
-                            /* 11110000 010snnnn 0000dddd xxxxxxxx */
-                            fprintf(f_hex,"f0 %x%x 0%x %0*x\n",4+s,ope2,ope1,2,ope3);
+                            /* ldr rd, [rm,#x] avec ope3 = xxxxyyyyzzzz*/
+                            /* 1101mmmm 11111000 yyyyzzzz ddddxxxx */
+                            x= (ope3 & 0xF00) / pow(2,8);
+                            y= (ope3 & 0xF0) / pow(2,4);
+                            z= (ope3 & 0xF);
+                            fprintf(f_hex,"d%xf8%x%x%x%x\n",ope2,y,z,ope1,x);
+                            break;
+                    }
+                    break;
+                case LDRH:
+                    switch(type){
+                        case DEUX_REGISTRES:
+                            /* ldrh rd, [rm] */
+                            /* 1011mmmm 11111000 00000000 dddd0000 */
+                            fprintf(f_hex,"b%xf800%x0\n",ope2,ope1);
+                            break;   
+                        case DEUX_REGISTRES_UNE_VALEUR:
+                            /* ldrh rd, [rm,#x] avec ope3 = xxxxyyyyzzzz*/
+                            /* 1011mmmm 11111000 yyyyzzzz ddddxxxx */
+                            x= (ope3 & 0xF00) / pow(2,8);
+                            y= (ope3 & 0xF0) / pow(2,4);
+                            z= (ope3 & 0xF);
+                            fprintf(f_hex,"b%xf8%x%x%x%x\n",ope2,y,z,ope1,x);
+                            break;
+                    }
+                    break;
+                case LDRB:
+                    switch(type){
+                        case DEUX_REGISTRES:
+                            /* ldrb rd, [rm] */
+                            /* 1001mmmm 11111000 00000000 dddd0000 */
+                            fprintf(f_hex,"9%xf800%x0\n",ope2,ope1);
+                            break;   
+                        case DEUX_REGISTRES_UNE_VALEUR:
+                            /* ldrb rd, [rm,#x] avec ope3 = xxxxyyyyzzzz*/
+                            /* 1001mmmm 11111000 yyyyzzzz ddddxxxx */
+                            x= (ope3 & 0xF00) / pow(2,8);
+                            y= (ope3 & 0xF0) / pow(2,4);
+                            z= (ope3 & 0xF);
+                            fprintf(f_hex,"9%xf8%x%x%x%x\n",ope2,y,z,ope1,x);
+                            break;
+                    }
+                    break;
+                case STR:
+                    switch(type){
+                        case DEUX_REGISTRES:
+                            /* str rd, [rm] */
+                            /* 1100mmmm 11111000 00000000 dddd0000 */
+                            fprintf(f_hex,"c%xf800%x0\n",ope2,ope1);
+                            break;   
+                        case DEUX_REGISTRES_UNE_VALEUR:
+                            /* str rd, [rm,#x] avec ope3 = xxxxyyyyzzzz*/
+                            /* 1100mmmm 11111000 yyyyzzzz ddddxxxx */
+                            x= (ope3 & 0xF00) / pow(2,8);
+                            y= (ope3 & 0xF0) / pow(2,4);
+                            z= (ope3 & 0xF);
+                            fprintf(f_hex,"c%xf8%x%x%x%x\n",ope2,y,z,ope1,x);
+                            break;
+                    }                
+                    break;
+                case STRH:
+                    switch(type){
+                        case DEUX_REGISTRES:
+                            /* strh rd, [rm] */
+                            /* 1010mmmm 11111000 00000000 dddd0000 */
+                            fprintf(f_hex,"a%xf800%x0\n",ope2,ope1);
+                            break;   
+                        case DEUX_REGISTRES_UNE_VALEUR:
+                            /* strh rd, [rm,#x] avec ope3 = xxxxyyyyzzzz*/
+                            /* 1010mmmm 11111000 yyyyzzzz ddddxxxx */
+                            x= (ope3 & 0xF00) / pow(2,8);
+                            y= (ope3 & 0xF0) / pow(2,4);
+                            z= (ope3 & 0xF);
+                            fprintf(f_hex,"a%xf8%x%x%x%x\n",ope2,y,z,ope1,x);
+                            break;
+                    }                
+                    break;
+                case STRB:
+                    switch(type){
+                        case DEUX_REGISTRES:
+                            /* strb rd, [rm] */
+                            /* 1000mmmm 11111000 00000000 dddd0000 */
+                            fprintf(f_hex,"8%xf800%x0\n",ope2,ope1);
+                            break;   
+                        case DEUX_REGISTRES_UNE_VALEUR:
+                            /* strb rd, [rm,#x] avec ope3 = xxxxyyyyzzzz*/
+                            /* 1000mmmm 11111000 yyyyzzzz ddddxxxx */
+                            x= (ope3 & 0xF00) / pow(2,8);
+                            y= (ope3 & 0xF0) / pow(2,4);
+                            z= (ope3 & 0xF);
+                            fprintf(f_hex,"8%xf8%x%x%x%x\n",ope2,y,z,ope1,x);
+                            break;
+                    }                
+                    break;
+                case MOV:
+                    switch(type){
+                        case UN_REGISTRE_UNE_VALEUR:
+                            /* mov(s) rd,#ope2 */
+                            /* 11110000 010s1111 0000dddd xxxxxxxx */
+                            fprintf(f_hex,"f0%xf0%x%0*x\n",4+s,ope1,2,ope2);
+                            break;
+                        case DEUX_REGISTRES:
+                            /* mov(s) rd,rm */
+                            /* 11101010 010s1111 0000dddd 0000mmmm */
+                            fprintf(f_hex,"eA%xf0%x0%x\n",4+s,ope1,ope2);
                             break;                        
                     }
                     break;
-            case ORN:
-                switch(type){
-                    case TROIS_REGISTRES:
-                        /* op(s) rd,rn,rm */
-                        /* 11101010 011snnnn 0000dddd 0000mmmm */
-                        fprintf(f_hex,"ea %x%x 0%x 0%x\n",6+s,ope2,ope1,ope3);
-                        break;
-                    case DEUX_REGISTRES_UNE_VALEUR:
-                        /* op(s) rd,rn,#x */
-                        /* 11110000 011snnnn 0000dddd xxxxxxxx */
-                        fprintf(f_hex,"f0 %x%x 0%x %0*x\n",6+s,ope2,ope1,2,ope3);
-                        break;                        
-                }
-                break;
-            case EOR:
-                switch(type){
-                    case TROIS_REGISTRES:
-                        /* op(s) rd,rn,rm */
-                        /* 11101010 100snnnn 0000dddd 0000mmmm */
-                        fprintf(f_hex,"ea %x%x 0%x 0%x\n",8+s,ope2,ope1,ope3);
-                        break;
-                    case DEUX_REGISTRES_UNE_VALEUR:
-                        /* op(s) rd,rn,#x */
-                        /* 11110000 100snnnn 0000dddd xxxxxxxx */
-                        fprintf(f_hex,"f0 %x%x 0%x %0*x\n",8+s,ope2,ope1,2,ope3);
-                        break;                        
-                }
-                break;
-            case ADD:
-                switch(type){
-                    case TROIS_REGISTRES:
-                        /* op(s) rd,rn,rm */
-                        /* 11101011 000snnnn 0000dddd 0000mmmm */
-                        fprintf(f_hex,"eb %x%x 0%x 0%x\n",s,ope2,ope1,ope3);
-                        break;
-                    case DEUX_REGISTRES_UNE_VALEUR:
-                        /* op(s) rd,rn,#x */
-                        /* 1111000o ooosnnnn 0000dddd xxxxxxxx */
-                        fprintf(f_hex,"f1 %x%x 0%x %0*x\n",s,ope2,ope1,2,ope3);
-                        break;                        
-                }
-                break;
-            case ADC:
-                switch(type){
-                    case TROIS_REGISTRES:
-                        /* op(s) rd,rn,rm */
-                        /* 11101011 010snnnn 0000dddd 0000mmmm */
-                        fprintf(f_hex,"eb %x%x 0%x 0%x\n",4+s,ope2,ope1,ope3);
-                        break;
-                    case DEUX_REGISTRES_UNE_VALEUR:
-                        /* op(s) rd,rn,#x */
-                        /* 11110001 010snnnn 0000dddd xxxxxxxx */
-                        fprintf(f_hex,"f1 %x%x 0%x %0*x\n",4+s,ope2,ope1,2,ope3);
-                        break;                        
+                case MVN:
+                    switch(type){
+                        case UN_REGISTRE_UNE_VALEUR:
+                            /* mvn(s) rd,#ope2 */
+                            /* 11110000 011s1111 0000dddd xxxxxxxx */
+                            fprintf(f_hex,"f0%xf0%x%0*x\n",6+s,ope1,2,ope2);
+                            break;
+                        case DEUX_REGISTRES:
+                            /* mvn(s) rd,rm */
+                            /* 11101010 011s1111 0000dddd 0000mmmm */
+                            fprintf(f_hex,"fA%xf0%x0%x\n",6+s,ope1,ope2);
+                            break;                        
                     }
-                break;
-            case SBC:
-                switch(type){
-                    case TROIS_REGISTRES:
-                        /* op(s) rd,rn,rm */
-                        /* 11101011 011snnnn 0000dddd 0000mmmm */
-                        fprintf(f_hex,"eb %x%x 0%x 0%x\n",6+s,ope2,ope1,ope3);
+                    break;
+                case MOVW:
+                    /* movw rd,#ope2       avec ope2 = zzzzwyyy xxxxxxxx*/
+                    /* 11110w10 0100zzzz 0yyydddd xxxxxxxx */
+                    w = (ope2 & 0x0800)/pow(2,11);
+                    z = (ope2 & 0xF000)/pow(2,12);
+                    y = (ope2 & 0x0700)/pow(2,8);
+                    x = (ope2 & 0x00FF);
+                            
+                    fprintf(f_hex,"f%x4%x%x%x%0*x\n",2+w,z,y,ope1,2,x);
+                    break;
+                case MOVT:
+                    /* movt rd,#ope2       avec ope2 = zzzzwyyy xxxxxxxx*/
+                    /* 11110w10 1100zzzz 0yyydddd xxxxxxxx */
+                    w = (ope2 & 0x0800)/pow(2,11);
+                    z = (ope2 & 0xF000)/pow(2,12);
+                    y = (ope2 & 0x0700)/pow(2,8);
+                    x = (ope2 & 0x00FF);
+                    
+                    fprintf(f_hex,"f%xc%x%x%x%0*x\n",2+w,z,y,ope1,2,x);
+                    break;
+                    
+                        
+                        
+                        
+                case AND:
+                    switch(type){
+                        case TROIS_REGISTRES:
+                            /* op(s) rd,rn,rm */
+                            /* 11101010 000snnnn 0000dddd 0000mmmm */
+                            fprintf(f_hex,"ea%x%x0%x0%x\n",s,ope2,ope1,ope3);
+                            break;
+                        case DEUX_REGISTRES_UNE_VALEUR:
+                            /* op(s) rd,rn,#x */
+                            /* 11110000 000snnnn 0000dddd xxxxxxxx */
+                            fprintf(f_hex,"f0%x%x0%x%0*x\n",s,ope2,ope1,2,ope3);
+                            break;                        
+                        }
+                    break;
+                case BIC:
+                    switch(type){
+                        case TROIS_REGISTRES:
+                            /* op(s) rd,rn,rm */
+                            /* 11101010 001snnnn 0000dddd 0000mmmm */
+                            fprintf(f_hex,"ea%x%x0%x0%x\n",2+s,ope2,ope1,ope3);
+                            break;
+                        case DEUX_REGISTRES_UNE_VALEUR:
+                            /* op(s) rd,rn,#x */
+                            /* 11110000 001snnnn 0000dddd xxxxxxxx */
+                            fprintf(f_hex,"f0%x%x0%x%0*x\n",2+s,ope2,ope1,2,ope3);
+                            break;                        
+                    }
+                    break;
+                case ORR:
+                    switch(type){
+                        case TROIS_REGISTRES:
+                                /* op(s) rd,rn,rm */
+                                /* 11101010 010snnnn 0000dddd 0000mmmm */
+                                fprintf(f_hex,"ea%x%x0%x0%x\n",4+s,ope2,ope1,ope3);
+                                break;
+                            case DEUX_REGISTRES_UNE_VALEUR:
+                                /* op(s) rd,rn,#x */
+                                /* 11110000 010snnnn 0000dddd xxxxxxxx */
+                                fprintf(f_hex,"f0%x%x0%x%0*x\n",4+s,ope2,ope1,2,ope3);
+                                break;                        
+                        }
                         break;
-                    case DEUX_REGISTRES_UNE_VALEUR:
-                        /* op(s) rd,rn,#x */
-                        /* 11110001 011snnnn 0000dddd xxxxxxxx */
-                        fprintf(f_hex,"f1 %x%x 0%x %0*x\n",6+s,ope2,ope1,2,ope3);
-                        break;                        
-                }
-                break;
-            case SUB:
-                switch(type){
-                    case TROIS_REGISTRES:
-                        /* op(s) rd,rn,rm */
-                        /* 11101011 101snnnn 0000dddd 0000mmmm */
-                        fprintf(f_hex,"eb %x%x 0%x 0%x\n",10+s,ope2,ope1,ope3);
-                        break;
-                    case DEUX_REGISTRES_UNE_VALEUR:
-                        /* op(s) rd,rn,#x */
-                        /* 11110001 101snnnn 0000dddd xxxxxxxx */
-                        fprintf(f_hex,"f1 %x%x 0%x %0*x\n",10+s,ope2,ope1,2,ope3);
-                        break;                        
-                }
-                break;
-            case RSB:
-                switch(type){
-                    case TROIS_REGISTRES:
-                        /* op(s) rd,rn,rm */
-                        /* 11101011 110snnnn 0000dddd 0000mmmm */
-                        fprintf(f_hex,"eb %x%x 0%x 0%x\n",12+s,ope2,ope1,ope3);
-                        break;
-                    case DEUX_REGISTRES_UNE_VALEUR:
-                        /* op(s) rd,rn,#x */
-                        /* 11110001 110snnnn 0000dddd xxxxxxxx */
-                        fprintf(f_hex,"f1 %x%x 0%x %0*x\n",12+s,ope2,ope1,2,ope3);
-                        break;                        
-                }
-                break;
-            case MUL:
-                /* mul rd,rn,rm */
-                /* 11111011 0000nnnn 1111dddd 0000mmmm */
-                fprintf(f_hex,"fb 0%x f%x 0%x\n",ope2,ope1,ope3);
-                break;
-            case TST:
-                switch(type){
-                    case UN_REGISTRE_UNE_VALEUR:
-                        /* tst rn,#x */
-                        /* 11110000 0001nnnn 00001111 xxxxxxxx */
-                        fprintf(f_hex,"f0 1%x 0f %0*x\n",ope1,2,ope2);
-                        break;
-                    case DEUX_REGISTRES:
-                        /* tst rn,rm */
-                        /* 11101010 0001nnnn 00001111 0000mmmm */
-                        fprintf(f_hex,"ea 1%x 0f 0%x\n",ope1,ope2);
-                        break;                        
-                }
-                break;
-            case CMP:
-                switch(type){
-                    case UN_REGISTRE_UNE_VALEUR:
-                        /* cmp rn,#x */
-                        /* 11110001 1011nnnn 00001111 xxxxxxxx */
-                        fprintf(f_hex,"f1 b%x 0f %0*x\n",ope1,2,ope2);
-                        break;
-                    case DEUX_REGISTRES:
-                        /* cmp rn,rm */
-                        /* 11101011 1011nnnn 00001111 0000mmmm */
-                        fprintf(f_hex,"eb b%x 0f 0%x\n",ope1,ope2);
-                        break;                        
-                }
-                break;
-            case LSL:
-                switch(type){
-                    case TROIS_REGISTRES:
-                        /* lsl rd,rn,rm */
-                        /* 11111010 000snnnn 1111dddd 0000mmmm */
-                        fprintf(f_hex,"fa %x%x f%x 0%x\n",s,ope2,ope1,ope3);
-                        break;
-                    case DEUX_REGISTRES_UNE_VALEUR:
-                        /* lsl rd,rm,#k */
-                        /* 11101010 010s1111 0xxxdddd yy00mmmm */
-                        x= (ope3 && 0x1C)/pow(2,2);
-                        y= ope3 && 0x3;
-                        fprintf(f_hex,"ea %xf %x%x %x%x\n",6+s,x ,ope1, y<<2 ,ope2);
-                        break;                      
-                }
-                break;
-            case LSR:
-                switch(type){
-                    case TROIS_REGISTRES:
-                        /* lsr rd,rn,rm */
-                        /* 11111010 001snnnn 1111dddd 0000mmmm */
-                        fprintf(f_hex,"fa %x%x f%x 0%x\n",2+s,ope2,ope1,ope3);
-                        break;
-                    case DEUX_REGISTRES_UNE_VALEUR:
-                        /* lsr rd,rm,#k */
-                        /* 11101010 010s1111 0xxxdddd yy01mmmm */
-                        x= (ope3 && 0x1C)/pow(2,2);
-                        y= ope3 && 0x3;
-                        fprintf(f_hex,"ea %xf %x%x %x%x\n",6+s,x ,ope1, (y<<2)+1 ,ope2);
-                        break;                      
-                }
-                break;
-            case ASR:
-                switch(type){
-                    case TROIS_REGISTRES:
-                        /* asr rd,rn,rm */
-                        /* 11111010 010snnnn 1111dddd 0000mmmm */
-                        fprintf(f_hex,"fa %x%x f%x 0%x\n",4+s,ope2,ope1,ope3);
-                        break;
-                    case DEUX_REGISTRES_UNE_VALEUR:
-                        /* asr rd,rm,#k */
-                        /* 11101010 010s1111 0xxxdddd yy10mmmm */
-                        x= (ope3 && 0x1C)/pow(2,2);
-                        y= ope3 && 0x3;
-                        fprintf(f_hex,"ea %xf %x%x %x%x\n",6+s,x ,ope1, (y<<2)+2 ,ope2);
-                        break;                      
-                }
-                break;
-            case ROR:
-                switch(type){
-                    case TROIS_REGISTRES:
-                        /* ror rd,rn,rm */
-                        /* 11111010 011snnnn 1111dddd 0000mmmm */
-                        fprintf(f_hex,"fa %x%x f%x 0%x\n",6+s,ope2,ope1,ope3);
-                        break;
-                    case DEUX_REGISTRES_UNE_VALEUR:
-                        /* ror rd,rm,#k */
-                        /* 11101010 010s1111 0xxxdddd yy11mmmm */
-                        x= (ope3 && 0x1C)/pow(2,2);
-                        y= ope3 && 0x3;
-                        fprintf(f_hex,"ea %xf %x%x %x%x\n",6+s,x ,ope1, (y<<2)+3 ,ope2);
-                        break;                      
-                }
-                break;
+                case ORN:
+                    switch(type){
+                        case TROIS_REGISTRES:
+                            /* op(s) rd,rn,rm */
+                            /* 11101010 011snnnn 0000dddd 0000mmmm */
+                            fprintf(f_hex,"ea%x%x0%x0%x\n",6+s,ope2,ope1,ope3);
+                            break;
+                        case DEUX_REGISTRES_UNE_VALEUR:
+                            /* op(s) rd,rn,#x */
+                            /* 11110000 011snnnn 0000dddd xxxxxxxx */
+                            fprintf(f_hex,"f0%x%x0%x%0*x\n",6+s,ope2,ope1,2,ope3);
+                            break;                        
+                    }
+                    break;
+                case EOR:
+                    switch(type){
+                        case TROIS_REGISTRES:
+                            /* op(s) rd,rn,rm */
+                            /* 11101010 100snnnn 0000dddd 0000mmmm */
+                            fprintf(f_hex,"ea%x%x0%x0%x\n",8+s,ope2,ope1,ope3);
+                            break;
+                        case DEUX_REGISTRES_UNE_VALEUR:
+                            /* op(s) rd,rn,#x */
+                            /* 11110000 100snnnn 0000dddd xxxxxxxx */
+                            fprintf(f_hex,"f0%x%x0%x%0*x\n",8+s,ope2,ope1,2,ope3);
+                            break;                        
+                    }
+                    break;
+                case ADD:
+                    switch(type){
+                        case TROIS_REGISTRES:
+                            /* op(s) rd,rn,rm */
+                            /* 11101011 000snnnn 0000dddd 0000mmmm */
+                            fprintf(f_hex,"eb%x%x0%x0%x\n",s,ope2,ope1,ope3);
+                            break;
+                        case DEUX_REGISTRES_UNE_VALEUR:
+                            /* op(s) rd,rn,#x */
+                            /* 1111000o ooosnnnn 0000dddd xxxxxxxx */
+                            fprintf(f_hex,"f1%x%x0%x%0*x\n",s,ope2,ope1,2,ope3);
+                            break;                        
+                    }
+                    break;
+                case ADC:
+                    switch(type){
+                        case TROIS_REGISTRES:
+                            /* op(s) rd,rn,rm */
+                            /* 11101011 010snnnn 0000dddd 0000mmmm */
+                            fprintf(f_hex,"eb%x%x0%x0%x\n",4+s,ope2,ope1,ope3);
+                            break;
+                        case DEUX_REGISTRES_UNE_VALEUR:
+                            /* op(s) rd,rn,#x */
+                            /* 11110001 010snnnn 0000dddd xxxxxxxx */
+                            fprintf(f_hex,"f1%x%x0%x%0*x\n",4+s,ope2,ope1,2,ope3);
+                            break;                        
+                        }
+                    break;
+                case SBC:
+                    switch(type){
+                        case TROIS_REGISTRES:
+                            /* op(s) rd,rn,rm */
+                            /* 11101011 011snnnn 0000dddd 0000mmmm */
+                            fprintf(f_hex,"eb%x%x0%x0%x\n",6+s,ope2,ope1,ope3);
+                            break;
+                        case DEUX_REGISTRES_UNE_VALEUR:
+                            /* op(s) rd,rn,#x */
+                            /* 11110001 011snnnn 0000dddd xxxxxxxx */
+                            fprintf(f_hex,"f1%x%x0%x%0*x\n",6+s,ope2,ope1,2,ope3);
+                            break;                        
+                    }
+                    break;
+                case SUB:
+                    switch(type){
+                        case TROIS_REGISTRES:
+                            /* op(s) rd,rn,rm */
+                            /* 11101011 101snnnn 0000dddd 0000mmmm */
+                            fprintf(f_hex,"eb%x%x0%x0%x\n",10+s,ope2,ope1,ope3);
+                            break;
+                        case DEUX_REGISTRES_UNE_VALEUR:
+                            /* op(s) rd,rn,#x */
+                            /* 11110001 101snnnn 0000dddd xxxxxxxx */
+                            fprintf(f_hex,"f1%x%x0%x%0*x\n",10+s,ope2,ope1,2,ope3);
+                            break;                        
+                    }
+                    break;
+                case RSB:
+                    switch(type){
+                        case TROIS_REGISTRES:
+                            /* op(s) rd,rn,rm */
+                            /* 11101011 110snnnn 0000dddd 0000mmmm */
+                            fprintf(f_hex,"eb%x%x0%x0%x\n",12+s,ope2,ope1,ope3);
+                            break;
+                        case DEUX_REGISTRES_UNE_VALEUR:
+                            /* op(s) rd,rn,#x */
+                            /* 11110001 110snnnn 0000dddd xxxxxxxx */
+                            fprintf(f_hex,"f1%x%x0%x%0*x\n",12+s,ope2,ope1,2,ope3);
+                            break;                        
+                    }
+                    break;
+                case MUL:
+                    /* mul rd,rn,rm */
+                    /* 11111011 0000nnnn 1111dddd 0000mmmm */
+                    fprintf(f_hex,"fb0%xf%x0%x\n",ope2,ope1,ope3);
+                    break;
+                case TST:
+                    switch(type){
+                        case UN_REGISTRE_UNE_VALEUR:
+                            /* tst rn,#x */
+                            /* 11110000 0001nnnn 00001111 xxxxxxxx */
+                            fprintf(f_hex,"f01%x0f%0*x\n",ope1,2,ope2);
+                            break;
+                        case DEUX_REGISTRES:
+                            /* tst rn,rm */
+                            /* 11101010 0001nnnn 00001111 0000mmmm */
+                            fprintf(f_hex,"ea1%x0f0%x\n",ope1,ope2);
+                            break;                        
+                    }
+                    break;
+                case CMP:
+                    switch(type){
+                        case UN_REGISTRE_UNE_VALEUR:
+                            /* cmp rn,#x */
+                            /* 11110001 1011nnnn 00001111 xxxxxxxx */
+                            fprintf(f_hex,"f1b%x0f%0*x\n",ope1,2,ope2);
+                            break;
+                        case DEUX_REGISTRES:
+                            /* cmp rn,rm */
+                            /* 11101011 1011nnnn 00001111 0000mmmm */
+                            fprintf(f_hex,"ebb%x0f0%x\n",ope1,ope2);
+                            break;                        
+                    }
+                    break;
+                case LSL:
+                    switch(type){
+                        case TROIS_REGISTRES:
+                            /* lsl rd,rn,rm */
+                            /* 11111010 000snnnn 1111dddd 0000mmmm */
+                            fprintf(f_hex,"fa%x%xf%x0%x\n",s,ope2,ope1,ope3);
+                            break;
+                        case DEUX_REGISTRES_UNE_VALEUR:
+                            /* lsl rd,rm,#k */
+                            /* 11101010 010s1111 0xxxdddd yy00mmmm */
+                            x= (ope3 && 0x1C)/pow(2,2);
+                            y= ope3 && 0x3;
+                            fprintf(f_hex,"ea%xf%x%x%x%x\n",6+s,x ,ope1, y<<2 ,ope2);
+                            break;                      
+                    }
+                    break;
+                case LSR:
+                    switch(type){
+                        case TROIS_REGISTRES:
+                            /* lsr rd,rn,rm */
+                            /* 11111010 001snnnn 1111dddd 0000mmmm */
+                            fprintf(f_hex,"fa%x%xf%x0%x\n",2+s,ope2,ope1,ope3);
+                            break;
+                        case DEUX_REGISTRES_UNE_VALEUR:
+                            /* lsr rd,rm,#k */
+                            /* 11101010 010s1111 0xxxdddd yy01mmmm */
+                            x= (ope3 && 0x1C)/pow(2,2);
+                            y= ope3 && 0x3;
+                            fprintf(f_hex,"ea%xf%x%x%x%x\n",6+s,x ,ope1, (y<<2)+1 ,ope2);
+                            break;                      
+                    }
+                    break;
+                case ASR:
+                    switch(type){
+                        case TROIS_REGISTRES:
+                            /* asr rd,rn,rm */
+                            /* 11111010 010snnnn 1111dddd 0000mmmm */
+                            fprintf(f_hex,"fa%x%xf%x0%x\n",4+s,ope2,ope1,ope3);
+                            break;
+                        case DEUX_REGISTRES_UNE_VALEUR:
+                            /* asr rd,rm,#k */
+                            /* 11101010 010s1111 0xxxdddd yy10mmmm */
+                            x= (ope3 && 0x1C)/pow(2,2);
+                            y= ope3 && 0x3;
+                            fprintf(f_hex,"ea%xf%x%x%x%x\n",6+s,x ,ope1, (y<<2)+2 ,ope2);
+                            break;                      
+                    }
+                    break;
+                case ROR:
+                    switch(type){
+                        case TROIS_REGISTRES:
+                            /* ror rd,rn,rm */
+                            /* 11111010 011snnnn 1111dddd 0000mmmm */
+                            fprintf(f_hex,"fa%x%xf%x0%x\n",6+s,ope2,ope1,ope3);
+                            break;
+                        case DEUX_REGISTRES_UNE_VALEUR:
+                            /* ror rd,rm,#k */
+                            /* 11101010 010s1111 0xxxdddd yy11mmmm */
+                            x= (ope3 && 0x1C)/pow(2,2);
+                            y= ope3 && 0x3;
+                            fprintf(f_hex,"ea%xf%x%x%x%x\n",6+s,x ,ope1, (y<<2)+3 ,ope2);
+                            break;                      
+                    }
+                    break;
+                case POP:   
+                    /* pop {rd} */
+                    /* 01011101 11111000 00000100 dddd1011 */
+                    fprintf(f_hex,"fa%x%xf%x0%x\n",6+s,ope2,ope1,ope3);
+                case PUSH:
+                    /* push {rd} */
+                    /* 01001101 11111000 00000100 dddd1101 */
+                    fprintf(f_hex,"fa%x%xf%x0%x\n",6+s,ope2,ope1,ope3);
             }
-            
             pc++;
-            
         }
     }
     return EXIT_SUCCESS;
@@ -513,9 +519,13 @@ void nettoyage_instruction(char instruction[]){
         if(instruction[i]=='%')
             instruction[i] = '\0';
         if(instruction[i]=='[')
-            instruction[i] = '\0';
+            instruction[i] = ' ';
         if(instruction[i]==']')
-            instruction[i] = '\0';
+            instruction[i] = ' ';
+        if(instruction[i]=='{')
+            instruction[i] = ' ';
+        if(instruction[i]=='}')
+            instruction[i] = ' ';
     }
 }
 
@@ -538,6 +548,8 @@ int recuperation_type(char *operande2, char *operande3){
         return DEUX_REGISTRES;
     if(operande2[0]=='#' && operande3[0]=='\0')
         return UN_REGISTRE_UNE_VALEUR;
+    if(operande2[0]=='\0' && operande3[0]=='\0')
+        return UN_REGISTRE;
     return -1;
 }
 
