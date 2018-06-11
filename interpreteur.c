@@ -270,32 +270,32 @@ int interpreter(Machine *M){
             
         case 0xD:
         /*ldr*/
-            ldr (M, hex7, hex2 + XYZ);
+            ldr (M, hex7, hex2, XYZ);
             break;
             
         case 0x9:
         /*ldrb*/
-            ldrb (M, hex7, hex2 + XYZ);
+            ldrb (M, hex7, hex2, XYZ);
             break;
         
         case 0xB:
         /*ldrh*/
-            ldrh (M, hex7, hex2 + XYZ);
+            ldrh (M, hex7, hex2, XYZ);
             break;
             
         case 0xC:
         /*str*/
-            str (M, hex7, hex2 + XYZ);
+            str (M, hex7, hex2, XYZ);
             break;
             
         case 0xA:
         /*strh*/
-            strh (M, hex7, hex2 + XYZ);
+            strh (M, hex7, hex2, XYZ);
             break;
             
         case 0x8:
         /*strb*/
-            strb (M, hex7, hex2 + XYZ);
+            strb (M, hex7, hex2, XYZ);
             break;
             
         default:

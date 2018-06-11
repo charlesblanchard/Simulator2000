@@ -72,7 +72,7 @@ typedef struct label{
 #define POP 193502740
 
 
-#define B 177671
+#define B 193487028
 #define BEQ 193487165
 #define BNE 193487450
 #define BHS 193487266
@@ -90,7 +90,7 @@ typedef struct label{
 #define BLE 193487384
 #define BAL 193487028
 
-#define BL 5863251
+#define BL 6385083648
 #define BLEQ 6385083785
 #define BLNE 6385084070                                                                       
 #define BLHS 6385083886                                                                       

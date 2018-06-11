@@ -5,7 +5,21 @@
 
 #include "math.h"
 
-
+#define EQ 0
+#define NE 1
+#define HS 2
+#define LO 3
+#define MI 4
+#define PL 5
+#define VS 6
+#define VC 7
+#define HI 8
+#define LS 9
+#define GE 10
+#define LT 11
+#define GT 12
+#define LE 13
+#define AL 14
 
 /* Calcul du PSR */
 void calcul_PSR(Machine *M, int16_t res);
@@ -80,25 +94,29 @@ void asr(Machine *M, int8_t rd, int32_t op1, int32_t op2, bool s);
 
 
 /* Store Register byte */
-void strb(Machine *M, int8_t rd, int8_t rn);
+void strb(Machine *M, int8_t rd, int8_t rn, int32_t offset);
 
 /* Store Register halfword */
-void strh(Machine *M, int8_t rd, int16_t rn);
+void strh(Machine *M, int8_t rd, int8_t rn, int32_t offset);
 
 /* Store Register word */
-void str(Machine *M, int8_t rd, int32_t rn);
+void str(Machine *M, int8_t rd, int8_t rn, int32_t offset);
 
 /* Load Register byte */
-void ldrb(Machine *M, int8_t rd, int8_t rn);
+void ldrb(Machine *M, int8_t rd, int8_t rn, int32_t offset);
 
 /* Load Register halfword */
-void ldrh(Machine *M, int16_t rd, int8_t rn);
+void ldrh(Machine *M, int8_t rd, int8_t rn, int32_t offset);
 
 /* Load Register word */
-void ldr(Machine *M, int32_t rd, int8_t rn);
+void ldr(Machine *M, int8_t rd, int8_t rn, int32_t offset);
 
 
-void push
+
+/* b{}{cond} adresse */
+void branch(Machine *M, int8_t cond, int8_t l, int8_t adresse);
+    
+    
 #endif
 
 
