@@ -15,7 +15,7 @@ int main(int argc, char *argv[]){
         printf("Mauvaise synthaxe: ./asm_to_hex nom_de_ficher.s\n");
         return ERR_SYNTHAXE;
     }
-    
+
     /* Ouverture des fichiers */
     ouverture_fichier(argv[1],&f_s,&f_hex);
     
@@ -37,7 +37,7 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
     
     char trash;
     
-    int ope1, ope2, ope3;
+    int ope1, ope2, ope3, i, address;
     int x,y,z,w;
     
     int type, s;
@@ -233,7 +233,6 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
                     
                         
                         
-                        
                 case AND:
                     switch(type){
                         case TROIS_REGISTRES:
@@ -374,11 +373,17 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
                             break;                        
                     }
                     break;
+                    
+                    
+                    
                 case MUL:
                     /* mul rd,rn,rm */
                     /* 11111011 0000nnnn 1111dddd 0000mmmm */
                     fprintf(f_hex,"fb0%xf%x0%x\n",ope2,ope1,ope3);
                     break;
+                    
+                    
+                    
                 case TST:
                     switch(type){
                         case UN_REGISTRE_UNE_VALEUR:
@@ -407,6 +412,9 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
                             break;                        
                     }
                     break;
+                    
+                    
+                    
                 case LSL:
                     switch(type){
                         case TROIS_REGISTRES:
@@ -471,14 +479,295 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
                             break;                      
                     }
                     break;
+                    
+                    
+                    
                 case POP:   
                     /* pop {rd} */
                     /* 01011101 11111000 00000100 dddd1011 */
                     fprintf(f_hex,"fa%x%xf%x0%x\n",6+s,ope2,ope1,ope3);
+                    break;   
                 case PUSH:
                     /* push {rd} */
                     /* 01001101 11111000 00000100 dddd1101 */
                     fprintf(f_hex,"fa%x%xf%x0%x\n",6+s,ope2,ope1,ope3);
+                    break;
+                    
+
+                    
+                case BEQ:
+                    /* beq label */
+                    /* 0000 1010 'adresse label sur 3 octet' */
+                    for(i=0; i<taille_label; i++){
+                        if(strcmp(operande1,e[i].nom_label)==0)
+                            address = e[i].valeur_label;
+                    }
+                    fprintf(f_hex,"0a%06x\n",address);
+                    break;
+                case BNE:
+                    /* bne label */
+                    /* 0001 1010 'adresse label sur 3 octet' */
+                    for(i=0; i<taille_label; i++){
+                        if(strcmp(operande1,e[i].nom_label)==0)
+                            address = e[i].valeur_label;
+                    }
+                    fprintf(f_hex,"1a%06x\n",address);
+                    break;
+                case BHS:
+                    /* bhs label */
+                    /* 0010 1010 'adresse label sur 3 octet' */
+                    for(i=0; i<taille_label; i++){
+                        if(strcmp(operande1,e[i].nom_label)==0)
+                            address = e[i].valeur_label;
+                    }
+                    fprintf(f_hex,"2a%06x\n",address);
+                    break;
+                case BLO:
+                    /* blo label */
+                    /* 0011 1010 'adresse label sur 3 octet' */
+                    for(i=0; i<taille_label; i++){
+                        if(strcmp(operande1,e[i].nom_label)==0)
+                            address = e[i].valeur_label;
+                    }
+                    fprintf(f_hex,"3a%06x\n",address);
+                    break;
+                case BMI:
+                    /* bmi label */
+                    /* 0100 1010 'adresse label sur 3 octet' */
+                    for(i=0; i<taille_label; i++){
+                        if(strcmp(operande1,e[i].nom_label)==0)
+                            address = e[i].valeur_label;
+                    }
+                    fprintf(f_hex,"4a%06x\n",address);
+                    break;
+                case BPL:
+                    /* bpl label */
+                    /* 0101 1010 'adresse label sur 3 octet' */
+                    for(i=0; i<taille_label; i++){
+                        if(strcmp(operande1,e[i].nom_label)==0)
+                            address = e[i].valeur_label;
+                    }
+                    fprintf(f_hex,"5a%06x\n",address);
+                    break;
+                case BVS:
+                    /* bvs label */
+                    /* 0110 1010 'adresse label sur 3 octet' */
+                    for(i=0; i<taille_label; i++){
+                        if(strcmp(operande1,e[i].nom_label)==0)
+                            address = e[i].valeur_label;
+                    }
+                    fprintf(f_hex,"6a%06x\n",address);
+                    break;
+                case BVC:
+                    /* bvc label */
+                    /* 0111 1010 'adresse label sur 3 octet' */
+                    for(i=0; i<taille_label; i++){
+                        if(strcmp(operande1,e[i].nom_label)==0)
+                            address = e[i].valeur_label;
+                    }
+                    fprintf(f_hex,"7a%06x\n",address);
+                    break;
+                case BHI:
+                    /* bhi label */
+                    /* 1000 1010 'adresse label sur 3 octet' */
+                    for(i=0; i<taille_label; i++){
+                        if(strcmp(operande1,e[i].nom_label)==0)
+                            address = e[i].valeur_label;
+                    }
+                    fprintf(f_hex,"8a%06x\n",address);
+                    break;
+                case BLS:
+                    /* bls label */
+                    /* 1001 1010 'adresse label sur 3 octet' */
+                    for(i=0; i<taille_label; i++){
+                        if(strcmp(operande1,e[i].nom_label)==0)
+                            address = e[i].valeur_label;
+                    }
+                    fprintf(f_hex,"9a%06x\n",address);
+                    break;
+                case BGE:
+                    /* bge label */
+                    /* 1010 1010 'adresse label sur 3 octet' */
+                    for(i=0; i<taille_label; i++){
+                        if(strcmp(operande1,e[i].nom_label)==0)
+                            address = e[i].valeur_label;
+                    }
+                    fprintf(f_hex,"aa%06x\n",address);
+                    break;
+                case BLT:
+                    /* blt label */
+                    /* 1011 1010 'adresse label sur 3 octet' */
+                    for(i=0; i<taille_label; i++){
+                        if(strcmp(operande1,e[i].nom_label)==0)
+                            address = e[i].valeur_label;
+                    }
+                    fprintf(f_hex,"ba%06x\n",address);
+                    break;
+                case BGT:
+                    /* bgt label */
+                    /* 1100 1010 'adresse label sur 3 octet' */
+                    for(i=0; i<taille_label; i++){
+                        if(strcmp(operande1,e[i].nom_label)==0)
+                            address = e[i].valeur_label;
+                    }
+                    fprintf(f_hex,"ca%06x\n",address);
+                    break;
+                case BLE:
+                    /* ble label */
+                    /* 1101 1010 'adresse label sur 3 octet' */
+                    for(i=0; i<taille_label; i++){
+                        if(strcmp(operande1,e[i].nom_label)==0)
+                            address = e[i].valeur_label;
+                    }
+                    fprintf(f_hex,"da%06x\n",address);
+                    break;
+                case BAL:
+                    /* bal label */
+                    /* 1110 1010 'adresse label sur 3 octet' */
+                    for(i=0; i<taille_label; i++){
+                        if(strcmp(operande1,e[i].nom_label)==0)
+                            address = e[i].valeur_label;
+                    }
+                    fprintf(f_hex,"fa%06x\n",address);
+                    break;
+                    
+                    
+                    
+                case BLEQ:
+                    /* bleq label */
+                    /* 0000 1011 'adresse label sur 3 octet' */
+                    for(i=0; i<taille_label; i++){
+                        if(strcmp(operande1,e[i].nom_label)==0)
+                            address = e[i].valeur_label;
+                    }
+                    fprintf(f_hex,"0b%06x\n",address);
+                    break;
+                case BLNE:
+                    /* blne label */
+                    /* 0001 1011 'adresse label sur 3 octet' */
+                    for(i=0; i<taille_label; i++){
+                        if(strcmp(operande1,e[i].nom_label)==0)
+                            address = e[i].valeur_label;
+                    }
+                    fprintf(f_hex,"1b%06x\n",address);
+                    break;
+                case BLHS:
+                    /* blhs label */
+                    /* 0010 1011 'adresse label sur 3 octet' */
+                    for(i=0; i<taille_label; i++){
+                        if(strcmp(operande1,e[i].nom_label)==0)
+                            address = e[i].valeur_label;
+                    }
+                    fprintf(f_hex,"2b%06x\n",address);
+                    break;
+                case BLLO:
+                    /* bllo label */
+                    /* 0011 1011 'adresse label sur 3 octet' */
+                    for(i=0; i<taille_label; i++){
+                        if(strcmp(operande1,e[i].nom_label)==0)
+                            address = e[i].valeur_label;
+                    }
+                    fprintf(f_hex,"3b%06x\n",address);
+                    break;
+                case BLMI:
+                    /* blmi label */
+                    /* 0100 1011 'adresse label sur 3 octet' */
+                    for(i=0; i<taille_label; i++){
+                        if(strcmp(operande1,e[i].nom_label)==0)
+                            address = e[i].valeur_label;
+                    }
+                    fprintf(f_hex,"4b%06x\n",address);
+                    break;
+                case BLPL:
+                    /* blpl label */
+                    /* 0101 1011 'adresse label sur 3 octet' */
+                    for(i=0; i<taille_label; i++){
+                        if(strcmp(operande1,e[i].nom_label)==0)
+                            address = e[i].valeur_label;
+                    }
+                    fprintf(f_hex,"5b%06x\n",address);
+                    break;
+                case BLVS:
+                    /* blvs label */
+                    /* 0110 1011 'adresse label sur 3 octet' */
+                    for(i=0; i<taille_label; i++){
+                        if(strcmp(operande1,e[i].nom_label)==0)
+                            address = e[i].valeur_label;
+                    }
+                    fprintf(f_hex,"6b%06x\n",address);
+                    break;
+                case BLVC:
+                    /* blvc label */
+                    /* 0111 1011 'adresse label sur 3 octet' */
+                    for(i=0; i<taille_label; i++){
+                        if(strcmp(operande1,e[i].nom_label)==0)
+                            address = e[i].valeur_label;
+                    }
+                    fprintf(f_hex,"7b%06x\n",address);
+                    break;
+                case BLHI:
+                    /* blhi label */
+                    /* 1000 1011 'adresse label sur 3 octet' */
+                    for(i=0; i<taille_label; i++){
+                        if(strcmp(operande1,e[i].nom_label)==0)
+                            address = e[i].valeur_label;
+                    }
+                    fprintf(f_hex,"8b%06x\n",address);
+                    break;
+                case BLLS:
+                    /* blls label */
+                    /* 1001 1011 'adresse label sur 3 octet' */
+                    for(i=0; i<taille_label; i++){
+                        if(strcmp(operande1,e[i].nom_label)==0)
+                            address = e[i].valeur_label;
+                    }
+                    fprintf(f_hex,"9b%06x\n",address);
+                    break;
+                case BLGE:
+                    /* blge label */
+                    /* 1010 1011 'adresse label sur 3 octet' */
+                    for(i=0; i<taille_label; i++){
+                        if(strcmp(operande1,e[i].nom_label)==0)
+                            address = e[i].valeur_label;
+                    }
+                    fprintf(f_hex,"ab%06x\n",address);
+                    break;
+                case BLLT:
+                    /* bllt label */
+                    /* 1011 1011 'adresse label sur 3 octet' */
+                    for(i=0; i<taille_label; i++){
+                        if(strcmp(operande1,e[i].nom_label)==0)
+                            address = e[i].valeur_label;
+                    }
+                    fprintf(f_hex,"bb%06x\n",address);
+                    break;
+                case BLGT:
+                    /* blgt label */
+                    /* 1100 1011 'adresse label sur 3 octet' */
+                    for(i=0; i<taille_label; i++){
+                        if(strcmp(operande1,e[i].nom_label)==0)
+                            address = e[i].valeur_label;
+                    }
+                    fprintf(f_hex,"cb%06x\n",address);
+                    break;
+                case BLLE:
+                    /* blle label */
+                    /* 1101 1011 'adresse label sur 3 octet' */
+                    for(i=0; i<taille_label; i++){
+                        if(strcmp(operande1,e[i].nom_label)==0)
+                            address = e[i].valeur_label;
+                    }
+                    fprintf(f_hex,"db%06x\n",address);
+                    break;
+                case BLAL:
+                    /* blal label */
+                    /* 1110 1011 'adresse label sur 3 octet' */
+                    for(i=0; i<taille_label; i++){
+                        if(strcmp(operande1,e[i].nom_label)==0)
+                            address = e[i].valeur_label;
+                    }
+                    fprintf(f_hex,"eb%06x\n",address);
+                    break;
             }
             pc++;
         }

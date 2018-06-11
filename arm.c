@@ -134,6 +134,7 @@ void mul(Machine *M, int8_t rd, int32_t op1, int32_t op2){
 }
 
 
+
 /* MAJ PSR TST op1 & op2 */ 
 void tst(Machine *M, int32_t op1, int32_t op2){
     calcul_PSR( M , op1 & op2 );
@@ -143,6 +144,7 @@ void tst(Machine *M, int32_t op1, int32_t op2){
 void cmp(Machine *M, int32_t op1, int32_t op2){
     calcul_PSR( M , (op1 - op2)%((int32_t)pow(2,32)) );
 }
+
 
 
 /* Logical left shift */
@@ -168,6 +170,8 @@ void asr(Machine *M, int8_t rd, int32_t op1, int32_t op2, bool s){
         calcul_PSR( M , M->REG[rd] );
     M->REG[PC] = M->REG[PC]+1;
 }
+
+
 
 /* Store Register byte */
 void strb(Machine *M, int8_t rd, int8_t rn){

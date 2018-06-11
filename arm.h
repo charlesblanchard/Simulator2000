@@ -98,6 +98,7 @@ void ldrh(Machine *M, int16_t rd, int8_t rn);
 void ldr(Machine *M, int32_t rd, int8_t rn);
 
 
+void push
 #endif
 
 
