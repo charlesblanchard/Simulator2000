@@ -58,43 +58,123 @@ int interpreter(Machine *M){
     int hex3 = (instruction & ~(0xFF0FFFFF)) / pow(2,20);
     int hex4 = (instruction & ~(0xFFF0FFFF)) / pow(2,16);
     int hex5 = (instruction & ~(0xFFFF0FFF)) / pow(2,12);
-    int hex6 = (instruction & ~(0xFFFFF0FF)) / pow(2,8);
+    /*int hex6 = (instruction & ~(0xFFFFF0FF)) / pow(2,8);*/ /*unused variable*/
     int hex7 = (instruction & ~(0xFFFFFF0F)) / pow(2,4);
-    int hex8 = (instruction & ~(0xFFFFFFF0));
+    /* hex8 = (instruction & ~(0xFFFFFFF0));*/ /*unused variable*/
     int zzzzwyyyxxxxxxxx = rego_z * pow(2,12) + w * pow(2,11) + xy * pow(2,8) + val1 * pow(2,4) + val2_regv;
     int pp_reg = (instruction & ~(0xFF6FFFFF)) / pow(2,21);
     int s = (instruction & ~(0xFFEFFFFF)) / pow(2,20);
+    int pp = (hex7 & 0x3);
+    int xxxyy = ((hex5*pow(2,2)) + (hex7 & 0xC));
+    int val = (val1 * pow(2,4)) + val2_regv;
     
-    
+    /*mov(reg),mvm(reg),ops(reg),décalages(val),tests(reg)*/
         if (hex1 == 0xE){
-            /*mov(reg),mvm(reg),ops(reg),décalages(val)*/
-           /*****************************************/
-            /*mov(reg)*/
+            /*test(reg)*/
+           	if (regd == 0xf && rego_z != 0xF){
             
-            
-            
-            
-            /****************************************/
-            
-        } else if (hex1 == 0xF){
-            /*mov(val),movn(val),movt(val),movw(val),décalages(reg),mul(reg),ops(val)*/
-            /**********************************/
+            /* décalages (val),mov(reg),mvn(reg)*/
+                switch (code){
+                    case(0x0):
+                        tst(M, M->FLASH[rego_z], M->FLASH[val2_regv]);
+                        break;
+                    
+                    case(0xD):
+                        cmp(M, M->FLASH[rego_z],  M->FLASH[val2_regv]);
+                        break;
+                }
+            }
+            else if (rego_z == 0xF){
+                /*décalages (val)*/
+                if(hex5 + val1 != 0xF) {
+                    switch (pp) {
+                        case(0x0):
+                            lsl(M, regd,M->FLASH[val2_regv],xxxyy, psr);
+                            break;
+                        
+                        case(0x1):
+                            lsr(M, regd,M->FLASH[val2_regv],xxxyy, psr);
+                            break;
+                        
+                        case(0x2):
+                            asr(M, regd,M->FLASH[val2_regv],xxxyy, psr);
+                            break;
+                    }
+                } 
+                /*mov(reg*/
+                else if (hex3 == 0x4 || hex3 == 0x5){
+                    mov(M, regd, M->FLASH[val2_regv], psr);
+                }
+                /*mvn(reg)*/
+                else if (hex3 == 0x6 || hex3 == 0x7){
+                    mvn(M, regd, M->FLASH[val2_regv], psr);
+                }
+            }
+            /*ops (reg)*/
+            else {
+                switch (code) {
+                    case(0x0):
+                    and(M, M->FLASH[regd], M->FLASH[rego_z], M->FLASH[val2_regv], psr);
+                    break;
+                    
+                    case(0x1):
+                    bic(M, M->FLASH[regd], M->FLASH[rego_z], M->FLASH[val2_regv], psr);
+                    break;
+                    
+                    case(0x2):
+                    orr(M, M->FLASH[regd], M->FLASH[rego_z], M->FLASH[val2_regv], psr);
+                    break;
+                    
+                    case(0x3):
+                    orn(M, M->FLASH[regd], M->FLASH[rego_z], M->FLASH[val2_regv], psr);
+                    break;
+                    
+                    case(0x4):
+                    eor(M, M->FLASH[regd], M->FLASH[rego_z], M->FLASH[val2_regv], psr);
+                    break;
+                    
+                    case(0x8):
+                    add(M, M->FLASH[regd], M->FLASH[rego_z], M->FLASH[val2_regv], psr);
+                    break;
+                    
+                    case(0xA):
+                    adc(M, M->FLASH[regd], M->FLASH[rego_z], M->FLASH[val2_regv], psr);
+                    break;
+                    
+                    case(0xB):
+                    sbc(M, M->FLASH[regd], M->FLASH[rego_z], M->FLASH[val2_regv], psr);
+                    break;
+                
+                    case(0xD):
+                    sub(M, M->FLASH[regd], M->FLASH[rego_z], M->FLASH[val2_regv], psr);
+                    break;
+                    
+                    case(0xE):
+                    rsb(M, M->FLASH[regd], M->FLASH[rego_z], M->FLASH[val2_regv], psr);
+                    break;
+                }
+            }
+    
+        }
+    
+    /*mov(val),movn(val),movt(val),movw(val),décalages(reg),mul(reg),ops(val)*/
+        else if (hex1 == 0xF){
             /*mov(val),movn(val)*/
             if (hex2 == 0x0 && hex4 == 0xF){
                 if (hex3 == 0x5 || hex3 == 0x4){
                     /*mov(val)*/
                     printf("mov(val)\n");
-                    mov(M, regd, (val1 * pow(2,4)) + val2_regv, psr);
+                    mov(M, regd, val, psr);
                 } else if (hex3 == 0x7 || hex3 == 0x6){
                     /*mvn(val)*/
                     printf("mvn(val)\n");
-                    mvn(M, regd, (val1 * pow(2,4)) + val2_regv, psr);
+                    mvn(M, regd, val, psr);
                 } else {
                     erreur = 1;
                     instruction = PC_DER_LIGNE;
                 }
             }
-            /**********************************/
+            
             /*movt(val), movw(all)*/
             else if (hex2 == 0x2 || hex2 == 0x6) {
                 if (hex3 == 0xC){
@@ -110,37 +190,92 @@ int interpreter(Machine *M){
                     instruction = PC_DER_LIGNE;
                 }
             }
-            /**********************************/
+            
             /*décalages(reg)*/
             else if (hex2 == 0xA) {
                 switch(pp_reg){
                     case 0x00:
-                        lsl(M, regd, M->REG[rego_z],M->REG[val2_regv],s);
+                        lsl(M, regd, M->FLASH[rego_z],M->FLASH[val2_regv],s);
                         break;
                     case 0x01:
-                        lsr(M, regd, M->REG[rego_z],M->REG[val2_regv],s);
+                        lsr(M, regd, M->FLASH[rego_z],M->FLASH[val2_regv],s);
                         break;
                     case 0x10:
-                        asr(M, regd, M->REG[rego_z],M->REG[val2_regv],s);
+                        asr(M, regd, M->FLASH[rego_z],M->FLASH[val2_regv],s);
                         break;
                 }
             }
-            /**********************************/
+            
             /*mul(reg)*/
             else if (hex2 == 0xB) {
-                mul(M, M->REG[regd],M->REG[rego_z], val2_regv);
+                mul(M, M->FLASH[regd],M->FLASH[rego_z], val2_regv);
             }
-            /**********************************/
-            /*
             
-            /**********************************/
-            /*opération innexistante*/
-            else {
+            /*tests(val)*/
+            if (regd == 0xf){
+                switch (code){
+                    case(0x0):
+                        tst(M, M->FLASH[rego_z], val);
+                        break;
+                    case(0xD):
+                        cmp(M, M->FLASH[rego_z], val);
+                        break;
+                }
+            }
+            
+            /*ops(val)*/
+            else if (hex4!= 0xF){
+                switch (code) {
+                    case(0x0):
+                    and(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
+                    break;
+                    
+                    case(0x1):
+                    bic(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
+                    break;
+                    
+                    case(0x2):
+                    orr(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
+                    break;
+                    
+                    case(0x3):
+                    orn(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
+                    break;
+                    
+                    case(0x4):
+                    eor(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
+                    break;
+                    
+                    case(0x8):
+                    add(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
+                    break;
+                    
+                    case(0xA):
+                    adc(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
+                    break;
+                    
+                    case(0xB):
+                    sbc(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
+                    break;
+                
+                    case(0xD):
+                    sub(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
+                    break;
+                    
+                    case(0xE):
+                    rsb(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
+                    break;
+                }
+            }
+            
+        /*opération innexistante*/
+        else {
                 erreur = 1;
             }
-            
-            
-        } else {
+        } 
+        
+    /*opération inexistante*/
+        else {
             erreur = 1;
             instruction = PC_DER_LIGNE;
         }
@@ -153,6 +288,8 @@ int interpreter(Machine *M){
     if (erreur == 1){
         return i;
     }
+    
+    return 0;
     
 
 }
