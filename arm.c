@@ -176,12 +176,16 @@ void strb(Machine *M, int8_t rd, int8_t rn){
 
 /* Store Register halfword */
 void strh(Machine *M, int8_t rd, int16_t rn){
-    M->RAM[rd] = rn;
+    M->RAM[rd] = rn & 0x00ff;
+    M->RAM[rd+1] = rn >> 8;
 }
 
 /* Store Register word */
 void str(Machine *M, int8_t rd, int32_t rn){
-    M->RAM[rd] = rn;
+    M->RAM[rd] = (rn & 0x00ff0000) >> 16;
+    M->RAM[rd+1] = (rn >> 24);
+    M->RAM[rd+2] = (rn & 0x000000ff);
+    M->RAM[rd+3] = (rn & 0x0000ff00) >> 8;
 }
 
 /* Load Register byte */
@@ -191,12 +195,12 @@ void ldrb(Machine *M, int8_t rd, int8_t rn){
 
 /* Load Register halfword */
 void ldrh(Machine *M, int16_t rd, int8_t rn){
-    rd = M->RAM[rn];
+    rd = M->RAM[rn] | (M->RAM[rn+1] << 8);
 }
 
 /* Load Register word */
 void ldr(Machine *M, int32_t rd, int8_t rn){
-    rd = M->RAM[rn];
+    rd = (M->RAM[rn] << 16) | (M->RAM[rn+1] << 24) | (M->RAM[rn+2]) | (M->RAM[rn+3] << 8);
 }
 
 
