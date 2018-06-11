@@ -19,18 +19,13 @@ int fermeture_fichier(FILE* f_s, FILE* f_hex);
 int lecture_fichier(FILE* f_s, FILE* f_hex);
 void nettoyage_instruction(char instruction[]);
 unsigned long hash(char *src);
-int recuperation_type(char prefix2, char prefix3);
+int recuperation_type(char *operande2, char *operande3);
 int recuperation_s(char *mnemonique);
 
 typedef struct label{
-    char *nom_label;
+    char nom_label[20];
     int valeur_label;
 } Label;
-
-typedef struct ens_label{
-    Label tab[50];
-    int taille;
-} Ens_Label;
 
 
 #define MOV 193499479
