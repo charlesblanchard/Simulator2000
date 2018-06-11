@@ -62,6 +62,8 @@ int interpreter(Machine *M){
     int hex7 = (instruction & ~(0xFFFFFF0F)) / pow(2,4);
     int hex8 = (instruction & ~(0xFFFFFFF0));
     int zzzzwyyyxxxxxxxx = rego_z * pow(2,12) + w * pow(2,11) + xy * pow(2,8) + val1 * pow(2,4) + val2_regv;
+    int pp_reg = (instruction & ~(0xFF6FFFFF)) / pow(2,21);
+    int s = (instruction & ~(0xFFEFFFFF)) / pow(2,20);
     
     
         if (hex1 == 0xE){
@@ -94,7 +96,7 @@ int interpreter(Machine *M){
             }
             /**********************************/
             /*movt(val), movw(all)*/
-            if (hex2 == 0x2 || hex2 == 0x6) {
+            else if (hex2 == 0x2 || hex2 == 0x6) {
                 if (hex3 == 0xC){
                     /*movt(val)*/
                     printf("movt(val)\n");
@@ -108,6 +110,35 @@ int interpreter(Machine *M){
                     instruction = PC_DER_LIGNE;
                 }
             }
+            /**********************************/
+            /*décalages(reg)*/
+            else if (hex2 == 0xA) {
+                switch(pp_reg){
+                    case 0x00:
+                        lsl(M, regd, M->REG[rego_z],M->REG[val2_regv],s);
+                        break;
+                    case 0x01:
+                        lsr(M, regd, M->REG[rego_z],M->REG[val2_regv],s);
+                        break;
+                    case 0x10:
+                        asr(M, regd, M->REG[rego_z],M->REG[val2_regv],s);
+                        break;
+                }
+            }
+            /**********************************/
+            /*mul(reg)*/
+            else if (hex2 == 0xB) {
+                mul(M, M->REG[regd],M->REG[rego_z], val2_regv);
+            }
+            /**********************************/
+            /*
+            
+            /**********************************/
+            /*opération innexistante*/
+            else {
+                erreur = 1;
+            }
+            
             
         } else {
             erreur = 1;
