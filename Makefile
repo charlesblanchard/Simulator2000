@@ -2,25 +2,26 @@
 CC 	?= gcc
 
 # Définition des paramètres de compilation
-FLAGS	?= -W -Wall -ansi
+FLAGS	?= -Wall -ansi
 
 # Définition des écutables
-EXEC	?= Simulateur2000 asm_to_hex
+EXEC	?= simulateur conversion_assembleur_hexa
 
 
 all: $(EXEC)
 
 # PROGRAMME PRINCIPAL
 
-Simulateur2000 : simulateur.o interpreteur.o lecture.o main.o
-	$(CC) $(FLAGS) simulateur.o arm.o interpreteur.o lecture.o main.o -o Simulateur2000
+simulateur : arm.o simulateur.o interpreteur.o lecture.o main.o
+	$(CC) $(FLAGS) simulateur.o arm.o interpreteur.o lecture.o main.o -o simulateur
 
 
 main.o : main.c simulateur.h interpreteur.h lecture.h arm.h
 	$(CC) $(FLAGS) -c main.c -o main.o
 
 arm.o : arm.c
-	gcc -W -Wall -ansi -c arm.c -o arm.o
+	$(CC) $(FLAGS) -c arm.c -o arm.o
+
 
 simulateur.o : simulateur.c
 	$(CC) $(FLAGS) -c simulateur.c -o simulateur.o
@@ -37,8 +38,8 @@ interpreteur.o : interpreteur.c simulateur.h arm.h arm.c
 
 # PROGRAMME ASM_to_HEX
 
-asm_to_hex : asm_to_hex.o
-	$(CC) $(FLAGS) asm_to_hex.o -o asm_to_hex
+conversion_assembleur_hexa : asm_to_hex.o
+	$(CC) $(FLAGS) asm_to_hex.o -o conversion_assembleur_hexa
 
 asm_to_hex.o : asm_to_hex.c
 	$(CC) $(FLAGS) -c asm_to_hex.c -o asm_to_hex.o

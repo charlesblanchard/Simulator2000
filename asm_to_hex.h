@@ -1,3 +1,38 @@
+#define EXIT_SUCCESS 0
+#define ERR_SYNTHAXE 1
+#define ERR_F_S 2
+#define ERR_F_HEX 3
+
+#define T_INSTRUCTION 50
+#define T_MNEMONIQUE 4
+#define T_OPERANDE 20
+
+#define TAILLE_LIGNE 50
+ 
+#define TROIS_REGISTRES 0
+#define DEUX_REGISTRES_UNE_VALEUR 1
+#define DEUX_REGISTRES 2
+#define UN_REGISTRE_UNE_VALEUR 3
+
+int ouverture_fichier(char *nom, FILE** f_s, FILE** f_hex);
+int fermeture_fichier(FILE* f_s, FILE* f_hex);
+int lecture_fichier(FILE* f_s, FILE* f_hex);
+void nettoyage_instruction(char instruction[]);
+unsigned long hash(char *src);
+int recuperation_type(char prefix2, char prefix3);
+int recuperation_s(char *mnemonique);
+
+typedef struct label{
+    char *nom_label;
+    int valeur_label;
+} Label;
+
+typedef struct ens_label{
+    Label tab[50];
+    int taille;
+} Ens_Label;
+
+
 #define MOV 193499479
 #define MVN 193499702
 #define MOVW 6385482926
@@ -18,23 +53,13 @@
 #define LSL 193498512
 #define LSR 193498518
 #define ASR 193486539
+#define ROR 193504920
+#define LDR 193498023
+#define LDRH 6385434863
+#define LDRB 6385434857
+#define STR 193506174
+#define STRH 6385703846
+#define STRB 6385703840
 
-/* printf("#define mov %lu\n",hash("mov"));
-        printf("#define mvn %lu\n",hash("mvn"));
-        printf("#define movw %lu\n",hash("movw"));
-        printf("#define movt %lu\n",hash("movt"));
-        printf("#define and %lu\n",hash("and"));
-        printf("#define bic %lu\n",hash("bic"));
-        printf("#define orr %lu\n",hash("orr"));
-        printf("#define orn %lu\n",hash("orn"));
-        printf("#define add %lu\n",hash("add"));
-        printf("#define adc %lu\n",hash("adc"));
-        printf("#define sbc %lu\n",hash("sbc"));
-        printf("#define sub %lu\n",hash("sub"));
-        printf("#define rsb %lu\n",hash("rsb"));
-        printf("#define mul %lu\n",hash("mul"));
-        printf("#define tst %lu\n",hash("tst"));
-        printf("#define cmp %lu\n",hash("cmp"));
-        printf("#define lsl %lu\n",hash("lsl"));
-        printf("#define lsr %lu\n",hash("lsr"));
-        printf("#define asr %lu\n",hash("asr"));*/
+/* printf("#define mov %lu\n",hash("mov")); */
+
