@@ -691,10 +691,10 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
             }
         }
     
-    affichage(*M,Programme);
     if(!pas_a_pas){
         M->REG[PC] = M->REG[PC] + 4 ;   
     } else {
+        affichage(*M,Programme);
         getchar();
         M->REG[PC] = M->REG[PC] + 4 ;   
     }
