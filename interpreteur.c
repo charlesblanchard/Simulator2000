@@ -59,7 +59,8 @@ int interpreter(Machine *M){
     int adress = instruction & ~(0xFFFFF000);
     int l = hex2 & ~(0xE);
    
-   
+   printf("pc : %x\n",M->REG[PC]);
+   printf("hex3 : %x\n",hex3);
    
     
     switch (hex1){
@@ -121,6 +122,7 @@ int interpreter(Machine *M){
                         printf("mov r%d, r%d\n",regd, val2_regv);
                     mov(M, regd, M->FLASH[val2_regv], psr);
                 }
+                
                 /*mvn(reg)*/
                 else if (hex3 == 0x6 || hex3 == 0x7){
                     if (psr)
@@ -694,6 +696,10 @@ int interpreter(Machine *M){
         
     
     M->REG[PC] = M->REG[PC] + 0x4 ;
+    if (M->REG[PC] == 0x5){
+        M->REG[PC] = M->REG[PC] - 1;
+    }
+    
     
     }while(M->REG[PC] - 0x4  != 0xFF ); 
     /*while pc ne revoit pas vers la derniere case*/
