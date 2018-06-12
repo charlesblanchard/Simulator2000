@@ -509,9 +509,9 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
                             address = e[i].valeur_label;
                     }
                     if(address!=-1){
-                        fprintf(f_hex,"0afc%04x\n",address);
+                        fprintf(f_hex,"0aff%04x\n",address);
                     } else {
-                        fprintf(f_hex,"0afc%-*s\n",4,operande1);
+                        fprintf(f_hex,"0aff%-*s\n",4,operande1);
                         strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
                         taille_label_manquant = taille_label_manquant+1;
                     }
@@ -525,9 +525,9 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
                             address = e[i].valeur_label;
                     }
                     if(address!=-1){
-                        fprintf(f_hex,"1afc%04x\n",address);
+                        fprintf(f_hex,"1aff%04x\n",address);
                     } else {
-                        fprintf(f_hex,"1afc%-*s\n",4,operande1);
+                        fprintf(f_hex,"1aff%-*s\n",4,operande1);
                         strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
                         taille_label_manquant = taille_label_manquant+1;
                     }
@@ -541,9 +541,9 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
                             address = e[i].valeur_label;
                     }
                     if(address!=-1){
-                        fprintf(f_hex,"2afc%04x\n",address);
+                        fprintf(f_hex,"2aff%04x\n",address);
                     } else {
-                        fprintf(f_hex,"2afc%-*s\n",4,operande1);
+                        fprintf(f_hex,"2aff%-*s\n",4,operande1);
                         strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
                         taille_label_manquant = taille_label_manquant+1;
                     }
@@ -557,9 +557,9 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
                             address = e[i].valeur_label;
                     }
                     if(address!=-1){
-                        fprintf(f_hex,"3afc%04x\n",address);
+                        fprintf(f_hex,"3aff%04x\n",address);
                     } else {
-                        fprintf(f_hex,"3afc%-*s\n",4,operande1);
+                        fprintf(f_hex,"3aff%-*s\n",4,operande1);
                         strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
                         taille_label_manquant = taille_label_manquant+1;
                     }
@@ -573,9 +573,9 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
                             address = e[i].valeur_label;
                     }
                     if(address!=-1){
-                        fprintf(f_hex,"4afc%04x\n",address);
+                        fprintf(f_hex,"4aff%04x\n",address);
                     } else {
-                        fprintf(f_hex,"4afc%-*s\n",4,operande1);
+                        fprintf(f_hex,"4aff%-*s\n",4,operande1);
                         strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
                         taille_label_manquant = taille_label_manquant+1;
                     }
@@ -589,9 +589,9 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
                             address = e[i].valeur_label;
                     }
                     if(address!=-1){
-                        fprintf(f_hex,"5afc%04x\n",address);
+                        fprintf(f_hex,"5aff%04x\n",address);
                     } else {
-                        fprintf(f_hex,"5afc%-*s\n",4,operande1);
+                        fprintf(f_hex,"5aff%-*s\n",4,operande1);
                         strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
                         taille_label_manquant = taille_label_manquant+1;
                     }
@@ -605,9 +605,9 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
                             address = e[i].valeur_label;
                     }
                     if(address!=-1){
-                        fprintf(f_hex,"6afc%04x\n",address);
+                        fprintf(f_hex,"6aff%04x\n",address);
                     } else {
-                        fprintf(f_hex,"6afc%-*s\n",4,operande1);
+                        fprintf(f_hex,"6aff%-*s\n",4,operande1);
                         strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
                         taille_label_manquant = taille_label_manquant+1;
                     }
@@ -621,9 +621,9 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
                             address = e[i].valeur_label;
                     }
                     if(address!=-1){
-                        fprintf(f_hex,"7afc%04x\n",address);
+                        fprintf(f_hex,"7aff%04x\n",address);
                     } else {
-                        fprintf(f_hex,"7afc%-*s\n",4,operande1);
+                        fprintf(f_hex,"7aff%-*s\n",4,operande1);
                         strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
                         taille_label_manquant = taille_label_manquant+1;
                     }
@@ -637,9 +637,9 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
                             address = e[i].valeur_label;
                     }
                     if(address!=-1){
-                        fprintf(f_hex,"8afc%04x\n",address);
+                        fprintf(f_hex,"8aff%04x\n",address);
                     } else {
-                        fprintf(f_hex,"8afc%-*s\n",4,operande1);
+                        fprintf(f_hex,"8aff%-*s\n",4,operande1);
                         strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
                         taille_label_manquant = taille_label_manquant+1;
                     }
@@ -653,9 +653,9 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
                             address = e[i].valeur_label;
                     }
                     if(address!=-1){
-                        fprintf(f_hex,"9afc%04x\n",address);
+                        fprintf(f_hex,"9aff%04x\n",address);
                     } else {
-                        fprintf(f_hex,"9afc%-*s\n",4,operande1);
+                        fprintf(f_hex,"9aff%-*s\n",4,operande1);
                         strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
                         taille_label_manquant = taille_label_manquant+1;
                     }
@@ -669,9 +669,9 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
                             address = e[i].valeur_label;
                     }
                     if(address!=-1){
-                        fprintf(f_hex,"aafc%04x\n",address);
+                        fprintf(f_hex,"aaff%04x\n",address);
                     } else {
-                        fprintf(f_hex,"aafc%-*s\n",4,operande1);
+                        fprintf(f_hex,"aaff%-*s\n",4,operande1);
                         strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
                         taille_label_manquant = taille_label_manquant+1;
                     }
@@ -685,9 +685,9 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
                             address = e[i].valeur_label;
                     }
                     if(address!=-1){
-                        fprintf(f_hex,"bafc%04x\n",address);
+                        fprintf(f_hex,"baff%04x\n",address);
                     } else {
-                        fprintf(f_hex,"bafc%-*s\n",4,operande1);
+                        fprintf(f_hex,"baff%-*s\n",4,operande1);
                         strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
                         taille_label_manquant = taille_label_manquant+1;
                     }
@@ -701,9 +701,9 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
                             address = e[i].valeur_label;
                     }
                     if(address!=-1){
-                        fprintf(f_hex,"cafc%04x\n",address);
+                        fprintf(f_hex,"caff%04x\n",address);
                     } else {
-                        fprintf(f_hex,"cafc%-*s\n",4,operande1);
+                        fprintf(f_hex,"caff%-*s\n",4,operande1);
                         strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
                         taille_label_manquant = taille_label_manquant+1;
                     }
@@ -717,9 +717,9 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
                             address = e[i].valeur_label;
                     }
                     if(address!=-1){
-                        fprintf(f_hex,"dafc%04x\n",address);
+                        fprintf(f_hex,"daff%04x\n",address);
                     } else {
-                        fprintf(f_hex,"dafc%-*s\n",4,operande1);
+                        fprintf(f_hex,"daff%-*s\n",4,operande1);
                         strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
                         taille_label_manquant = taille_label_manquant+1;
                     }
@@ -733,9 +733,9 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
                             address = e[i].valeur_label;
                     }
                     if(address!=-1){
-                        fprintf(f_hex,"eafc%04x\n",address);
+                        fprintf(f_hex,"eaff%04x\n",address);
                     } else {
-                        fprintf(f_hex,"eafc%-*s\n",4,operande1);
+                        fprintf(f_hex,"eaff%-*s\n",4,operande1);
                         strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
                         taille_label_manquant = taille_label_manquant+1;
                     }
@@ -752,9 +752,9 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
                             address = e[i].valeur_label;
                     }
                     if(address!=-1){
-                        fprintf(f_hex,"0bfc%04x\n",address);
+                        fprintf(f_hex,"0bff%04x\n",address);
                     } else {
-                        fprintf(f_hex,"0bfc%-*s\n",4,operande1);
+                        fprintf(f_hex,"0bff%-*s\n",4,operande1);
                         strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
                         taille_label_manquant = taille_label_manquant+1;
                     }
@@ -768,9 +768,9 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
                             address = e[i].valeur_label;
                     }
                     if(address!=-1){
-                        fprintf(f_hex,"1bfc%04x\n",address);
+                        fprintf(f_hex,"1bff%04x\n",address);
                     } else {
-                        fprintf(f_hex,"1bfc%-*s\n",4,operande1);
+                        fprintf(f_hex,"1bff%-*s\n",4,operande1);
                         strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
                         taille_label_manquant = taille_label_manquant+1;
                     }
@@ -784,9 +784,9 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
                             address = e[i].valeur_label;
                     }
                     if(address!=-1){
-                        fprintf(f_hex,"2bfc%04x\n",address);
+                        fprintf(f_hex,"2bff%04x\n",address);
                     } else {
-                        fprintf(f_hex,"2bfc%-*s\n",4,operande1);
+                        fprintf(f_hex,"2bff%-*s\n",4,operande1);
                         strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
                         taille_label_manquant = taille_label_manquant+1;
                     }
@@ -800,9 +800,9 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
                             address = e[i].valeur_label;
                     }
                     if(address!=-1){
-                        fprintf(f_hex,"3bfc%04x\n",address);
+                        fprintf(f_hex,"3bff%04x\n",address);
                     } else {
-                        fprintf(f_hex,"3bfc%-*s\n",4,operande1);
+                        fprintf(f_hex,"3bff%-*s\n",4,operande1);
                         strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
                         taille_label_manquant = taille_label_manquant+1;
                     }
@@ -816,9 +816,9 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
                             address = e[i].valeur_label;
                     }
                     if(address!=-1){
-                        fprintf(f_hex,"4bfc%04x\n",address);
+                        fprintf(f_hex,"4bff%04x\n",address);
                     } else {
-                        fprintf(f_hex,"4bfc%-*s\n",4,operande1);
+                        fprintf(f_hex,"4bff%-*s\n",4,operande1);
                         strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
                         taille_label_manquant = taille_label_manquant+1;
                     }
@@ -832,9 +832,9 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
                             address = e[i].valeur_label;
                     }
                     if(address!=-1){
-                        fprintf(f_hex,"5bfc%04x\n",address);
+                        fprintf(f_hex,"5bff%04x\n",address);
                     } else {
-                        fprintf(f_hex,"5bfc%-*s\n",4,operande1);
+                        fprintf(f_hex,"5bff%-*s\n",4,operande1);
                         strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
                         taille_label_manquant = taille_label_manquant+1;
                     }
@@ -848,9 +848,9 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
                             address = e[i].valeur_label;
                     }
                     if(address!=-1){
-                        fprintf(f_hex,"6bfc%04x\n",address);
+                        fprintf(f_hex,"6bff%04x\n",address);
                     } else {
-                        fprintf(f_hex,"6bfc%-*s\n",4,operande1);
+                        fprintf(f_hex,"6bff%-*s\n",4,operande1);
                         strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
                         taille_label_manquant = taille_label_manquant+1;
                     }
@@ -864,9 +864,9 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
                             address = e[i].valeur_label;
                     }
                     if(address!=-1){
-                        fprintf(f_hex,"7bfc%04x\n",address);
+                        fprintf(f_hex,"7bff%04x\n",address);
                     } else {
-                        fprintf(f_hex,"7bfc%-*s\n",4,operande1);
+                        fprintf(f_hex,"7bff%-*s\n",4,operande1);
                         strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
                         taille_label_manquant = taille_label_manquant+1;
                     }
@@ -880,9 +880,9 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
                             address = e[i].valeur_label;
                     }
                     if(address!=-1){
-                        fprintf(f_hex,"8bfc%04x\n",address);
+                        fprintf(f_hex,"8bff%04x\n",address);
                     } else {
-                        fprintf(f_hex,"8bfc%-*s\n",4,operande1);
+                        fprintf(f_hex,"8bff%-*s\n",4,operande1);
                         strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
                         taille_label_manquant = taille_label_manquant+1;
                     }
@@ -896,9 +896,9 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
                             address = e[i].valeur_label;
                     }
                     if(address!=-1){
-                        fprintf(f_hex,"9bfc%04x\n",address);
+                        fprintf(f_hex,"9bff%04x\n",address);
                     } else {
-                        fprintf(f_hex,"9bfc%-*s\n",4,operande1);
+                        fprintf(f_hex,"9bff%-*s\n",4,operande1);
                         strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
                         taille_label_manquant = taille_label_manquant+1;
                     }
@@ -912,9 +912,9 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
                             address = e[i].valeur_label;
                     }
                     if(address!=-1){
-                        fprintf(f_hex,"abfc%04x\n",address);
+                        fprintf(f_hex,"abff%04x\n",address);
                     } else {
-                        fprintf(f_hex,"abfc%-*s\n",4,operande1);
+                        fprintf(f_hex,"abff%-*s\n",4,operande1);
                         strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
                         taille_label_manquant = taille_label_manquant+1;
                     }
@@ -928,9 +928,9 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
                             address = e[i].valeur_label;
                     }
                     if(address!=-1){
-                        fprintf(f_hex,"bbfc%04x\n",address);
+                        fprintf(f_hex,"bbff%04x\n",address);
                     } else {
-                        fprintf(f_hex,"bbfc%-*s\n",4,operande1);
+                        fprintf(f_hex,"bbff%-*s\n",4,operande1);
                         strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
                         taille_label_manquant = taille_label_manquant+1;
                     }
@@ -944,9 +944,9 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
                             address = e[i].valeur_label;
                     }
                     if(address!=-1){
-                        fprintf(f_hex,"cbfc%04x\n",address);
+                        fprintf(f_hex,"cbff%04x\n",address);
                     } else {
-                        fprintf(f_hex,"cbfc%-*s\n",4,operande1);
+                        fprintf(f_hex,"cbff%-*s\n",4,operande1);
                         strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
                         taille_label_manquant = taille_label_manquant+1;
                     }
@@ -960,9 +960,9 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
                             address = e[i].valeur_label;
                     }
                     if(address!=-1){
-                        fprintf(f_hex,"dbfc%04x\n",address);
+                        fprintf(f_hex,"dbff%04x\n",address);
                     } else {
-                        fprintf(f_hex,"dbfc%-*s\n",4,operande1);
+                        fprintf(f_hex,"dbff%-*s\n",4,operande1);
                         strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
                         taille_label_manquant = taille_label_manquant+1;
                     }
@@ -976,9 +976,9 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
                             address = e[i].valeur_label;
                     }
                     if(address!=-1){
-                        fprintf(f_hex,"ebfc%04x\n",address);
+                        fprintf(f_hex,"ebff%04x\n",address);
                     } else {
-                        fprintf(f_hex,"ebfc%-*s\n",4,operande1);
+                        fprintf(f_hex,"ebff%-*s\n",4,operande1);
                         strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
                         taille_label_manquant = taille_label_manquant+1;
                     }
