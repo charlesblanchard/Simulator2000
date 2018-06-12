@@ -62,6 +62,8 @@ int interpreter(Machine *M){
     int xxxyy = ((hex5*pow(2,2)) + (hex7 & 0xC));
     int val = (val1 * pow(2,4)) + val2_regv;
     int XYZ = hex8 * pow(2,8) + hex5 * pow(2,4) + hex6;
+    int adress = instruction & ~(0xFF000000);
+    int l = hex2 & ~(0xE);
     
     
     printf("\nCode interpreté\n");
@@ -485,6 +487,81 @@ int interpreter(Machine *M){
             printf("psuh{r%d}\n",regd);
             push(M,regd);
             break;
+            
+        case 0x0:
+        /*beq*/
+            if (l){
+                printf("bleq 0x%08x\n",adress);
+                
+            } else {
+                printf("beq 0x%08x\n",adress);
+            }
+            branch(M, EQ, l, adress);        
+            break;
+        
+        case 0x1:
+        /*bne*/
+            if (l){
+                printf("blne 0x%08x\n",adress);
+                
+            } else {
+                printf("bne 0x%08x\n",adress);
+            }
+            branch(M, NE, l, adress);   
+            
+            break;
+        
+        case 0x2:
+        /*bhs*/
+            if (l){
+                printf("blhs 0x%08x\n",adress);
+                
+            } else {
+                printf("bhs 0x%08x\n",adress);
+            }
+            branch(M, HS, l, adress);   
+        
+            break;
+            
+        case 0x3:
+        /*blo*/
+            if (l){
+                printf("bllo 0x%08x\n",adress);
+                
+            } else {
+                printf("blo 0x%08x\n",adress);
+            }
+            branch(M, LO, l, adress);   
+        
+            break;
+            
+            
+        case 0x6:
+        /*bvs*/
+            if (l){
+                printf("blvs 0x%08x\n",adress);
+                
+            } else {
+                printf("bvs 0x%08x\n",adress);
+            }
+            branch(M, VS, l, adress);   
+        
+            break;
+            
+            
+        case 0x7:
+        /*bvc*/
+            if (l){
+                printf("blvc 0x%08x\n",adress);
+                
+            } else {
+                printf("bvc 0x%08x\n",adress);
+            }
+            branch(M, VC, l, adress);   
+        
+            break;
+            
+            
             
         default:
             printf("erreur à l'instruction 0x%08x\n",M->REG[PC]);
