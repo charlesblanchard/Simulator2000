@@ -14,17 +14,17 @@ int main(int argc, char *argv[]){
     
     Machine *m = init_machine();
     char Programme[64][30];
+    
     for(i=0;i<64;i++){
         Programme[i][0]='\0';
     }
-    
+        
     /* Charger programme en mémoire */
     flasher_prgm(m, argv[1]);
     
-    affichage(*m,Programme);
-    
+    printf("\n\n");
     /* Executer programme */
-    /*interpreter(m);*/
+    interpreter(m,Programme,1);
     
     free(m);
     return 0;

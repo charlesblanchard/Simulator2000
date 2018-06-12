@@ -5,6 +5,8 @@
 #include <string.h>
 
 #include "simulateur.h"
+#include "couleur.h"
+
 
 Machine *init_machine(){
     int i;
@@ -104,12 +106,18 @@ void afficher_machine(Machine m){
 }
 
 void affichage(Machine m, char Programme[64][30]){
-    int i;
     int ligne, colonne,adresse;
     char indicateur_pc[3];
-    int fin = 0;
-    printf("\n\n");
-    printf("#####################################################################################################\n");
+    
+    printf("\033[H\033[2J");
+    printf("                _____  __  __      _____ _____ __  __ _    _ _            _______ ____  _____  \n");
+    printf("          /\\   |  __ \\|  \\/  |    / ____|_   _|  \\/  | |  | | |        /\\|__   __/ __ \\|  __ \\ \n");
+    printf("         /  \\  | |__) | \\  / |   | (___   | | | \\  / | |  | | |       /  \\  | | | |  | | |__) |\n");
+    printf("        / /\\ \\ |  _  /| |\\/| |    \\___ \\  | | | |\\/| | |  | | |      / /\\ \\ | | | |  | |  _  / \n");
+    printf("       / ____ \\| | \\ \\| |  | |    ____) |_| |_| |  | | |__| | |____ / ____ \\| | | |__| | | \\ \\ \n");
+    printf("      /_/    \\_\\_|  \\_\\_|  |_|   |_____/|_____|_|  |_|\\____/|______/_/    \\_\\_|  \\____/|_|  \\_\\\n");
+                                                                                          
+    printf("\n#####################################################################################################\n");
     printf("#                     # r0 = %4i | r4 = %4i | r8  = %4i | r12 = %4i | Z = %i #                   #\n",m.REG[0],m.REG[4],m.REG[8],m.REG[12],m.PSR[Z]);
     printf("#                     # r1 = %4i | r5 = %4i | r9  = %4i |  SP = %4i | N = %i #                   #\n",m.REG[1],m.REG[5],m.REG[9],m.REG[13],m.PSR[N]);
     printf("#        FLASH        # r2 = %4i | r6 = %4i | r10 = %4i |  LR = %4i | C = %i #        RAM        #\n",m.REG[2],m.REG[6],m.REG[10],m.REG[14],m.PSR[C]);
@@ -121,55 +129,24 @@ void affichage(Machine m, char Programme[64][30]){
     
     for (ligne =0;ligne<32;ligne++) {
         adresse = 4*ligne;
-        printf("# ");
-        if(ligne==m.REG[PC]){
-            green();
+        
+        if(adresse==m.REG[PC]){
             strcpy(indicateur_pc,"->");
         } else {
             strcpy(indicateur_pc,"  ");
         }
-        printf("%s %02x | ",indicateur_pc,adresse);
+        
+        printf("# %s %02x | ",indicateur_pc,adresse);
         for (colonne=0; colonne<4; colonne++) {
             printf("%02x ", m.FLASH[adresse + colonne]);
         }
-        reset();
-        printf("# %s ",indicateur_pc);
-        fin=0;
-        for(i=0;i<30;i++){
-            if(Programme[m.REG[PC]][i]=='\0')
-                fin=1;
-            if(!fin)
-                printf("%c",Programme[m.REG[PC]][i]);
-            if(fin)
-                printf(" ");
-        }
-        adresse = 4*ligne;
-        printf("                       #  %02x | ",adresse);
+        printf("# %3i. %s %-*s                  #  %02x | ",ligne,indicateur_pc,30,Programme[ligne],adresse);
+
         for (colonne=0; colonne<4; colonne++) {
             printf("%02x ", m.RAM[adresse + colonne]);
         }
         printf("#\n");
     }
-    printf("#####################################################################################################\n");
-}
-
-void bold_red() {
-  printf("\033[1;31m");
-}
-void red() {
-  printf("\033[0;31m");
-}
-
-
-void green(){
-  printf("\033[0;32m");
-}
-void bold_green(){
-  printf("\033[1;32m");
-}
-
-
-void reset(){
-  printf("\033[0m");
+    printf("#####################################################################################################");
 }
 

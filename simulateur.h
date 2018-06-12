@@ -32,11 +32,5 @@ void afficher_PSR(Machine m);
 
 void affichage(Machine m, char Programme[64][30]);
 
-void bold_red();
-void red();
-void green();
-void bold_green();
-void reset();
-
 #endif
 

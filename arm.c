@@ -189,7 +189,7 @@ void cmp(Machine *M, int32_t op1, int32_t op2){
 /* Logical left shift */
 void lsl(Machine *M, int8_t rd, int32_t op1, int32_t op2, bool s){
     M->REG[rd] = op1 * (1<<op2) ;
-<<<<<<< HEAD
+
     int64_t res = op1 - op2;
     if(s){
         M->PSR[Z] = res==0;
@@ -197,17 +197,11 @@ void lsl(Machine *M, int8_t rd, int32_t op1, int32_t op2, bool s){
         M->PSR[C] = 0;
         M->PSR[V] = 0;
     }
-=======
-    if(s) 
-        /*calcul_PSR( M , M->REG[rd] );*/
-    M->REG[PC] = M->REG[PC]+1;
->>>>>>> 6d5d713653671fa2b42be0e72b7eb36dc43a4161
 }
 
 /* Logical right shift */
 void lsr(Machine *M, int8_t rd, int32_t op1, int32_t op2, bool s){
     M->REG[rd] = op1 / (1<<op2) ;
-<<<<<<< HEAD
     int64_t res = op1 - op2;
     if(s){
         M->PSR[Z] = res==0;
@@ -215,17 +209,11 @@ void lsr(Machine *M, int8_t rd, int32_t op1, int32_t op2, bool s){
         M->PSR[C] = 0;
         M->PSR[V] = 0;
     }
-=======
-    if(s) 
-        /*calcul_PSR( M , M->REG[rd] );*/
-    M->REG[PC] = M->REG[PC]+1;
->>>>>>> 6d5d713653671fa2b42be0e72b7eb36dc43a4161
 }
 
 /* Arithm right shift */
 void asr(Machine *M, int8_t rd, int32_t op1, int32_t op2, bool s){
     M->REG[rd] = op1 / (1<<op2) ;
-<<<<<<< HEAD
     int64_t res = op1 - op2;
     if(s){
         M->PSR[Z] = res==0;
@@ -233,11 +221,6 @@ void asr(Machine *M, int8_t rd, int32_t op1, int32_t op2, bool s){
         M->PSR[C] = 0;
         M->PSR[V] = 0;
     }
-=======
-    if(s) 
-        /*calcul_PSR( M , M->REG[rd] );*/
-    M->REG[PC] = M->REG[PC]+1;
->>>>>>> 6d5d713653671fa2b42be0e72b7eb36dc43a4161
 }
 
 
