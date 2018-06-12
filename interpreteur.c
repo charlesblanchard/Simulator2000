@@ -114,12 +114,7 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
                     
                     mov(M, regd, M->FLASH[val2_regv], psr);
                 
-                } else {
-                    /*erreur*/
-                    sprintf(Programme[ M->REG[PC]/4 ],"erreur at 0x%08x\n",M->REG[PC]);
-                    erreur = 1;
-                    M->REG[PC] = 0xFF;
-                }
+                } 
                 
             } else if (hex4 != 0xF){
                 if (hex6 == 0xF){
