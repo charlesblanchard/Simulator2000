@@ -85,27 +85,27 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
                     switch (pp) {
                         case(0x0):
                             if (psr)
-                                sprintf(Programme[ M->REG[PC]/4 ],"lsls r%d, r%d, #0x%08x",regd, val2_regv,xxxyy);
+                                sprintf(Programme[ M->REG[PC]/4 ],"lsls r%d, r%d, #0x%x",regd, val2_regv,xxxyy);
                             else
-                                sprintf(Programme[ M->REG[PC]/4 ],"lsl r%d, r%d, #0x%08x",regd, val2_regv,xxxyy);
+                                sprintf(Programme[ M->REG[PC]/4 ],"lsl r%d, r%d, #0x%x",regd, val2_regv,xxxyy);
                             
                             lsl(M, regd,M->FLASH[val2_regv],xxxyy, psr);
                             break;
                         
                         case(0x1):
                             if (psr)
-                                sprintf(Programme[ M->REG[PC]/4 ],"lsrs r%d, r%d, #0x%08x",regd, val2_regv,xxxyy);
+                                sprintf(Programme[ M->REG[PC]/4 ],"lsrs r%d, r%d, #0x%x",regd, val2_regv,xxxyy);
                             else
-                                sprintf(Programme[ M->REG[PC]/4 ],"lsr r%d, r%d, #0x%08x",regd, val2_regv,xxxyy);
+                                sprintf(Programme[ M->REG[PC]/4 ],"lsr r%d, r%d, #0x%x",regd, val2_regv,xxxyy);
                             
                             lsr(M, regd,M->FLASH[val2_regv],xxxyy, psr);
                             break;
                         
                         case(0x2):
                             if (psr)
-                                sprintf(Programme[ M->REG[PC]/4 ],"asrs r%d, r%d, #0x%08x",regd, val2_regv,xxxyy);
+                                sprintf(Programme[ M->REG[PC]/4 ],"asrs r%d, r%d, #0x%x",regd, val2_regv,xxxyy);
                             else
-                                sprintf(Programme[ M->REG[PC]/4 ],"asr r%d, r%d, #0x%08x",regd, val2_regv,xxxyy);
+                                sprintf(Programme[ M->REG[PC]/4 ],"asr r%d, r%d, #0x%x",regd, val2_regv,xxxyy);
                             
                             asr(M, regd,M->FLASH[val2_regv],xxxyy, psr);
                             break;

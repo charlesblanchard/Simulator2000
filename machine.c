@@ -4,8 +4,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "machine.h"
 #include "couleur.h"
+
+#include "machine.h"
 
 
 Machine *init_machine(){
@@ -110,13 +111,14 @@ void affichage(Machine m, char Programme[64][30]){
     char indicateur_pc[3];
     
     printf("\033[H\033[2J");
+    
     printf("                _____  __  __      _____ _____ __  __ _    _ _            _______ ____  _____  \n");
     printf("          /\\   |  __ \\|  \\/  |    / ____|_   _|  \\/  | |  | | |        /\\|__   __/ __ \\|  __ \\ \n");
     printf("         /  \\  | |__) | \\  / |   | (___   | | | \\  / | |  | | |       /  \\  | | | |  | | |__) |\n");
     printf("        / /\\ \\ |  _  /| |\\/| |    \\___ \\  | | | |\\/| | |  | | |      / /\\ \\ | | | |  | |  _  / \n");
     printf("       / ____ \\| | \\ \\| |  | |    ____) |_| |_| |  | | |__| | |____ / ____ \\| | | |__| | | \\ \\ \n");
     printf("      /_/    \\_\\_|  \\_\\_|  |_|   |_____/|_____|_|  |_|\\____/|______/_/    \\_\\_|  \\____/|_|  \\_\\\n");
-                                                                                          
+    
     printf("\n#####################################################################################################\n");
     printf("#                     # r0 = %4i | r4 = %4i | r8  = %4i | r12 = %4i | Z = %i #                   #\n",m.REG[0],m.REG[4],m.REG[8],m.REG[12],m.PSR[Z]);
     printf("#                     # r1 = %4i | r5 = %4i | r9  = %4i |  SP = %4i | N = %i #                   #\n",m.REG[1],m.REG[5],m.REG[9],m.REG[13],m.PSR[N]);
@@ -131,17 +133,20 @@ void affichage(Machine m, char Programme[64][30]){
         adresse = 4*ligne;
         
         if(adresse==m.REG[PC]){
+            
             strcpy(indicateur_pc,"->");
         } else {
             strcpy(indicateur_pc,"  ");
         }
         
         printf("# %s %02x | ",indicateur_pc,adresse);
+        
         for (colonne=0; colonne<4; colonne++) {
             printf("%02x ", m.FLASH[adresse + colonne]);
         }
+        
         printf("# %3i. %s %-*s                  #  %02x | ",ligne,indicateur_pc,30,Programme[ligne],adresse);
-
+        
         for (colonne=0; colonne<4; colonne++) {
             printf("%02x ", m.RAM[adresse + colonne]);
         }
