@@ -30,4 +30,13 @@ void afficher_flash(Machine m);
 void afficher_registres(Machine m);
 void afficher_PSR(Machine m);
 
+void affichage(Machine m);
+
+void bold_red();
+void red();
+void green();
+void bold_green();
+void reset();
+
 #endif
+
