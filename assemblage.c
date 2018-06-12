@@ -987,7 +987,6 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
             pc++;
         }
     }
-    fprintf(f_hex,"fa0000FF\n");
 
     for(i=0;i<taille_label_manquant;i++){
         
