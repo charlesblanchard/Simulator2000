@@ -308,11 +308,11 @@ int interpreter(Machine *M){
             else if (regd == 0xF){
                 switch (code){
                     case(0x0):
-                        printf("tst r%d, #0x%08x\n",regd, rego_z, val);
+                        printf("tst r%d, #0x%08x\n", rego_z, val);
                         tst(M, M->FLASH[rego_z], val);
                         break;
                     case(0xD):
-                        printf("cmp r%d, #0x%08x\n",regd, rego_z, val);
+                        printf("cmp r%d, #0x%08x\n", rego_z, val);
                         cmp(M, M->FLASH[rego_z], val);
                         break;
                 }
@@ -417,38 +417,79 @@ int interpreter(Machine *M){
             
         case 0xD:
         /*ldr*/
-
+            if (XYZ == 0)
+                printf("ldr r%d, [r%d]\n",hex7, hex2);
+            else
+                printf("ldr r%d, [r%d], #0x%08x\n",hex7, hex2, XYZ);
+        
             ldr (M, hex7, hex2, XYZ);
             break;
             
         case 0x9:
         /*ldrb*/
+            if (XYZ == 0)
+                printf("ldrb r%d, [r%d]\n",hex7, hex2);
+            else
+                printf("ldrb r%d, [r%d], #0x%08x\n",hex7, hex2, XYZ);
+            
             ldrb (M, hex7, hex2, XYZ);
             break;
         
         case 0xB:
         /*ldrh*/
+            if (XYZ == 0)
+                printf("ldrh r%d, [r%d]\n",hex7, hex2);
+            else
+                printf("ldrh r%d, [r%d], #0x%08x\n",hex7, hex2, XYZ);
+            
             ldrh (M, hex7, hex2, XYZ);
             break;
             
         case 0xC:
         /*str*/
+            if (XYZ == 0)
+                printf("str r%d, [r%d]\n",hex7, hex2);
+            else
+                printf("str r%d, [r%d], #0x%08x\n",hex7, hex2, XYZ);
+        
             str (M, hex7, hex2, XYZ);
             break;
             
         case 0xA:
         /*strh*/
+            if (XYZ == 0)
+                printf("strh r%d, [r%d]\n",hex7, hex2);
+            else
+                printf("strh r%d, [r%d], #0x%08x\n",hex7, hex2, XYZ);
+            
             strh (M, hex7, hex2, XYZ);
             break;
             
         case 0x8:
         /*strb*/
+            if (XYZ == 0)
+                printf("strb r%d, [r%d]\n",hex7, hex2);
+            else
+                printf("strb r%d, [r%d], #0x%08x\n",hex7, hex2, XYZ);
             strb (M, hex7, hex2, XYZ);
+            break;
+        
+        case 0x5:
+        /*pop*/
+            printf("pop{r%d}\n",regd);
+            pop(M,regd);
+            break;
+        
+        case 0x4:
+        /*push*/
+            printf("psuh{r%d}\n",regd);
+            push(M,regd);
             break;
             
         default:
+            printf("erreur à l'instruction 0x%08x\n",M->REG[PC]);
             erreur = 1;
-            instruction = PC_DER_LIGNE;
+            M->REG[PC] = M->REG[LR];
             break;
         
     }

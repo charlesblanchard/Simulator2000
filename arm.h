@@ -112,6 +112,11 @@ void ldrh(Machine *M, int8_t rd, int8_t rn, int32_t offset);
 void ldr(Machine *M, int8_t rd, int8_t rn, int32_t offset);
 
 
+/*pop*/
+void pop(Machine *M, int8_t rt);
+
+/*push*/
+void push(Machine *M, int8_t rt);
 
 /* b{}{cond} adresse */
 void branch(Machine *M, int8_t cond, int8_t l, int8_t adresse);
