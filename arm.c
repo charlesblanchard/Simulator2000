@@ -5,24 +5,13 @@
 #include "arm.h"
 
 
-
-/* Calcul du PSR */
-void calcul_PSR(Machine *M, int32_t res){
-    M->PSR[Z] = res==0;
-    M->PSR[N] = res<0;
-    M->PSR[C] = 0;
-    M->PSR[V] = 0;
-}
-
-
-
-
 /* Chargement d'une constante 8 bits */
 void mov(Machine *M, int8_t rd, int32_t op, bool s){ 
     M->REG[rd] = op;
     int64_t res = op;
     if(s){
-        calcul_PSR( M , M->REG[rd] );
+        M->PSR[Z] = res==0;
+        M->PSR[N] = res<0;
     }
     M->REG[PC] = M->REG[PC]+1;
 }
@@ -30,8 +19,11 @@ void mov(Machine *M, int8_t rd, int32_t op, bool s){
 /* Complément à 1 d'une constante 8 bits */
 void mvn(Machine *M, int8_t rd, int32_t op, bool s){
     M->REG[rd] = ~op;
-    if(s)
-        calcul_PSR( M , M->REG[rd] );
+    int64_t res = ~op;
+    if(s){
+        M->PSR[Z] = res==0;
+        M->PSR[N] = res<0;
+    }
     M->REG[PC] = M->REG[PC]+1;
 }
 
@@ -51,40 +43,65 @@ void movt(Machine *M, int8_t rd, int16_t x){
 /* ET bit à bit */
 void and(Machine *M, int8_t rd, int32_t op1, int32_t op2, bool s){
     M->REG[rd] = op1 & op2;
-    if(s)
-        calcul_PSR( M , M->REG[rd] );
+    int64_t res = op1 & op2;
+    if(s){
+        M->PSR[Z] = res==0;
+        M->PSR[N] = res<0;
+        M->PSR[C] = 0;
+        M->PSR[V] = 0;
+    }
     M->REG[PC] = M->REG[PC]+1;
 }
 
 /* ET NON bit à bit */
 void bic(Machine *M, int8_t rd, int32_t op1, int32_t op2, bool s){
     M->REG[rd] = op1 & (~op2);
-    if(s)
-        calcul_PSR( M , M->REG[rd] );
+    int64_t res = op1 & (~op2);
+    if(s){
+        M->PSR[Z] = res==0;
+        M->PSR[N] = res<0;
+        M->PSR[C] = 0;
+        M->PSR[V] = 0;
+    }
     M->REG[PC] = M->REG[PC]+1;
 }
 
 /* OU bit à bit */
 void orr(Machine *M, int8_t rd, int32_t op1, int32_t op2, bool s){
     M->REG[rd] = op1 | op2;
-    if(s)
-        calcul_PSR( M , M->REG[rd] );
+    int64_t res = op1 | op2;
+    if(s){
+        M->PSR[Z] = res==0;
+        M->PSR[N] = res<0;
+        M->PSR[C] = 0;
+        M->PSR[V] = 0;
+    }
     M->REG[PC] = M->REG[PC]+1;
 }
 
 /* OU NON bit à bit */
 void orn(Machine *M, int8_t rd, int32_t op1, int32_t op2, bool s){
     M->REG[rd] = op1 | (~op2);
-    if(s)
-        calcul_PSR( M , M->REG[rd] );
+    int64_t res = op1 | (~op2);
+    if(s){
+        M->PSR[Z] = res==0;
+        M->PSR[N] = res<0;
+        M->PSR[C] = 0;
+        M->PSR[V] = 0;
+    }
     M->REG[PC] = M->REG[PC]+1;
 }
 
 /* OU EXCLU bit à bit */
 void eor(Machine *M, int8_t rd, int32_t op1, int32_t op2, bool s){
     M->REG[rd] = op1 ^ op2;
-    if(s)
-        calcul_PSR( M , M->REG[rd] );
+    int64_t res = op1 ^ op2;
+    if(s){
+        M->PSR[Z] = res==0;
+        M->PSR[N] = res<0;
+        M->PSR[C] = 0;
+        M->PSR[V] = 0;
+    }
     M->REG[PC] = M->REG[PC]+1;
 }
 
@@ -92,40 +109,65 @@ void eor(Machine *M, int8_t rd, int32_t op1, int32_t op2, bool s){
 /* RD = (OP1 + OP2)%2^32 */
 void add(Machine *M, int8_t rd, int32_t op1, int32_t op2, bool s){
     M->REG[rd] = (op1 + op2)%((int32_t)pow(2,32));
-    if(s)
-        calcul_PSR( M , M->REG[rd] );
+    int64_t res = op1 + op2;
+    if(s){
+        M->PSR[Z] = res==0;
+        M->PSR[N] = res<0;
+        M->PSR[C] = 0;
+        M->PSR[V] = 0;
+    }
     M->REG[PC] = M->REG[PC]+1;
 }
 
 /* RD = (OP1 + OP2 + C)%2^32 */
 void adc(Machine *M, int8_t rd, int32_t op1, int32_t op2, bool s){
     M->REG[rd] = (op1 + op2 + M->PSR[C])%((int32_t)pow(2,32));
-    if(s) 
-        calcul_PSR( M , M->REG[rd] );
+    int64_t res = op1 + op2 + M->PSR[C];
+    if(s){
+        M->PSR[Z] = res==0;
+        M->PSR[N] = res<0;
+        M->PSR[C] = 0;
+        M->PSR[V] = 0;
+    }
     M->REG[PC] = M->REG[PC]+1;
 }
 
 /* RD = (OP1 - OP2 - C)%2^32 */
 void sbc(Machine *M, int8_t rd, int32_t op1, int32_t op2, bool s){
     M->REG[rd] = (op1 - op2 + M->PSR[C])%((int32_t)pow(2,32));
-    if(s) 
-        calcul_PSR( M , M->REG[rd] );
+    int64_t res = op1 - op2 + M->PSR[C];
+    if(s){
+        M->PSR[Z] = res==0;
+        M->PSR[N] = res<0;
+        M->PSR[C] = 0;
+        M->PSR[V] = 0;
+    }
     M->REG[PC] = M->REG[PC]+1;
 }
 
 /* RD = (OP1 - OP2)%2^32 */
 void sub(Machine *M, int8_t rd, int32_t op1, int32_t op2, bool s){
     M->REG[rd] = (op1 - op2)%((int32_t)pow(2,32));
-    if(s) 
-        calcul_PSR( M , M->REG[rd] );
+    int64_t res = op1 - op2;
+    if(s){
+        M->PSR[Z] = res==0;
+        M->PSR[N] = res<0;
+        M->PSR[C] = 0;
+        M->PSR[V] = 0;
+    }
     M->REG[PC] = M->REG[PC]+1;
 }
 
 /* RD = (OP2 - OP1)%2^32 */
 void rsb(Machine *M, int8_t rd, int32_t op1, int32_t op2, bool s){
     M->REG[rd] = (op2 - op1)%((int32_t)pow(2,32));
-    if(s) 
-        calcul_PSR( M , M->REG[rd] );
+    int64_t res = op2 - op1;
+    if(s){
+        M->PSR[Z] = res==0;
+        M->PSR[N] = res<0;
+        M->PSR[C] = 0;
+        M->PSR[V] = 0;
+    }
     M->REG[PC] = M->REG[PC]+1;
 }
 
@@ -139,12 +181,24 @@ void mul(Machine *M, int8_t rd, int32_t op1, int32_t op2){
 
 /* MAJ PSR TST op1 & op2 */ 
 void tst(Machine *M, int32_t op1, int32_t op2){
-    calcul_PSR( M , op1 & op2 );
+    int64_t res = op1 & op2;
+    if(s){
+        M->PSR[Z] = res==0;
+        M->PSR[N] = res<0;
+        M->PSR[C] = 0;
+        M->PSR[V] = 0;
+    }
 }
 
 /* MAJ PSR CMP op1 - op2 */ 
 void cmp(Machine *M, int32_t op1, int32_t op2){
-    calcul_PSR( M , (op1 - op2)%((int32_t)pow(2,32)) );
+    int64_t res = op1 - op2;
+    if(s){
+        M->PSR[Z] = res==0;
+        M->PSR[N] = res<0;
+        M->PSR[C] = 0;
+        M->PSR[V] = 0;
+    }
 }
 
 
@@ -223,14 +277,18 @@ void ldr(Machine *M, int8_t rd, int8_t rn, int32_t offset){
 
 /* push {rt} */
 void push(Machine *M, int8_t rt){
-    ldr(M,rt,SP,0);
-    M->REG[SP] = M->REG[SP]-4;
+    if(M->REG[SP]!=0x00){
+        M->REG[SP] = M->REG[SP]-4;
+        ldr(M,rt,SP,0);
+    }
 }
 
 /* pop {rt} */
 void pop(Machine *M, int8_t rt){
-    str(M,rt,SP,0);
-    M->REG[SP] = M->REG[SP]+4;
+    if(M->REG[SP]!=0xFF){
+        str(M,rt,SP,0);
+        M->REG[SP] = M->REG[SP]+4;
+    }
 }
 
 /* b{}{cond} adresse */
