@@ -6,16 +6,15 @@
 #include "simulateur.h"
 #include "arm.h"
 
-#define T_MEM 0
-#define PC_DER_LIGNE 4031713024 + T_MEM 
+#define T_MEM 0 
 
 
 
 /* si la fonction retourn autre chose que 0, alors "Opération inconnue" et return = case mémoire du début de l'opération 32bit*/ 
 int interpreter(Machine *M){
     
-    int32_t i=0;
-    uint32_t instruction = 0x00000000;
+    
+    uint32_t instruction = 0x0;
     /*lorsqu'on aura mis en place un système d'erreurs*/
     int erreur = 0;
     
@@ -26,18 +25,13 @@ int interpreter(Machine *M){
     
     printf("\n");
     
-    M->FLASH[1] = 0xF6;
-    M->FLASH[0] = 0x44;
-    M->FLASH[3] = 0x35;
-    M->FLASH[2] = 0xF5;
-    
     do{    
         instruction = 0;
         
         instruction = instruction + (M->FLASH[M->REG[PC]]) ;
         instruction = instruction + (M->FLASH[M->REG[PC]] + 1) * pow(2,8);
-        instruction = instruction + (M->FLASH[M->REG[PC]] + 3) * pow(2,16);
-        instruction = instruction + (M->FLASH[M->REG[PC]] + 2) * pow(2,24);
+        instruction = instruction + (M->FLASH[M->REG[PC]] + 2) * pow(2,16);
+        instruction = instruction + (M->FLASH[M->REG[PC]] + 3) * pow(2,24);
 
     int code = (instruction & ~(0xFE1FFFFF)) / pow(2,20); /*code d'une opération*/
     int psr = (instruction & ~(0xFFEFFFFF)) / pow(2,20); /*bit informant de l'actualisation duPSR*/
@@ -66,7 +60,7 @@ int interpreter(Machine *M){
     int l = hex2 & ~(0xE);
     
     
-    printf("\nCode interpreté\n");
+    printf("\ninstruction:\t%08x\n",instruction);
     switch (hex1){
         /*mov(reg),mvm(reg),ops(reg),décalages(val),tests(reg)*/
         case 0xE:
@@ -258,8 +252,9 @@ int interpreter(Machine *M){
                     
                     mvn(M, regd, val, psr);
                 } else {
+                    printf("erreur à l'instruction 0x%08x\n",M->REG[PC]);
                     erreur = 1;
-                    instruction = PC_DER_LIGNE;
+                    M->REG[PC] = M->REG[LR];
                 }
             }
             
@@ -704,13 +699,9 @@ int interpreter(Machine *M){
     
     M->REG[PC] = M->REG[PC] + 0x4;
     
-    }while(M->REG[PC] != M->REG[LR]); 
+    }while(0 /*M->REG[PC] != M->REG[LR]*/); 
     /*while pc ne revoit pas vers la derniere case*/
     
-
-    if (erreur == 1){
-        return i;
-    }
     
     return 0;
     
