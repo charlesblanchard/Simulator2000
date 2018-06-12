@@ -26,10 +26,10 @@ void flasher_prgm(Machine *m, char *fic_hexa){
     /* Ré-arrangement des mots de 32 bits (avec little endian) */
     while( fgets(instruction,TAILLE_LIGNE,f)){
         sscanf(instruction,"%02x%02x%02x%02x",&a,&b,&c,&d);
-        m->FLASH[i] = b;
-        m->FLASH[i+1] = a;
-        m->FLASH[i+2] = d;
-        m->FLASH[i+3] = c;
+        m->FLASH[i] = d;
+        m->FLASH[i+1] = c;
+        m->FLASH[i+2] = b;
+        m->FLASH[i+3] = a;
         i=i+4;
     }
     

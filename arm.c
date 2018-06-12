@@ -7,7 +7,7 @@
 
 
 /* Calcul du PSR */
-void calcul_PSR(Machine *M, int16_t res){
+void calcul_PSR(Machine *M, int32_t res){
     M->PSR[Z] = res==0;
     M->PSR[N] = res<0;
     M->PSR[C] = 0;
@@ -20,8 +20,10 @@ void calcul_PSR(Machine *M, int16_t res){
 /* Chargement d'une constante 8 bits */
 void mov(Machine *M, int8_t rd, int32_t op, bool s){ 
     M->REG[rd] = op;
-    if(s)
+    int64_t res = op;
+    if(s){
         calcul_PSR( M , M->REG[rd] );
+    }
     M->REG[PC] = M->REG[PC]+1;
 }
 
@@ -175,58 +177,59 @@ void asr(Machine *M, int8_t rd, int32_t op1, int32_t op2, bool s){
 
 /* Store Register byte */
 void strb(Machine *M, int8_t rd, int8_t rn, int32_t offset){
-    M->RAM[M->REG[rn]+offset] = M->REG[rd];
+    /* Stockage en little-endian */
+    M->RAM[M->REG[rn]+offset] = M->REG[rd] && 0xFF;
 }
 
 /* Store Register halfword */
 void strh(Machine *M, int8_t rd, int8_t rn, int32_t offset){
-    M->RAM[M->REG[rn]+offset] = M->REG[rd];
-    M->RAM[M->REG[rn]+offset+1] = M->REG[rd];
-    
-    M->RAM[rd] = rn & 0x00ff;
-    M->RAM[rd+1] = rn >> 8;
+    /* Stockage en little-endian */
+    M->RAM[M->REG[rn]+offset] = M->REG[rd] & 0xFF;
+    M->RAM[M->REG[rn]+offset+1] = (M->REG[rd] & 0xFF00)/pow(2,8);
 }
 
 /* Store Register word */
 void str(Machine *M, int8_t rd, int8_t rn, int32_t offset){
-    M->RAM[M->REG[rn]+offset] = M->REG[rd];
-    M->RAM[M->REG[rn]+offset+1] = M->REG[rd];
-    M->RAM[M->REG[rn]+offset+2] = M->REG[rd];
-    M->RAM[M->REG[rn]+offset+3] = M->REG[rd];
-    
-    
-    M->RAM[rd] = (rn & 0x00ff0000) >> 16;
-    M->RAM[rd+1] = (rn >> 24);
-    M->RAM[rd+2] = (rn & 0x000000ff);
-    M->RAM[rd+3] = (rn & 0x0000ff00) >> 8;
+    /* Stockage en little-endian */
+    M->RAM[M->REG[rn]+offset] = (M->REG[rd] & 0xFF000000)/pow(2,24);
+    M->RAM[M->REG[rn]+offset+1] = (M->REG[rd] & 0xFF0000)/pow(2,16);
+    M->RAM[M->REG[rn]+offset+2] = (M->REG[rd] & 0xFF00)/pow(2,8);
+    M->RAM[M->REG[rn]+offset+3] = M->REG[rd] & 0xFF;
 }
 
 /* Load Register byte */
 void ldrb(Machine *M, int8_t rd, int8_t rn, int32_t offset){
-    rd = M->RAM[rn];
+    /* Chargement en little-endian */
+    M->REG[rd] = M->RAM[M->REG[rn]+offset];
 }
 
 /* Load Register halfword */
 void ldrh(Machine *M, int8_t rd, int8_t rn, int32_t offset){
-    rd = M->RAM[rn] | (M->RAM[rn+1] << 8);
+    /* Chargement en little-endian */
+    M->REG[rd] = M->RAM[M->REG[rn]+offset]*pow(2,8);
+    M->REG[rd] += M->RAM[M->REG[rn]+offset+1];
 }
 
 /* Load Register word */
 void ldr(Machine *M, int8_t rd, int8_t rn, int32_t offset){
-    rd = (M->RAM[rn] << 16) | (M->RAM[rn+1] << 24) | (M->RAM[rn+2]) | (M->RAM[rn+3] << 8);
+    /* Chargement en little-endian */
+    M->REG[rd] = M->RAM[M->REG[rn]+offset]*pow(2,24);
+    M->REG[rd] += M->RAM[M->REG[rn]+offset+1]*pow(2,16);
+    M->REG[rd] += M->RAM[M->REG[rn]+offset+2]*pow(2,8);
+    M->REG[rd] += M->RAM[M->REG[rn]+offset+3];
 }
 
 
 
 /* push {rt} */
 void push(Machine *M, int8_t rt){
-    M->RAM[M->REG[SP]] = rt;
+    ldr(M,rt,SP,0);
     M->REG[SP] = M->REG[SP]-4;
 }
 
 /* pop {rt} */
 void pop(Machine *M, int8_t rt){
-    M->REG[rt] = M->RAM[M->REG[SP]];
+    str(M,rt,SP,0);
     M->REG[SP] = M->REG[SP]+4;
 }
 

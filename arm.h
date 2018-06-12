@@ -22,7 +22,7 @@
 #define AL 14
 
 /* Calcul du PSR */
-void calcul_PSR(Machine *M, int16_t res);
+void calcul_PSR(Machine *M, int32_t res);
     
 
 

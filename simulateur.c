@@ -20,6 +20,7 @@ Machine *init_machine(){
     for( i=0 ; i<16 ; i++){
         m->REG[i] = 0;
     }
+    m->REG[SP] = 256;
     
     for( i=0 ; i<4 ; i++){
         m->PSR[i] = 0;
