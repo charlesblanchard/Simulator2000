@@ -29,13 +29,13 @@ int main(int argc, char *argv[]){
 
 
 int lecture_fichier(FILE* f_s, FILE* f_hex){
-    char instruction[T_INSTRUCTION];
-    char mnemonique[T_MNEMONIQUE];
-    char operande1[T_OPERANDE];
-    char operande2[T_OPERANDE];
-    char operande3[T_OPERANDE];
+    char instruction[T_INSTRUCTION]; /* exemple : add r1, r2, #4 */
+    char mnemonique[T_MNEMONIQUE];   /* add */
+    char operande1[T_OPERANDE];      /* r1 */
+    char operande2[T_OPERANDE];      /* r2 */
+    char operande3[T_OPERANDE];      /* #4 */
     
-    char trash;
+    char trash;     /* Si op = r1 --> trash = r; si op = #4 --> trash = # */
     
     int ope1, ope2, ope3, i, address;
     int x,y,z,w;
@@ -48,7 +48,7 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
     int pc=0;
     
     while( fgets(instruction,TAILLE_LIGNE,f_s)){
-        if( instruction[strlen(instruction)-2] == ':'){
+        if( instruction[strlen(instruction)-2] == ':'){     /*S'il s'agit d'une étiquette ("boucle :" par exemple)*/
             /* Nouvelle étiquette */
             instruction[strlen(instruction)-2] = '\0';
             
@@ -61,18 +61,15 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
             /* Instruction habituelle */
             nettoyage_instruction(instruction);
                 
-            sscanf(instruction,"\t%s %s %s %s",mnemonique,operande1,operande2,operande3);
-                
+            sscanf(instruction,"\t%s %s %s %s",mnemonique,operande1,operande2,operande3);   /*attribution des valeurs à partir de l'instruction*/
+            
+            /* RECUPERATION TYPE */
+            type = recuperation_type(operande2,operande3);
             sscanf(operande1,"%c%i",&trash,&ope1);
             sscanf(operande2,"%c%i",&trash,&ope2);
             if( type==TROIS_REGISTRES || type==DEUX_REGISTRES_UNE_VALEUR)
                 sscanf(operande3,"%c%i",&trash,&ope3);
                    
-            
-            
-            /* RECUPERATION TYPE */
-            type = recuperation_type(operande2,operande3);
-    
             /* RECUPERATION S */
             s = recuperation_s(mnemonique);
             
