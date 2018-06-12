@@ -182,23 +182,19 @@ void mul(Machine *M, int8_t rd, int32_t op1, int32_t op2){
 /* MAJ PSR TST op1 & op2 */ 
 void tst(Machine *M, int32_t op1, int32_t op2){
     int64_t res = op1 & op2;
-    if(s){
-        M->PSR[Z] = res==0;
-        M->PSR[N] = res<0;
-        M->PSR[C] = 0;
-        M->PSR[V] = 0;
-    }
+    M->PSR[Z] = res==0;
+    M->PSR[N] = res<0;
+    M->PSR[C] = 0;
+    M->PSR[V] = 0;
 }
 
 /* MAJ PSR CMP op1 - op2 */ 
 void cmp(Machine *M, int32_t op1, int32_t op2){
     int64_t res = op1 - op2;
-    if(s){
-        M->PSR[Z] = res==0;
-        M->PSR[N] = res<0;
-        M->PSR[C] = 0;
-        M->PSR[V] = 0;
-    }
+    M->PSR[Z] = res==0;
+    M->PSR[N] = res<0;
+    M->PSR[C] = 0;
+    M->PSR[V] = 0;
 }
 
 
@@ -207,7 +203,7 @@ void cmp(Machine *M, int32_t op1, int32_t op2){
 void lsl(Machine *M, int8_t rd, int32_t op1, int32_t op2, bool s){
     M->REG[rd] = op1 * (1<<op2) ;
     if(s) 
-        calcul_PSR( M , M->REG[rd] );
+        /*calcul_PSR( M , M->REG[rd] );*/
     M->REG[PC] = M->REG[PC]+1;
 }
 
@@ -215,7 +211,7 @@ void lsl(Machine *M, int8_t rd, int32_t op1, int32_t op2, bool s){
 void lsr(Machine *M, int8_t rd, int32_t op1, int32_t op2, bool s){
     M->REG[rd] = op1 / (1<<op2) ;
     if(s) 
-        calcul_PSR( M , M->REG[rd] );
+        /*calcul_PSR( M , M->REG[rd] );*/
     M->REG[PC] = M->REG[PC]+1;
 }
 
@@ -223,7 +219,7 @@ void lsr(Machine *M, int8_t rd, int32_t op1, int32_t op2, bool s){
 void asr(Machine *M, int8_t rd, int32_t op1, int32_t op2, bool s){
     M->REG[rd] = op1 / (1<<op2) ;
     if(s) 
-        calcul_PSR( M , M->REG[rd] );
+        /*calcul_PSR( M , M->REG[rd] );*/
     M->REG[PC] = M->REG[PC]+1;
 }
 

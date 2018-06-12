@@ -772,6 +772,7 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
             pc++;
         }
     }
+    fprintf(f_hex,"fa0000FF\n");
     return EXIT_SUCCESS;
 }
 
