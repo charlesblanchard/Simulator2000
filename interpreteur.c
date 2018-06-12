@@ -53,11 +53,9 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
     int xxxyy = ((hex5*pow(2,2)) + (hex7 & 0xC));
     int val = (val1 * pow(2,4)) + val2_regv;
     int XYZ = hex8 * pow(2,8) + hex5 * pow(2,4) + hex6;
-    int adress = instruction & ~(0xFFFFF000);
+    int adress = instruction & ~(0xFFF00000);
     int l = hex2 & ~(0xE);
-    
-    printf("instruction : 0x%x\n",instruction);
-    
+        
     switch (hex1){
 
         case 0xE:
@@ -234,8 +232,7 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
                     }
                 }
                 
-            } else if (hex4 == 0){
-                if (hex3 == 0 && hex5 == 0xF){
+            } else if (hex3 == 1 && hex4 == 1){
                     
                     /*bal*/
                     
@@ -248,12 +245,7 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
                     
                     branch(M, AL, l, adress);   
                 
-                } else {
-                    /*erreur*/
-                    sprintf(Programme[ M->REG[PC]/4 ],"erreur at 0x%08x\n",M->REG[PC]);
-                    erreur = 1;
-                    M->REG[PC] = 0xFF;
-                }
+                
                 
             } else {
                 /*erreur*/
@@ -268,195 +260,201 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
             
         
         case 0xF:
-            /*mov(val),movn(val)*/
-            if (hex2 == 0x0 && hex4 == 0xF){
-                if (hex3 == 0x5 || hex3 == 0x4){
-                    /*mov(val)*/
-                    if (psr)
-                        sprintf(Programme[ M->REG[PC]/4 ],"movs r%d, #0x%08x",regd, val);
-                    else
-                        sprintf(Programme[ M->REG[PC]/4 ],"mov r%d, #0x%08x",regd, val);
-                    
-                    mov(M, regd, val, psr);
-                } else if (hex3 == 0x7 || hex3 == 0x6){
-                    /*mvn(val)*/
-                    if (psr)
-                        sprintf(Programme[ M->REG[PC]/4 ],"mvns r%d, #0x%08x",regd, val);
-                    else
-                        sprintf(Programme[ M->REG[PC]/4 ],"mvn r%d, #0x%08x",regd, val);
-                    
-                    mvn(M, regd, val, psr);
-                } else {
-                    sprintf(Programme[ M->REG[PC]/4 ],"erreur at 0x%08x\n",M->REG[PC]);
-                    erreur = 1;
-                    M->REG[PC] = 0xFF;
-                }
-            }
             
-            /*movt(val), movw(all)*/
-            else if (hex2 == 0x2 || hex2 == 0x6) {
-                if (hex3 == 0xC){
+            if (hex5 == 0x0){
+                if (hex4 == 0xF){
+                    if (hex2 == 0x0) {
+                        if (hex3 == 0x4 || hex3 == 0x5){
+                            /*mov(val)*/
+                            if (psr)
+                                sprintf(Programme[ M->REG[PC]/4 ],"movs r%d, #0x%08x",regd, val);
+                            else
+                                sprintf(Programme[ M->REG[PC]/4 ],"mov r%d, #0x%08x",regd, val);
+                            
+                            mov(M, regd, val, psr);
+                            
+                        } else if (hex3 == 0x6 || hex3 == 0x7){
+                            /*mvn(val)*/
+                            if (psr)
+                                sprintf(Programme[ M->REG[PC]/4 ],"mvns r%d, #0x%08x",regd, val);
+                            else
+                                sprintf(Programme[ M->REG[PC]/4 ],"mvn r%d, #0x%08x",regd, val);
+                            
+                            mvn(M, regd, val, psr);
+                        }
+                    }
+                } else if (hex4 != 0xF){
+                    if (hex6 == 0xF){
+                        /*tests(val)*/
+                        switch (code){
+                            case(0x0):
+                                sprintf(Programme[ M->REG[PC]/4 ],"tst r%d, #0x%08x", rego_z, val);
+                                tst(M, M->FLASH[rego_z], val);
+                                break;
+                            case(0xD):
+                                sprintf(Programme[ M->REG[PC]/4 ],"cmp r%d, #0x%08x", rego_z, val);
+                                cmp(M, M->FLASH[rego_z], val);
+                                break;
+                        }
+                    } else {
+                        /*ops (val)*/
+                        switch (code) {
+                            case(0x0):
+                                if (psr)
+                                    sprintf(Programme[ M->REG[PC]/4 ],"ands r%d, r%d, r%d",regd, rego_z, val);
+                                else
+                                    sprintf(Programme[ M->REG[PC]/4 ],"and r%d, r%d, r%d",regd, rego_z, val);
+                                
+                                and(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
+                                break;
+                            
+                            case(0x1):
+                                if (psr)
+                                    sprintf(Programme[ M->REG[PC]/4 ],"bics r%d, r%d, r%d",regd, rego_z, val);
+                                else
+                                    sprintf(Programme[ M->REG[PC]/4 ],"bic r%d, r%d, r%d",regd, rego_z, val);
+                                
+                                bic(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
+                                break;
+                            
+                            case(0x2):
+                                if (psr)
+                                    sprintf(Programme[ M->REG[PC]/4 ],"orrs r%d, r%d, r%d",regd, rego_z, val);
+                                else
+                                    sprintf(Programme[ M->REG[PC]/4 ],"orr r%d, r%d, r%d",regd, rego_z, val);
+                                
+                                orr(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
+                                break;
+                            
+                            case(0x3):
+                                if (psr)
+                                    sprintf(Programme[ M->REG[PC]/4 ],"orns r%d, r%d, r%d",regd, rego_z, val);
+                                else
+                                    sprintf(Programme[ M->REG[PC]/4 ],"orn r%d, r%d, r%d",regd, rego_z, val);
+                                
+                                orn(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
+                                break;
+                            
+                            case(0x4):
+                                if (psr)
+                                    sprintf(Programme[ M->REG[PC]/4 ],"eors r%d, r%d, r%d",regd, rego_z, val);
+                                else
+                                    sprintf(Programme[ M->REG[PC]/4 ],"eor r%d, r%d, r%d",regd, rego_z, val);
+                                
+                                eor(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
+                                break;
+                            
+                            case(0x8):
+                                if (psr)
+                                    sprintf(Programme[ M->REG[PC]/4 ],"adds r%d, r%d, r%d",regd, rego_z, val);
+                                else
+                                    sprintf(Programme[ M->REG[PC]/4 ],"add r%d, r%d, r%d",regd, rego_z, val);
+                                
+                                add(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
+                                break;
+                            
+                            case(0xA):
+                                if (psr)
+                                    sprintf(Programme[ M->REG[PC]/4 ],"adcs r%d, r%d, r%d",regd, rego_z, val);
+                                else
+                                    sprintf(Programme[ M->REG[PC]/4 ],"adc r%d, r%d, r%d",regd, rego_z, val);
+                                
+                                adc(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
+                                break;
+                            
+                            case(0xB):
+                                if (psr)
+                                    sprintf(Programme[ M->REG[PC]/4 ],"sbcs r%d, r%d, r%d",regd, rego_z, val);
+                                else
+                                    sprintf(Programme[ M->REG[PC]/4 ],"sbc r%d, r%d, r%d",regd, rego_z, val);
+                                
+                                sbc(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
+                                break;
+                        
+                            case(0xD):
+                                if (psr)
+                                    sprintf(Programme[ M->REG[PC]/4 ],"subs r%d, r%d, r%d",regd, rego_z, val);
+                                else
+                                    sprintf(Programme[ M->REG[PC]/4 ],"sub r%d, r%d, r%d",regd, rego_z, val);
+                                
+                                sub(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
+                                break;
+                            
+                            case(0xE):
+                                if (psr)
+                                    sprintf(Programme[ M->REG[PC]/4 ],"rsbs r%d, r%d, r%d",regd, rego_z, val);
+                                else
+                                    sprintf(Programme[ M->REG[PC]/4 ],"rsb r%d, r%d, r%d",regd, rego_z, val);
+                                
+                                rsb(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
+                                break;
+                        }
+                    }
+                }
+            } else if (hex5 == 0xF){
+                if (hex7 == 0x0 && hex5 == 0xF){
+                    if (hex2 == 0xA){
+                        if (hex4 != 0xF){
+                            /*décalage(reg)*/
+                            
+                            switch(pp_reg){
+                                case 0x0:
+                                    if (s)
+                                        sprintf(Programme[ M->REG[PC]/4 ],"lsls r%d, r%d, r%d",regd, rego_z, val2_regv);
+                                    else
+                                        sprintf(Programme[ M->REG[PC]/4 ],"lsl r%d, r%d, r%d",regd, rego_z, val2_regv);
+                                    
+                                    lsl(M, regd, M->FLASH[rego_z],M->FLASH[val2_regv],s);
+                                    break;
+                                case 0x1:
+                                    if (s)
+                                        sprintf(Programme[ M->REG[PC]/4 ],"lsrs r%d, r%d, r%d",regd, rego_z, val2_regv);
+                                    else
+                                        sprintf(Programme[ M->REG[PC]/4 ],"lsr r%d, r%d, r%d",regd, rego_z, val2_regv);                        
+                                    
+                                    lsr(M, regd, M->FLASH[rego_z],M->FLASH[val2_regv],s);
+                                    break;
+                                case 0x2:
+                                    if (s)
+                                        sprintf(Programme[ M->REG[PC]/4 ],"asrs r%d, r%d, r%d",regd, rego_z, val2_regv);
+                                    else
+                                        sprintf(Programme[ M->REG[PC]/4 ],"asr r%d, r%d, r%d",regd, rego_z, val2_regv);
+                                    
+                                    sprintf(Programme[ M->REG[PC]/4 ],"asr r%d, r%d, r%d",regd, rego_z, val2_regv);
+                                    asr(M, regd, M->FLASH[rego_z],M->FLASH[val2_regv],s);
+                                    break;
+                            }
+                        }
+                    } else if (hex2 == 0xB){
+                        if (hex3 == 0x0){
+                            /*mul(reg)*/
+                            
+                            sprintf(Programme[ M->REG[PC]/4 ],"mul r%d, r%d, r%d",regd, rego_z, val2_regv);
+                            mul(M, M->FLASH[regd],M->FLASH[rego_z], M->FLASH[val2_regv]);
+                        }
+                    }
+                }
+            } if (hex2 == 0x6 || hex2 == 0x2) {
+                if (hex3 == 0xC) {
                     /*movt(val)*/
                     sprintf(Programme[ M->REG[PC]/4 ],"movt r%d, #0x%08x",regd, zzzzwyyyxxxxxxxx);
                     movt(M, regd, zzzzwyyyxxxxxxxx);
-                } else if (hex3 == 0x4){
+                } else if (hex3 == 0x4) {
                     /*movw(val)*/
                     sprintf(Programme[ M->REG[PC]/4 ],"movw r%d, #0x%08x",regd, zzzzwyyyxxxxxxxx);
                     movw(M, regd, zzzzwyyyxxxxxxxx); /*val = zzzzwyyy xxxxxxxx*/
-                } else {
-                    sprintf(Programme[ M->REG[PC]/4 ],"erreur at 0x%08x",M->REG[PC]);
-                    erreur = 1;
-                    M->REG[PC] = 0xFF;
                 }
             }
             
-            /*décalages(reg)*/
-            else if (hex2 == 0xA) {
-                switch(pp_reg){
-                    case 0x0:
-                        if (s)
-                            sprintf(Programme[ M->REG[PC]/4 ],"lsls r%d, r%d, r%d",regd, rego_z, val2_regv);
-                        else
-                            sprintf(Programme[ M->REG[PC]/4 ],"lsl r%d, r%d, r%d",regd, rego_z, val2_regv);
-                        
-                        lsl(M, regd, M->FLASH[rego_z],M->FLASH[val2_regv],s);
-                        break;
-                    case 0x1:
-                        if (s)
-                            sprintf(Programme[ M->REG[PC]/4 ],"lsrs r%d, r%d, r%d",regd, rego_z, val2_regv);
-                        else
-                            sprintf(Programme[ M->REG[PC]/4 ],"lsr r%d, r%d, r%d",regd, rego_z, val2_regv);                        
-                        
-                        lsr(M, regd, M->FLASH[rego_z],M->FLASH[val2_regv],s);
-                        break;
-                    case 0x2:
-                        if (s)
-                            sprintf(Programme[ M->REG[PC]/4 ],"asrs r%d, r%d, r%d",regd, rego_z, val2_regv);
-                        else
-                            sprintf(Programme[ M->REG[PC]/4 ],"asr r%d, r%d, r%d",regd, rego_z, val2_regv);
-                        
-                        sprintf(Programme[ M->REG[PC]/4 ],"asr r%d, r%d, r%d",regd, rego_z, val2_regv);
-                        asr(M, regd, M->FLASH[rego_z],M->FLASH[val2_regv],s);
-                        break;
-                }
-            }
-            
-            /*mul(reg)*/
-            else if (hex2 == 0xB) {
-                sprintf(Programme[ M->REG[PC]/4 ],"mul r%d, r%d, r%d",regd, rego_z, val2_regv);
-                mul(M, M->FLASH[regd],M->FLASH[rego_z], M->FLASH[val2_regv]);
-            }
-            
-            /*tests(val)*/
-            else if (regd == 0xF){
-                switch (code){
-                    case(0x0):
-                        sprintf(Programme[ M->REG[PC]/4 ],"tst r%d, #0x%08x", rego_z, val);
-                        tst(M, M->FLASH[rego_z], val);
-                        break;
-                    case(0xD):
-                        sprintf(Programme[ M->REG[PC]/4 ],"cmp r%d, #0x%08x", rego_z, val);
-                        cmp(M, M->FLASH[rego_z], val);
-                        break;
-                }
-            }
-            
-            /*ops(val)*/
-            else if (hex4!= 0xF){
-                switch (code) {
-                    case(0x0):
-                        if (psr)
-                            sprintf(Programme[ M->REG[PC]/4 ],"ands r%d, r%d, r%d",regd, rego_z, val);
-                        else
-                            sprintf(Programme[ M->REG[PC]/4 ],"and r%d, r%d, r%d",regd, rego_z, val);
-                        
-                        and(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
-                        break;
-                    
-                    case(0x1):
-                        if (psr)
-                            sprintf(Programme[ M->REG[PC]/4 ],"bics r%d, r%d, r%d",regd, rego_z, val);
-                        else
-                            sprintf(Programme[ M->REG[PC]/4 ],"bic r%d, r%d, r%d",regd, rego_z, val);
-                        
-                        bic(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
-                        break;
-                    
-                    case(0x2):
-                        if (psr)
-                            sprintf(Programme[ M->REG[PC]/4 ],"orrs r%d, r%d, r%d",regd, rego_z, val);
-                        else
-                            sprintf(Programme[ M->REG[PC]/4 ],"orr r%d, r%d, r%d",regd, rego_z, val);
-                        
-                        orr(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
-                        break;
-                    
-                    case(0x3):
-                        if (psr)
-                            sprintf(Programme[ M->REG[PC]/4 ],"orns r%d, r%d, r%d",regd, rego_z, val);
-                        else
-                            sprintf(Programme[ M->REG[PC]/4 ],"orn r%d, r%d, r%d",regd, rego_z, val);
-                        
-                        orn(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
-                        break;
-                    
-                    case(0x4):
-                        if (psr)
-                            sprintf(Programme[ M->REG[PC]/4 ],"eors r%d, r%d, r%d",regd, rego_z, val);
-                        else
-                            sprintf(Programme[ M->REG[PC]/4 ],"eor r%d, r%d, r%d",regd, rego_z, val);
-                        
-                        eor(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
-                        break;
-                    
-                    case(0x8):
-                        if (psr)
-                            sprintf(Programme[ M->REG[PC]/4 ],"adds r%d, r%d, r%d",regd, rego_z, val);
-                        else
-                            sprintf(Programme[ M->REG[PC]/4 ],"add r%d, r%d, r%d",regd, rego_z, val);
-                        
-                        add(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
-                        break;
-                    
-                    case(0xA):
-                        if (psr)
-                            sprintf(Programme[ M->REG[PC]/4 ],"adcs r%d, r%d, r%d",regd, rego_z, val);
-                        else
-                            sprintf(Programme[ M->REG[PC]/4 ],"adc r%d, r%d, r%d",regd, rego_z, val);
-                        
-                        adc(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
-                        break;
-                    
-                    case(0xB):
-                        if (psr)
-                            sprintf(Programme[ M->REG[PC]/4 ],"sbcs r%d, r%d, r%d",regd, rego_z, val);
-                        else
-                            sprintf(Programme[ M->REG[PC]/4 ],"sbc r%d, r%d, r%d",regd, rego_z, val);
-                        
-                        sbc(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
-                        break;
                 
-                    case(0xD):
-                        if (psr)
-                            sprintf(Programme[ M->REG[PC]/4 ],"subs r%d, r%d, r%d",regd, rego_z, val);
-                        else
-                            sprintf(Programme[ M->REG[PC]/4 ],"sub r%d, r%d, r%d",regd, rego_z, val);
-                        
-                        sub(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
-                        break;
-                    
-                    case(0xE):
-                        if (psr)
-                            sprintf(Programme[ M->REG[PC]/4 ],"rsbs r%d, r%d, r%d",regd, rego_z, val);
-                        else
-                            sprintf(Programme[ M->REG[PC]/4 ],"rsb r%d, r%d, r%d",regd, rego_z, val);
-                        
-                        rsb(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
-                        break;
-                }
-            }
-            
+            /*sprintf(Programme[ M->REG[PC]/4 ],"erreur at 0x%08x\n",M->REG[PC]);
+            erreur = 1;
+            M->REG[PC] = 0xFF;*/
+                
+
             break;
+            
+            
             
         case 0xD:
         /*ldr*/
@@ -528,7 +526,7 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
         case 0x4:
         /*push*/
             if (hex3 == 0xF){
-                sprintf(Programme[ M->REG[PC]/4 ],"psuh{r%d}",regd);
+                sprintf(Programme[ M->REG[PC]/4 ],"push{r%d}",regd);
                 push(M,regd);
             }
             break;
@@ -544,7 +542,12 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
         
         /****************************************/
         /*branchements*/
-        if(hex3 + hex4 == 0){
+        
+        
+        
+        
+        
+        if(hex3 == 0xF && hex4 == 0xF){
             switch(hex1){
                 case 0x0:
         /*beq*/
