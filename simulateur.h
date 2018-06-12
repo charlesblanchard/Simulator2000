@@ -30,7 +30,7 @@ void afficher_flash(Machine m);
 void afficher_registres(Machine m);
 void afficher_PSR(Machine m);
 
-void affichage(Machine m);
+void affichage(Machine m, char Programme[64][30]);
 
 void bold_red();
 void red();

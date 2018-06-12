@@ -103,18 +103,20 @@ void afficher_machine(Machine m){
     afficher_memoire(m);
 }
 
-void affichage(Machine m){
+void affichage(Machine m, char Programme[64][30]){
+    int i;
     int ligne, colonne,adresse;
     char indicateur_pc[3];
+    int fin = 0;
     printf("\n\n");
-    printf("######################################################################################################################################\n");
-    printf("#                     # r0 = 0x%08x | r4 = 0x%08x | r8  = 0x%08x | r12 = 0x%08x | Z = 0x%08x #                   #\n",m.REG[0],m.REG[4],m.REG[8],m.REG[12],m.PSR[Z]);
-    printf("#                     # r1 = 0x%08x | r5 = 0x%08x | r9  = 0x%08x |  SP = 0x%08x | N = 0x%08x #                   #\n",m.REG[1],m.REG[5],m.REG[9],m.REG[13],m.PSR[N]);
-    printf("#        FLASH        # r2 = 0x%08x | r6 = 0x%08x | r10 = 0x%08x |  LR = 0x%08x | C = 0x%08x #        RAM        #\n",m.REG[2],m.REG[6],m.REG[10],m.REG[14],m.PSR[C]);
-    printf("#                     # r3 = 0x%08x | r7 = 0x%08x | r11 = 0x%08x |  PC = 0x%08x | V = 0x%08x #                   #\n",m.REG[3],m.REG[7],m.REG[11],m.REG[15],m.PSR[V]);
-    printf("######################################################################################################################################\n");
-    printf("#   ADR |  0  1  2  3 #                                                                                          # ADR |  0  1  2  3 #\n");
-    printf("#-------+-------------#                                                                                          #-----+-------------#\n");
+    printf("#####################################################################################################\n");
+    printf("#                     # r0 = %4i | r4 = %4i | r8  = %4i | r12 = %4i | Z = %i #                   #\n",m.REG[0],m.REG[4],m.REG[8],m.REG[12],m.PSR[Z]);
+    printf("#                     # r1 = %4i | r5 = %4i | r9  = %4i |  SP = %4i | N = %i #                   #\n",m.REG[1],m.REG[5],m.REG[9],m.REG[13],m.PSR[N]);
+    printf("#        FLASH        # r2 = %4i | r6 = %4i | r10 = %4i |  LR = %4i | C = %i #        RAM        #\n",m.REG[2],m.REG[6],m.REG[10],m.REG[14],m.PSR[C]);
+    printf("#                     # r3 = %4i | r7 = %4i | r11 = %4i |  PC = %4i | V = %i #                   #\n",m.REG[3],m.REG[7],m.REG[11],m.REG[15],m.PSR[V]);
+    printf("#####################################################################################################\n");
+    printf("#   ADR |  0  1  2  3 #                                                         # ADR |  0  1  2  3 #\n");
+    printf("#-------+-------------#                                                         #-----+-------------#\n");
 
     
     for (ligne =0;ligne<32;ligne++) {
@@ -131,15 +133,24 @@ void affichage(Machine m){
             printf("%02x ", m.FLASH[adresse + colonne]);
         }
         reset();
-        printf("#                                                                                          #");
+        printf("# %s ",indicateur_pc);
+        fin=0;
+        for(i=0;i<30;i++){
+            if(Programme[m.REG[PC]][i]=='\0')
+                fin=1;
+            if(!fin)
+                printf("%c",Programme[m.REG[PC]][i]);
+            if(fin)
+                printf(" ");
+        }
         adresse = 4*ligne;
-        printf("  %02x | ",adresse);
+        printf("                       #  %02x | ",adresse);
         for (colonne=0; colonne<4; colonne++) {
             printf("%02x ", m.RAM[adresse + colonne]);
         }
         printf("#\n");
     }
-    printf("######################################################################################################################################\n");    
+    printf("#####################################################################################################\n");
 }
 
 void bold_red() {

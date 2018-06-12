@@ -10,13 +10,18 @@
 
 int main(int argc, char *argv[]){
     (void)argc; /* Supprimer warning argc innutilisé*/
+    int i;
     
     Machine *m = init_machine();
-        
+    char Programme[64][30];
+    for(i=0;i<64;i++){
+        Programme[i][0]='\0';
+    }
+    
     /* Charger programme en mémoire */
     flasher_prgm(m, argv[1]);
     
-    affichage(*m);
+    affichage(*m,Programme);
     
     /* Executer programme */
     /*interpreter(m);*/

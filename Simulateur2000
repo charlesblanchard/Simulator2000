@@ -8,7 +8,7 @@ fi
 
 VAR=$1
 
-if test ${VAR##*.} = "s"
+if [ ${VAR##*.} = "s" ]
 then
     ./conversion_assembleur_hexa $VAR
     VAR=`echo ${VAR//.s/.hex}`
