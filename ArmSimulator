@@ -2,7 +2,7 @@
 
 if [ $# != 1 ]
 then
-    echo "Mauvaise syntaxe: ./Simulateur2000 nom_du_fichier"
+    echo "Mauvaise syntaxe: ./ArmSimulator nom_du_fichier"
     exit
 fi
 
