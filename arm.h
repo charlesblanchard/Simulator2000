@@ -1,7 +1,7 @@
 #ifndef _ARM_
 #define _ARM_
 
-#include "simulateur.h"
+#include "machine.h"
 
 #include "math.h"
 

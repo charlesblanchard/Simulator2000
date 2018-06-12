@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include <math.h>
 
-#include "simulateur.h"
+#include "machine.h"
 #include "arm.h"
 
 #define T_MEM 0 

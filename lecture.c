@@ -4,7 +4,7 @@
 #include <inttypes.h>
 #include <math.h>
 
-#include "simulateur.h"
+#include "machine.h"
 
 #include "lecture.h"
 

@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 #include "math.h"
-#include "asm_to_hex.h"
+#include "assemblage.h"
 
 
 int main(int argc, char *argv[]){

@@ -5,44 +5,44 @@ CC 	?= gcc
 FLAGS	?= -Wall -ansi
 
 # Définition des écutables
-EXEC	?= simulateur conversion_assembleur_hexa
+EXEC	?= Simulateur Assembleur
 
 
 all: $(EXEC)
 
 # PROGRAMME PRINCIPAL
 
-simulateur : arm.o simulateur.o interpreteur.o lecture.o main.o
-	$(CC) $(FLAGS) simulateur.o arm.o interpreteur.o lecture.o main.o -o simulateur
+Simulateur : arm.o machine.o interpreteur.o lecture.o main.o
+	$(CC) $(FLAGS) machine.o arm.o interpreteur.o lecture.o main.o -o Simulateur
 
 
-main.o : main.c simulateur.h interpreteur.h lecture.h arm.h
+main.o : main.c machine.h interpreteur.h lecture.h arm.h
 	$(CC) $(FLAGS) -c main.c -o main.o
 
 arm.o : arm.c
 	$(CC) $(FLAGS) -c arm.c -o arm.o
 
 
-simulateur.o : simulateur.c
-	$(CC) $(FLAGS) -c simulateur.c -o simulateur.o
+machine.o : machine.c
+	$(CC) $(FLAGS) -c machine.c -o machine.o
 
 
-lecture.o : lecture.c simulateur.h
+lecture.o : lecture.c machine.h
 	$(CC) $(FLAGS) -c lecture.c -o lecture.o
 
 
-interpreteur.o : interpreteur.c simulateur.h arm.h arm.c
+interpreteur.o : interpreteur.c machine.h arm.h arm.c
 	$(CC) $(FLAGS) -c interpreteur.c -o interpreteur.o
 
 
 
 # PROGRAMME ASM_to_HEX
 
-conversion_assembleur_hexa : asm_to_hex.o
-	$(CC) $(FLAGS) asm_to_hex.o -o conversion_assembleur_hexa
+Assembleur : assemblage.o
+	$(CC) $(FLAGS) assemblage.o -o Assembleur
 
-asm_to_hex.o : asm_to_hex.c
-	$(CC) $(FLAGS) -c asm_to_hex.c -o asm_to_hex.o
+assemblage.o : assemblage.c
+	$(CC) $(FLAGS) -c assemblage.c -o assemblage.o
 
 
 

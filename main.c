@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "simulateur.h"
+#include "machine.h"
 #include "interpreteur.h"
 #include "lecture.h"
 
