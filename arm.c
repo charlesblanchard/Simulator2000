@@ -113,7 +113,7 @@ void add(Machine *M, int8_t rd, int32_t op1, int32_t op2, bool s){
     if(s){
         M->PSR[Z] = res==0;
         M->PSR[N] = res<0;
-        M->PSR[C] = 0;
+        M->PSR[C] = res>0xFFFFFFFF;
         M->PSR[V] = 0;
     }
     M->REG[PC] = M->REG[PC]+1;
@@ -126,7 +126,7 @@ void adc(Machine *M, int8_t rd, int32_t op1, int32_t op2, bool s){
     if(s){
         M->PSR[Z] = res==0;
         M->PSR[N] = res<0;
-        M->PSR[C] = 0;
+        M->PSR[C] = res>0xFFFFFFFF;
         M->PSR[V] = 0;
     }
     M->REG[PC] = M->REG[PC]+1;
@@ -139,7 +139,7 @@ void sbc(Machine *M, int8_t rd, int32_t op1, int32_t op2, bool s){
     if(s){
         M->PSR[Z] = res==0;
         M->PSR[N] = res<0;
-        M->PSR[C] = 0;
+        M->PSR[C] = res>0xFFFFFFFF;
         M->PSR[V] = 0;
     }
     M->REG[PC] = M->REG[PC]+1;
@@ -202,24 +202,39 @@ void cmp(Machine *M, int32_t op1, int32_t op2){
 /* Logical left shift */
 void lsl(Machine *M, int8_t rd, int32_t op1, int32_t op2, bool s){
     M->REG[rd] = op1 * (1<<op2) ;
-    if(s) 
-        /*calcul_PSR( M , M->REG[rd] );*/
+    int64_t res = op1 - op2;
+    if(s){
+        M->PSR[Z] = res==0;
+        M->PSR[N] = res<0;
+        M->PSR[C] = 0;
+        M->PSR[V] = 0;
+    }
     M->REG[PC] = M->REG[PC]+1;
 }
 
 /* Logical right shift */
 void lsr(Machine *M, int8_t rd, int32_t op1, int32_t op2, bool s){
     M->REG[rd] = op1 / (1<<op2) ;
-    if(s) 
-        /*calcul_PSR( M , M->REG[rd] );*/
+    int64_t res = op1 - op2;
+    if(s){
+        M->PSR[Z] = res==0;
+        M->PSR[N] = res<0;
+        M->PSR[C] = 0;
+        M->PSR[V] = 0;
+    }
     M->REG[PC] = M->REG[PC]+1;
 }
 
 /* Arithm right shift */
 void asr(Machine *M, int8_t rd, int32_t op1, int32_t op2, bool s){
     M->REG[rd] = op1 / (1<<op2) ;
-    if(s) 
-        /*calcul_PSR( M , M->REG[rd] );*/
+    int64_t res = op1 - op2;
+    if(s){
+        M->PSR[Z] = res==0;
+        M->PSR[N] = res<0;
+        M->PSR[C] = 0;
+        M->PSR[V] = 0;
+    }
     M->REG[PC] = M->REG[PC]+1;
 }
 
