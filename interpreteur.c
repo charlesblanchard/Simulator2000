@@ -5,9 +5,6 @@
 
 #include "simulateur.h"
 #include "arm.h"
-#include "interpreteur.h"
-
-
 
 #define T_MEM 0
 #define PC_DER_LIGNE 4031713024 + T_MEM 
@@ -37,10 +34,10 @@ int interpreter(Machine *M){
     do{    
         instruction = 0;
         
-        instruction = instruction + M->FLASH[i+1] * pow(2,24);
-        instruction = instruction + M->FLASH[i] * pow(2,16);
-        instruction = instruction + M->FLASH[i+3] * pow(2,8);
-        instruction = instruction + M->FLASH[i+2];
+        instruction = instruction + (M->FLASH[M->REG[PC]] + 1) * pow(2,24);
+        instruction = instruction + (M->FLASH[M->REG[PC]]) * pow(2,16);
+        instruction = instruction + (M->FLASH[M->REG[PC]] + 3) * pow(2,8);
+        instruction = instruction + (M->FLASH[M->REG[PC]] + 2);
 
     int code = (instruction & ~(0xFE1FFFFF)) / pow(2,20); /*code d'une opération*/
     int psr = (instruction & ~(0xFFEFFFFF)) / pow(2,20); /*bit informant de l'actualisation duPSR*/
@@ -66,6 +63,8 @@ int interpreter(Machine *M){
     int val = (val1 * pow(2,4)) + val2_regv;
     int XYZ = hex8 * pow(2,8) + hex5 * pow(2,4) + hex6;
     
+    
+    printf("\nCode interpreté\n");
     switch (hex1){
         /*mov(reg),mvm(reg),ops(reg),décalages(val),tests(reg)*/
         case 0xE:
@@ -75,10 +74,12 @@ int interpreter(Machine *M){
             /* décalages (val),mov(reg),mvn(reg)*/
                 switch (code){
                     case(0x0):
+                        printf("tst r%d,r%d\n",rego_z,val2_regv);
                         tst(M, M->FLASH[rego_z], M->FLASH[val2_regv]);
                         break;
                     
                     case(0xD):
+                        printf("cmp r%d,r%d\n",rego_z,val2_regv);
                         cmp(M, M->FLASH[rego_z],  M->FLASH[val2_regv]);
                         break;
                 }
@@ -88,24 +89,47 @@ int interpreter(Machine *M){
                 if(hex5 + val1 != 0xF) {
                     switch (pp) {
                         case(0x0):
+                            if (psr)
+                                printf("lsls r%d, r%d, #0x%08x\n",regd, val2_regv,xxxyy);
+                            else
+                                printf("lsl r%d, r%d, #0x%08x\n",regd, val2_regv,xxxyy);
+                            
                             lsl(M, regd,M->FLASH[val2_regv],xxxyy, psr);
                             break;
                         
                         case(0x1):
+                            if (psr)
+                                printf("lsrs r%d, r%d, #0x%08x\n",regd, val2_regv,xxxyy);
+                            else
+                                printf("lsr r%d, r%d, #0x%08x\n",regd, val2_regv,xxxyy);
+                            
                             lsr(M, regd,M->FLASH[val2_regv],xxxyy, psr);
                             break;
                         
                         case(0x2):
+                            if (psr)
+                                printf("asrs r%d, r%d, #0x%08x\n",regd, val2_regv,xxxyy);
+                            else
+                                printf("asr r%d, r%d, #0x%08x\n",regd, val2_regv,xxxyy);
+                            
                             asr(M, regd,M->FLASH[val2_regv],xxxyy, psr);
                             break;
                     }
                 } 
-                /*mov(reg*/
+                /*mov(reg)*/
                 else if (hex3 == 0x4 || hex3 == 0x5){
+                    if (psr)
+                        printf("movs r%d, r%d\n",regd, val2_regv);
+                    else
+                        printf("mov r%d, r%d\n",regd, val2_regv);
                     mov(M, regd, M->FLASH[val2_regv], psr);
                 }
                 /*mvn(reg)*/
                 else if (hex3 == 0x6 || hex3 == 0x7){
+                    if (psr)
+                        printf("mvns r%d, r%d\n",regd, val2_regv);
+                    else
+                        printf("mvn r%d, r%d\n",regd, val2_regv);
                     mvn(M, regd, M->FLASH[val2_regv], psr);
                 }
             }
@@ -113,44 +137,89 @@ int interpreter(Machine *M){
             else {
                 switch (code) {
                     case(0x0):
-                    and(M, M->FLASH[regd], M->FLASH[rego_z], M->FLASH[val2_regv], psr);
-                    break;
+                        if (psr)
+                            printf("ands r%d, r%d, r%d\n",regd, rego_z,val2_regv);
+                        else
+                            printf("and r%d, r%d, r%d\n",regd, rego_z,val2_regv);
+                        
+                        and(M, M->FLASH[regd], M->FLASH[rego_z], M->FLASH[val2_regv], psr);
+                        break;
                     
                     case(0x1):
-                    bic(M, M->FLASH[regd], M->FLASH[rego_z], M->FLASH[val2_regv], psr);
-                    break;
+                        if (psr)
+                            printf("bics r%d, r%d, r%d\n",regd, rego_z,val2_regv);
+                        else
+                            printf("bic r%d, r%d, r%d\n",regd, rego_z,val2_regv);
+                        
+                        bic(M, M->FLASH[regd], M->FLASH[rego_z], M->FLASH[val2_regv], psr);
+                        break;
                     
                     case(0x2):
-                    orr(M, M->FLASH[regd], M->FLASH[rego_z], M->FLASH[val2_regv], psr);
-                    break;
+                        if (psr)
+                            printf("orrs r%d, r%d, r%d\n",regd, rego_z,val2_regv);
+                        else
+                            printf("orr r%d, r%d, r%d\n",regd, rego_z,val2_regv);
+                        
+                        orr(M, M->FLASH[regd], M->FLASH[rego_z], M->FLASH[val2_regv], psr);
+                        break;
                     
                     case(0x3):
-                    orn(M, M->FLASH[regd], M->FLASH[rego_z], M->FLASH[val2_regv], psr);
-                    break;
+                        if (psr)
+                            printf("orns r%d, r%d, r%d\n",regd, rego_z,val2_regv);
+                        else
+                            printf("orn r%d, r%d, r%d\n",regd, rego_z,val2_regv);
+                        orn(M, M->FLASH[regd], M->FLASH[rego_z], M->FLASH[val2_regv], psr);
+                        break;
                     
                     case(0x4):
-                    eor(M, M->FLASH[regd], M->FLASH[rego_z], M->FLASH[val2_regv], psr);
-                    break;
+                        if (psr)
+                            printf("eors r%d, r%d, r%d\n",regd, rego_z,val2_regv);
+                        else
+                            printf("eor r%d, r%d, r%d\n",regd, rego_z,val2_regv);
+                        
+                        eor(M, M->FLASH[regd], M->FLASH[rego_z], M->FLASH[val2_regv], psr);
+                        break;
                     
                     case(0x8):
-                    add(M, M->FLASH[regd], M->FLASH[rego_z], M->FLASH[val2_regv], psr);
-                    break;
+                        if (psr)
+                            printf("adds r%d, r%d, r%d\n",regd, rego_z,val2_regv);
+                        else
+                            printf("add r%d, r%d, r%d\n",regd, rego_z,val2_regv);
+                        add(M, M->FLASH[regd], M->FLASH[rego_z], M->FLASH[val2_regv], psr);
+                        break;
                     
                     case(0xA):
+                        if (psr)
+                            printf("adc r%d, r%d, r%d\n",regd, rego_z,val2_regv);
+                        else
+                            printf("adc r%d, r%d, r%d\n",regd, rego_z,val2_regv);
+                        
                     adc(M, M->FLASH[regd], M->FLASH[rego_z], M->FLASH[val2_regv], psr);
-                    break;
+                        break;
                     
                     case(0xB):
-                    sbc(M, M->FLASH[regd], M->FLASH[rego_z], M->FLASH[val2_regv], psr);
-                    break;
+                        if (psr)
+                            printf("sbcs r%d, r%d, r%d\n",regd, rego_z,val2_regv);
+                        else
+                            printf("sbc r%d, r%d, r%d\n",regd, rego_z,val2_regv);
+                        sbc(M, M->FLASH[regd], M->FLASH[rego_z], M->FLASH[val2_regv], psr);
+                        break;
                 
                     case(0xD):
-                    sub(M, M->FLASH[regd], M->FLASH[rego_z], M->FLASH[val2_regv], psr);
-                    break;
+                        if (psr)
+                            printf("subs r%d, r%d, r%d\n",regd, rego_z,val2_regv);
+                        else
+                            printf("sub r%d, r%d, r%d\n",regd, rego_z,val2_regv);
+                        sub(M, M->FLASH[regd], M->FLASH[rego_z], M->FLASH[val2_regv], psr);
+                        break;
                     
                     case(0xE):
-                    rsb(M, M->FLASH[regd], M->FLASH[rego_z], M->FLASH[val2_regv], psr);
-                    break;
+                        if (psr)
+                            printf("rsbs r%d, r%d, r%d\n",regd, rego_z,val2_regv);
+                        else
+                            printf("rsbs r%d, r%d, r%d\n",regd, rego_z,val2_regv);
+                        rsb(M, M->FLASH[regd], M->FLASH[rego_z], M->FLASH[val2_regv], psr);
+                        break;
                 }
             }
     
@@ -161,11 +230,19 @@ int interpreter(Machine *M){
             if (hex2 == 0x0 && hex4 == 0xF){
                 if (hex3 == 0x5 || hex3 == 0x4){
                     /*mov(val)*/
-                    printf("mov(val)\n");
+                    if (psr)
+                        printf("movs r%d, #0x%08x\n",regd, val);
+                    else
+                        printf("mov r%d, #0x%08x\n",regd, val);
+                    
                     mov(M, regd, val, psr);
                 } else if (hex3 == 0x7 || hex3 == 0x6){
                     /*mvn(val)*/
-                    printf("mvn(val)\n");
+                    if (psr)
+                        printf("mvns r%d, #0x%08x\n",regd, val);
+                    else
+                        printf("mvn r%d, #0x%08x\n",regd, val);
+                    
                     mvn(M, regd, val, psr);
                 } else {
                     erreur = 1;
@@ -177,28 +254,45 @@ int interpreter(Machine *M){
             else if (hex2 == 0x2 || hex2 == 0x6) {
                 if (hex3 == 0xC){
                     /*movt(val)*/
-                    printf("movt(val)\n");
+                    printf("movt r%d, #0x%08x\n",regd, zzzzwyyyxxxxxxxx);
                     movt(M, regd, zzzzwyyyxxxxxxxx);
                 } else if (hex3 == 0x4){
                     /*movw(val)*/
-                    printf("movw(val)\n");
+                    printf("movw r%d, #0x%08x\n",regd, zzzzwyyyxxxxxxxx);
                     movw(M, regd, zzzzwyyyxxxxxxxx); /*val = zzzzwyyy xxxxxxxx*/
                 } else {
+                    printf("erreur à l'instruction 0x%08x\n",M->REG[PC]);
                     erreur = 1;
-                    instruction = PC_DER_LIGNE;
+                    M->REG[PC] = M->REG[LR];
                 }
             }
             
             /*décalages(reg)*/
             else if (hex2 == 0xA) {
                 switch(pp_reg){
-                    case 0x00:
+                    case 0x0:
+                        if (s)
+                            printf("lsls r%d, r%d, r%d\n",regd, rego_z, val2_regv);
+                        else
+                            printf("lsl r%d, r%d, r%d\n",regd, rego_z, val2_regv);
+                        
                         lsl(M, regd, M->FLASH[rego_z],M->FLASH[val2_regv],s);
                         break;
-                    case 0x01:
+                    case 0x1:
+                        if (s)
+                            printf("lsrs r%d, r%d, r%d\n",regd, rego_z, val2_regv);
+                        else
+                            printf("lsr r%d, r%d, r%d\n",regd, rego_z, val2_regv);                        
+                        
                         lsr(M, regd, M->FLASH[rego_z],M->FLASH[val2_regv],s);
                         break;
-                    case 0x10:
+                    case 0x2:
+                        if (s)
+                            printf("asrs r%d, r%d, r%d\n",regd, rego_z, val2_regv);
+                        else
+                            printf("asr r%d, r%d, r%d\n",regd, rego_z, val2_regv);
+                        
+                        printf("asr r%d, r%d, r%d\n",regd, rego_z, val2_regv);
                         asr(M, regd, M->FLASH[rego_z],M->FLASH[val2_regv],s);
                         break;
                 }
@@ -206,16 +300,19 @@ int interpreter(Machine *M){
             
             /*mul(reg)*/
             else if (hex2 == 0xB) {
-                mul(M, M->FLASH[regd],M->FLASH[rego_z], val2_regv);
+                printf("mul r%d, r%d, r%d\n",regd, rego_z, val2_regv);
+                mul(M, M->FLASH[regd],M->FLASH[rego_z], M->FLASH[val2_regv]);
             }
             
             /*tests(val)*/
-            if (regd == 0xf){
+            else if (regd == 0xF){
                 switch (code){
                     case(0x0):
+                        printf("tst r%d, #0x%08x\n",regd, rego_z, val);
                         tst(M, M->FLASH[rego_z], val);
                         break;
                     case(0xD):
+                        printf("cmp r%d, #0x%08x\n",regd, rego_z, val);
                         cmp(M, M->FLASH[rego_z], val);
                         break;
                 }
@@ -225,44 +322,94 @@ int interpreter(Machine *M){
             else if (hex4!= 0xF){
                 switch (code) {
                     case(0x0):
-                    and(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
-                    break;
+                        if (psr)
+                            printf("ands r%d, r%d, r%d\n",regd, rego_z, val);
+                        else
+                            printf("and r%d, r%d, r%d\n",regd, rego_z, val);
+                        
+                        and(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
+                        break;
                     
                     case(0x1):
-                    bic(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
-                    break;
+                        if (psr)
+                            printf("bics r%d, r%d, r%d\n",regd, rego_z, val);
+                        else
+                            printf("bic r%d, r%d, r%d\n",regd, rego_z, val);
+                        
+                        bic(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
+                        break;
                     
                     case(0x2):
-                    orr(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
-                    break;
+                        if (psr)
+                            printf("orrs r%d, r%d, r%d\n",regd, rego_z, val);
+                        else
+                            printf("orr r%d, r%d, r%d\n",regd, rego_z, val);
+                        
+                        orr(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
+                        break;
                     
                     case(0x3):
-                    orn(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
-                    break;
+                        if (psr)
+                            printf("orns r%d, r%d, r%d\n",regd, rego_z, val);
+                        else
+                            printf("orn r%d, r%d, r%d\n",regd, rego_z, val);
+                        
+                        orn(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
+                        break;
                     
                     case(0x4):
-                    eor(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
-                    break;
+                        if (psr)
+                            printf("eors r%d, r%d, r%d\n",regd, rego_z, val);
+                        else
+                            printf("eor r%d, r%d, r%d\n",regd, rego_z, val);
+                        
+                        eor(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
+                        break;
                     
                     case(0x8):
-                    add(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
-                    break;
+                        if (psr)
+                            printf("adds r%d, r%d, r%d\n",regd, rego_z, val);
+                        else
+                            printf("add r%d, r%d, r%d\n",regd, rego_z, val);
+                        
+                        add(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
+                        break;
                     
                     case(0xA):
-                    adc(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
-                    break;
+                        if (psr)
+                            printf("adcs r%d, r%d, r%d\n",regd, rego_z, val);
+                        else
+                            printf("adc r%d, r%d, r%d\n",regd, rego_z, val);
+                        
+                        adc(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
+                        break;
                     
                     case(0xB):
-                    sbc(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
-                    break;
+                        if (psr)
+                            printf("sbcs r%d, r%d, r%d\n",regd, rego_z, val);
+                        else
+                            printf("sbc r%d, r%d, r%d\n",regd, rego_z, val);
+                        
+                        sbc(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
+                        break;
                 
                     case(0xD):
-                    sub(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
-                    break;
+                        if (psr)
+                            printf("subs r%d, r%d, r%d\n",regd, rego_z, val);
+                        else
+                            printf("sub r%d, r%d, r%d\n",regd, rego_z, val);
+                        
+                        sub(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
+                        break;
                     
                     case(0xE):
-                    rsb(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
-                    break;
+                        if (psr)
+                            printf("rsbs r%d, r%d, r%d\n",regd, rego_z, val);
+                        else
+                            printf("rsb r%d, r%d, r%d\n",regd, rego_z, val);
+                        
+                        rsb(M, M->FLASH[regd], M->FLASH[rego_z], val, psr);
+                        break;
                 }
             }
             
@@ -270,6 +417,7 @@ int interpreter(Machine *M){
             
         case 0xD:
         /*ldr*/
+
             ldr (M, hex7, hex2, XYZ);
             break;
             
@@ -305,7 +453,10 @@ int interpreter(Machine *M){
         
     }
     
-    }while(i != 0); 
+    
+    M->REG[PC] = M->REG[PC] + 0x4;
+    
+    }while(M->REG[PC] != M->REG[LR]); 
     /*while pc ne revoit pas vers la derniere case*/
     
 
