@@ -705,9 +705,9 @@ int interpreter(Machine *M){
     
     
     
-    M->REG[PC] = M->REG[PC] + 0x4;
+    M->REG[PC] = M->REG[PC] + 0x4 ;
     
-    }while(M->REG[PC] != M->REG[LR]); 
+    }while(M->REG[PC] - 0x4  != 0xFF ); 
     /*while pc ne revoit pas vers la derniere case*/
     
     
