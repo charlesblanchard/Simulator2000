@@ -138,7 +138,6 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
                             break;
                     }
                 } else {
-                    printf("code : 0x%x\n",code);
                     /*ops(reg)*/
 
                     switch (code) {
@@ -232,7 +231,7 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
                     }
                 }
                 
-            } else if (hex3 == 1 && hex4 == 1){
+            } if (hex3 == 0xF && hex4 == 0xF){
                     
                     /*bal*/
                     
@@ -244,15 +243,10 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
                     }
                     
                     branch(M, AL, l, adress);   
-                
-                
-                
-            } else {
-                /*erreur*/
-                sprintf(Programme[ M->REG[PC]/4 ],"erreur at 0x%08x\n",M->REG[PC]);
-                erreur = 1;
-                M->REG[PC] = 0xFF;
             }
+                
+                
+            
             
             
                 
@@ -446,14 +440,8 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
                 }
             }
             
-                
-            /*sprintf(Programme[ M->REG[PC]/4 ],"erreur at 0x%08x\n",M->REG[PC]);
-            erreur = 1;
-            M->REG[PC] = 0xFF;*/
-                
 
             break;
-            
             
             
         case 0xD:
@@ -531,23 +519,15 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
             }
             break;
             
-        default:
-            sprintf(Programme[ M->REG[PC]/4 ],"erreur at 0x%08x",M->REG[PC]);
-            erreur = 1;
-            M->REG[PC] = 0xFF;
-            break;
             
-        }
-        
-        
-        /****************************************/
+            
+            
+            
+        default:
+            /****************************************/
         /*branchements*/
-        
-        
-        
-        
-        
-        if(hex3 == 0xF && hex4 == 0xF){
+            
+            if(hex3 == 0xF && hex4 == 0xF){
             switch(hex1){
                 case 0x0:
         /*beq*/
@@ -728,6 +708,18 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
                 
             }
         }
+            
+            
+            
+            
+            break;
+            
+    }  
+        
+        
+        
+        
+        
     
     if(!pas_a_pas){
         M->REG[PC] = M->REG[PC] + 4 ;   
