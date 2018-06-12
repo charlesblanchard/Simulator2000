@@ -37,13 +37,15 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
     
     char trash;     /* Si op = r1 --> trash = r; si op = #4 --> trash = # */
     
-    int ope1, ope2, ope3, i, address;
+    int ope1, ope2, ope3, i, j, address;
     int x,y,z,w;
     
     int type, s;
 
     Label e[20];
     int taille_label=0;
+    Label e_manquant[20];
+    int taille_label_manquant=0;
     
     int pc=0;
     
@@ -55,16 +57,21 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
             strcpy( (e[taille_label]).nom_label, instruction);
             (e[taille_label]).valeur_label = pc;
             taille_label = taille_label+1;
-            
+
             /*printf("pc %s = %i\n",instruction,pc);*/
         } else {
             /* Instruction habituelle */
             nettoyage_instruction(instruction);
-                
+            
+            strcpy(operande1,"");
+            strcpy(operande2,"");
+            strcpy(operande3,"");            
+            
             sscanf(instruction,"\t%s %s %s %s",mnemonique,operande1,operande2,operande3);   /*attribution des valeurs à partir de l'instruction*/
             
             /* RECUPERATION TYPE */
             type = recuperation_type(operande2,operande3);
+            
             sscanf(operande1,"%c%i",&trash,&ope1);
             sscanf(operande2,"%c%i",&trash,&ope2);
             if( type==TROIS_REGISTRES || type==DEUX_REGISTRES_UNE_VALEUR)
@@ -74,6 +81,7 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
             s = recuperation_s(mnemonique);
             
             /*printf("%s %s %s %s - type=%i - s=%i - pc=%i\n",mnemonique,operande1, operande2, operande3, type, s, pc);*/
+            
             
             /* CONSTRUCTION */
             switch(hash(mnemonique)){
@@ -495,137 +503,242 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
                 case BEQ:
                     /* beq label */
                     /* 0000 1010 'adresse label sur 3 octet' */
+                    address = -1;
                     for(i=0; i<taille_label; i++){
                         if(strcmp(operande1,e[i].nom_label)==0)
                             address = e[i].valeur_label;
                     }
-                    fprintf(f_hex,"0a%06x\n",address);
+                    if(address!=-1){
+                        fprintf(f_hex,"0a%06x\n",address);
+                    } else {
+                        fprintf(f_hex,"0a%-*s\n",6,operande1);
+                        strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
+                        taille_label_manquant = taille_label_manquant+1;
+                    }
                     break;
                 case BNE:
                     /* bne label */
                     /* 0001 1010 'adresse label sur 3 octet' */
+                    address = -1;
                     for(i=0; i<taille_label; i++){
                         if(strcmp(operande1,e[i].nom_label)==0)
                             address = e[i].valeur_label;
                     }
-                    fprintf(f_hex,"1a%06x\n",address);
+                    if(address!=-1){
+                        fprintf(f_hex,"1a%06x\n",address);
+                    } else {
+                        fprintf(f_hex,"1a%-*s\n",6,operande1);
+                        strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
+                        taille_label_manquant = taille_label_manquant+1;
+                    }
                     break;
                 case BHS:
                     /* bhs label */
                     /* 0010 1010 'adresse label sur 3 octet' */
+                    address = -1;
                     for(i=0; i<taille_label; i++){
                         if(strcmp(operande1,e[i].nom_label)==0)
                             address = e[i].valeur_label;
                     }
-                    fprintf(f_hex,"2a%06x\n",address);
+                    if(address!=-1){
+                        fprintf(f_hex,"2a%06x\n",address);
+                    } else {
+                        fprintf(f_hex,"2a%-*s\n",6,operande1);
+                        strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
+                        taille_label_manquant = taille_label_manquant+1;
+                    }
                     break;
                 case BLO:
                     /* blo label */
                     /* 0011 1010 'adresse label sur 3 octet' */
+                    address = -1;
                     for(i=0; i<taille_label; i++){
                         if(strcmp(operande1,e[i].nom_label)==0)
                             address = e[i].valeur_label;
                     }
-                    fprintf(f_hex,"3a%06x\n",address);
+                    if(address!=-1){
+                        fprintf(f_hex,"3a%06x\n",address);
+                    } else {
+                        fprintf(f_hex,"3a%-*s\n",6,operande1);
+                        strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
+                        taille_label_manquant = taille_label_manquant+1;
+                    }
                     break;
                 case BMI:
                     /* bmi label */
                     /* 0100 1010 'adresse label sur 3 octet' */
+                    address = -1;
                     for(i=0; i<taille_label; i++){
                         if(strcmp(operande1,e[i].nom_label)==0)
                             address = e[i].valeur_label;
                     }
-                    fprintf(f_hex,"4a%06x\n",address);
+                    if(address!=-1){
+                        fprintf(f_hex,"4a%06x\n",address);
+                    } else {
+                        fprintf(f_hex,"4a%-*s\n",6,operande1);
+                        strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
+                        taille_label_manquant = taille_label_manquant+1;
+                    }
                     break;
                 case BPL:
                     /* bpl label */
                     /* 0101 1010 'adresse label sur 3 octet' */
+                    address = -1;
                     for(i=0; i<taille_label; i++){
                         if(strcmp(operande1,e[i].nom_label)==0)
                             address = e[i].valeur_label;
                     }
-                    fprintf(f_hex,"5a%06x\n",address);
+                    if(address!=-1){
+                        fprintf(f_hex,"5a%06x\n",address);
+                    } else {
+                        fprintf(f_hex,"5a%-*s\n",6,operande1);
+                        strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
+                        taille_label_manquant = taille_label_manquant+1;
+                    }
                     break;
                 case BVS:
                     /* bvs label */
                     /* 0110 1010 'adresse label sur 3 octet' */
+                    address = -1;
                     for(i=0; i<taille_label; i++){
                         if(strcmp(operande1,e[i].nom_label)==0)
                             address = e[i].valeur_label;
                     }
-                    fprintf(f_hex,"6a%06x\n",address);
+                    if(address!=-1){
+                        fprintf(f_hex,"6a%06x\n",address);
+                    } else {
+                        fprintf(f_hex,"6a%-*s\n",6,operande1);
+                        strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
+                        taille_label_manquant = taille_label_manquant+1;
+                    }
                     break;
                 case BVC:
                     /* bvc label */
                     /* 0111 1010 'adresse label sur 3 octet' */
+                    address = -1;
                     for(i=0; i<taille_label; i++){
                         if(strcmp(operande1,e[i].nom_label)==0)
                             address = e[i].valeur_label;
                     }
-                    fprintf(f_hex,"7a%06x\n",address);
+                    if(address!=-1){
+                        fprintf(f_hex,"7a%06x\n",address);
+                    } else {
+                        fprintf(f_hex,"7a%-*s\n",6,operande1);
+                        strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
+                        taille_label_manquant = taille_label_manquant+1;
+                    }
                     break;
                 case BHI:
                     /* bhi label */
                     /* 1000 1010 'adresse label sur 3 octet' */
+                    address = -1;
                     for(i=0; i<taille_label; i++){
                         if(strcmp(operande1,e[i].nom_label)==0)
                             address = e[i].valeur_label;
                     }
-                    fprintf(f_hex,"8a%06x\n",address);
+                    if(address!=-1){
+                        fprintf(f_hex,"8a%06x\n",address);
+                    } else {
+                        fprintf(f_hex,"8a%-*s\n",6,operande1);
+                        strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
+                        taille_label_manquant = taille_label_manquant+1;
+                    }
                     break;
                 case BLS:
                     /* bls label */
                     /* 1001 1010 'adresse label sur 3 octet' */
+                    address = -1;
                     for(i=0; i<taille_label; i++){
                         if(strcmp(operande1,e[i].nom_label)==0)
                             address = e[i].valeur_label;
                     }
-                    fprintf(f_hex,"9a%06x\n",address);
+                    if(address!=-1){
+                        fprintf(f_hex,"9a%06x\n",address);
+                    } else {
+                        fprintf(f_hex,"9a%-*s\n",6,operande1);
+                        strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
+                        taille_label_manquant = taille_label_manquant+1;
+                    }
                     break;
                 case BGE:
                     /* bge label */
                     /* 1010 1010 'adresse label sur 3 octet' */
+                    address = -1;
                     for(i=0; i<taille_label; i++){
                         if(strcmp(operande1,e[i].nom_label)==0)
                             address = e[i].valeur_label;
                     }
-                    fprintf(f_hex,"aa%06x\n",address);
+                    if(address!=-1){
+                        fprintf(f_hex,"aa%06x\n",address);
+                    } else {
+                        fprintf(f_hex,"aa%-*s\n",6,operande1);
+                        strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
+                        taille_label_manquant = taille_label_manquant+1;
+                    }
                     break;
                 case BLT:
                     /* blt label */
                     /* 1011 1010 'adresse label sur 3 octet' */
+                    address = -1;
                     for(i=0; i<taille_label; i++){
                         if(strcmp(operande1,e[i].nom_label)==0)
                             address = e[i].valeur_label;
                     }
-                    fprintf(f_hex,"ba%06x\n",address);
+                    if(address!=-1){
+                        fprintf(f_hex,"ba%06x\n",address);
+                    } else {
+                        fprintf(f_hex,"ba%-*s\n",6,operande1);
+                        strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
+                        taille_label_manquant = taille_label_manquant+1;
+                    }
                     break;
                 case BGT:
                     /* bgt label */
                     /* 1100 1010 'adresse label sur 3 octet' */
+                    address = -1;
                     for(i=0; i<taille_label; i++){
                         if(strcmp(operande1,e[i].nom_label)==0)
                             address = e[i].valeur_label;
                     }
-                    fprintf(f_hex,"ca%06x\n",address);
+                    if(address!=-1){
+                        fprintf(f_hex,"ca%06x\n",address);
+                    } else {
+                        fprintf(f_hex,"ca%-*s\n",6,operande1);
+                        strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
+                        taille_label_manquant = taille_label_manquant+1;
+                    }
                     break;
                 case BLE:
                     /* ble label */
                     /* 1101 1010 'adresse label sur 3 octet' */
+                    address = -1;
                     for(i=0; i<taille_label; i++){
                         if(strcmp(operande1,e[i].nom_label)==0)
                             address = e[i].valeur_label;
                     }
-                    fprintf(f_hex,"da%06x\n",address);
+                    if(address!=-1){
+                        fprintf(f_hex,"da%06x\n",address);
+                    } else {
+                        fprintf(f_hex,"da%-*s\n",6,operande1);
+                        strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
+                        taille_label_manquant = taille_label_manquant+1;
+                    }
                     break;
                 case BAL:
                     /* bal label */
                     /* 1110 1010 'adresse label sur 3 octet' */
+                    address = -1;
                     for(i=0; i<taille_label; i++){
                         if(strcmp(operande1,e[i].nom_label)==0)
                             address = e[i].valeur_label;
                     }
-                    fprintf(f_hex,"fa%06x\n",address);
+                    if(address!=-1){
+                        fprintf(f_hex,"fa%06x\n",address);
+                    } else {
+                        fprintf(f_hex,"fa%-*s\n",6,operande1);
+                        strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
+                        taille_label_manquant = taille_label_manquant+1;
+                    }
                     break;
                     
                     
@@ -633,143 +746,265 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
                 case BLEQ:
                     /* bleq label */
                     /* 0000 1011 'adresse label sur 3 octet' */
+                    address = -1;
                     for(i=0; i<taille_label; i++){
                         if(strcmp(operande1,e[i].nom_label)==0)
                             address = e[i].valeur_label;
                     }
-                    fprintf(f_hex,"0b%06x\n",address);
+                    if(address!=-1){
+                        fprintf(f_hex,"0b%06x\n",address);
+                    } else {
+                        fprintf(f_hex,"0b%-*s\n",6,operande1);
+                        strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
+                        taille_label_manquant = taille_label_manquant+1;
+                    }
                     break;
                 case BLNE:
                     /* blne label */
                     /* 0001 1011 'adresse label sur 3 octet' */
+                    address = -1;
                     for(i=0; i<taille_label; i++){
                         if(strcmp(operande1,e[i].nom_label)==0)
                             address = e[i].valeur_label;
                     }
-                    fprintf(f_hex,"1b%06x\n",address);
+                    if(address!=-1){
+                        fprintf(f_hex,"1b%06x\n",address);
+                    } else {
+                        fprintf(f_hex,"1b%-*s\n",6,operande1);
+                        strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
+                        taille_label_manquant = taille_label_manquant+1;
+                    }
                     break;
                 case BLHS:
                     /* blhs label */
                     /* 0010 1011 'adresse label sur 3 octet' */
+                    address = -1;
                     for(i=0; i<taille_label; i++){
                         if(strcmp(operande1,e[i].nom_label)==0)
                             address = e[i].valeur_label;
                     }
-                    fprintf(f_hex,"2b%06x\n",address);
+                    if(address!=-1){
+                        fprintf(f_hex,"2b%06x\n",address);
+                    } else {
+                        fprintf(f_hex,"2b%-*s\n",6,operande1);
+                        strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
+                        taille_label_manquant = taille_label_manquant+1;
+                    }
                     break;
                 case BLLO:
                     /* bllo label */
                     /* 0011 1011 'adresse label sur 3 octet' */
+                    address = -1;
                     for(i=0; i<taille_label; i++){
                         if(strcmp(operande1,e[i].nom_label)==0)
                             address = e[i].valeur_label;
                     }
-                    fprintf(f_hex,"3b%06x\n",address);
+                    if(address!=-1){
+                        fprintf(f_hex,"3b%06x\n",address);
+                    } else {
+                        fprintf(f_hex,"3b%-*s\n",6,operande1);
+                        strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
+                        taille_label_manquant = taille_label_manquant+1;
+                    }
                     break;
                 case BLMI:
                     /* blmi label */
                     /* 0100 1011 'adresse label sur 3 octet' */
+                    address = -1;
                     for(i=0; i<taille_label; i++){
                         if(strcmp(operande1,e[i].nom_label)==0)
                             address = e[i].valeur_label;
                     }
-                    fprintf(f_hex,"4b%06x\n",address);
+                    if(address!=-1){
+                        fprintf(f_hex,"4b%06x\n",address);
+                    } else {
+                        fprintf(f_hex,"4b%-*s\n",6,operande1);
+                        strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
+                        taille_label_manquant = taille_label_manquant+1;
+                    }
                     break;
                 case BLPL:
                     /* blpl label */
                     /* 0101 1011 'adresse label sur 3 octet' */
+                    address = -1;
                     for(i=0; i<taille_label; i++){
                         if(strcmp(operande1,e[i].nom_label)==0)
                             address = e[i].valeur_label;
                     }
-                    fprintf(f_hex,"5b%06x\n",address);
+                    if(address!=-1){
+                        fprintf(f_hex,"5b%06x\n",address);
+                    } else {
+                        fprintf(f_hex,"5b%-*s\n",6,operande1);
+                        strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
+                        taille_label_manquant = taille_label_manquant+1;
+                    }
                     break;
                 case BLVS:
                     /* blvs label */
                     /* 0110 1011 'adresse label sur 3 octet' */
+                    address = -1;
                     for(i=0; i<taille_label; i++){
                         if(strcmp(operande1,e[i].nom_label)==0)
                             address = e[i].valeur_label;
                     }
-                    fprintf(f_hex,"6b%06x\n",address);
+                    if(address!=-1){
+                        fprintf(f_hex,"6b%06x\n",address);
+                    } else {
+                        fprintf(f_hex,"6b%-*s\n",6,operande1);
+                        strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
+                        taille_label_manquant = taille_label_manquant+1;
+                    }
                     break;
                 case BLVC:
                     /* blvc label */
                     /* 0111 1011 'adresse label sur 3 octet' */
+                    address = -1;
                     for(i=0; i<taille_label; i++){
                         if(strcmp(operande1,e[i].nom_label)==0)
                             address = e[i].valeur_label;
                     }
-                    fprintf(f_hex,"7b%06x\n",address);
+                    if(address!=-1){
+                        fprintf(f_hex,"7b%06x\n",address);
+                    } else {
+                        fprintf(f_hex,"7b%-*s\n",6,operande1);
+                        strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
+                        taille_label_manquant = taille_label_manquant+1;
+                    }
                     break;
                 case BLHI:
                     /* blhi label */
                     /* 1000 1011 'adresse label sur 3 octet' */
+                    address = -1;
                     for(i=0; i<taille_label; i++){
                         if(strcmp(operande1,e[i].nom_label)==0)
                             address = e[i].valeur_label;
                     }
-                    fprintf(f_hex,"8b%06x\n",address);
+                    if(address!=-1){
+                        fprintf(f_hex,"8b%06x\n",address);
+                    } else {
+                        fprintf(f_hex,"8b%-*s\n",6,operande1);
+                        strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
+                        taille_label_manquant = taille_label_manquant+1;
+                    }
                     break;
                 case BLLS:
                     /* blls label */
                     /* 1001 1011 'adresse label sur 3 octet' */
+                    address = -1;
                     for(i=0; i<taille_label; i++){
                         if(strcmp(operande1,e[i].nom_label)==0)
                             address = e[i].valeur_label;
                     }
-                    fprintf(f_hex,"9b%06x\n",address);
+                    if(address!=-1){
+                        fprintf(f_hex,"9b%06x\n",address);
+                    } else {
+                        fprintf(f_hex,"9b%-*s\n",6,operande1);
+                        strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
+                        taille_label_manquant = taille_label_manquant+1;
+                    }
                     break;
                 case BLGE:
                     /* blge label */
                     /* 1010 1011 'adresse label sur 3 octet' */
+                    address = -1;
                     for(i=0; i<taille_label; i++){
                         if(strcmp(operande1,e[i].nom_label)==0)
                             address = e[i].valeur_label;
                     }
-                    fprintf(f_hex,"ab%06x\n",address);
+                    if(address!=-1){
+                        fprintf(f_hex,"ab%06x\n",address);
+                    } else {
+                        fprintf(f_hex,"ab%-*s\n",6,operande1);
+                        strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
+                        taille_label_manquant = taille_label_manquant+1;
+                    }
                     break;
                 case BLLT:
                     /* bllt label */
                     /* 1011 1011 'adresse label sur 3 octet' */
+                    address = -1;
                     for(i=0; i<taille_label; i++){
                         if(strcmp(operande1,e[i].nom_label)==0)
                             address = e[i].valeur_label;
                     }
-                    fprintf(f_hex,"bb%06x\n",address);
+                    if(address!=-1){
+                        fprintf(f_hex,"bb%06x\n",address);
+                    } else {
+                        fprintf(f_hex,"bb%-*s\n",6,operande1);
+                        strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
+                        taille_label_manquant = taille_label_manquant+1;
+                    }
                     break;
                 case BLGT:
                     /* blgt label */
                     /* 1100 1011 'adresse label sur 3 octet' */
+                    address = -1;
                     for(i=0; i<taille_label; i++){
                         if(strcmp(operande1,e[i].nom_label)==0)
                             address = e[i].valeur_label;
                     }
-                    fprintf(f_hex,"cb%06x\n",address);
+                    if(address!=-1){
+                        fprintf(f_hex,"cb%06x\n",address);
+                    } else {
+                        fprintf(f_hex,"cb%-*s\n",6,operande1);
+                        strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
+                        taille_label_manquant = taille_label_manquant+1;
+                    }
                     break;
                 case BLLE:
                     /* blle label */
                     /* 1101 1011 'adresse label sur 3 octet' */
+                    address = -1;
                     for(i=0; i<taille_label; i++){
                         if(strcmp(operande1,e[i].nom_label)==0)
                             address = e[i].valeur_label;
                     }
-                    fprintf(f_hex,"db%06x\n",address);
+                    if(address!=-1){
+                        fprintf(f_hex,"db%06x\n",address);
+                    } else {
+                        fprintf(f_hex,"db%-*s\n",6,operande1);
+                        strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
+                        taille_label_manquant = taille_label_manquant+1;
+                    }
                     break;
                 case BLAL:
                     /* blal label */
                     /* 1110 1011 'adresse label sur 3 octet' */
+                    address = -1;
                     for(i=0; i<taille_label; i++){
                         if(strcmp(operande1,e[i].nom_label)==0)
                             address = e[i].valeur_label;
                     }
-                    fprintf(f_hex,"eb%06x\n",address);
+                    if(address!=-1){
+                        fprintf(f_hex,"eb%06x\n",address);
+                    } else {
+                        fprintf(f_hex,"eb%-*s\n",6,operande1);
+                        strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
+                        taille_label_manquant = taille_label_manquant+1;
+                    }
                     break;
             }
             pc++;
         }
     }
     fprintf(f_hex,"fa0000FF\n");
+
+    for(i=0;i<taille_label_manquant;i++){
+        
+        for(j=0; j<taille_label; j++){
+            if(strcmp(e_manquant[i].nom_label,e[j].nom_label)==0)
+                address = e[j].valeur_label;
+        }
+        fseek(f_hex,0,SEEK_SET);
+        while( fgets(instruction,TAILLE_LIGNE,f_hex)){ 
+            if( strstr(instruction,e_manquant[i].nom_label) !=NULL){
+                fseek(f_hex,-9,SEEK_CUR);
+                instruction[2]='\0';
+                fprintf(f_hex,"%s%06x\n",instruction,address);
+            }
+        }
+    }
+    
     return EXIT_SUCCESS;
 }
 
