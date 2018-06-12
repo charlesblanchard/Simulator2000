@@ -28,10 +28,18 @@ int interpreter(Machine *M){
     do{    
         instruction = 0;
         
+    /*int octet1;
+    int octet2;
+    int octet3;
+    int octet4;*/
+    
+        
+        printf("\n%02x %02x %02x %02x\n",M->FLASH[M->REG[PC]],M->FLASH[M->REG[PC]+ 1] ,M->FLASH[M->REG[PC]+ 2] ,M->FLASH[M->REG[PC]+ 3] );
+        
         instruction = instruction + (M->FLASH[M->REG[PC]]) ;
-        instruction = instruction + (M->FLASH[M->REG[PC]] + 1) * pow(2,8);
-        instruction = instruction + (M->FLASH[M->REG[PC]] + 2) * pow(2,16);
-        instruction = instruction + (M->FLASH[M->REG[PC]] + 3) * pow(2,24);
+        instruction = instruction + (M->FLASH[M->REG[PC] + 1]) * pow(2,8);
+        instruction = instruction + (M->FLASH[M->REG[PC] + 2]) * pow(2,16);
+        instruction = instruction + (M->FLASH[M->REG[PC] + 3]) * pow(2,24);
 
     int code = (instruction & ~(0xFE1FFFFF)) / pow(2,20); /*code d'une opération*/
     int psr = (instruction & ~(0xFFEFFFFF)) / pow(2,20); /*bit informant de l'actualisation duPSR*/
@@ -699,7 +707,7 @@ int interpreter(Machine *M){
     
     M->REG[PC] = M->REG[PC] + 0x4;
     
-    }while(0 /*M->REG[PC] != M->REG[LR]*/); 
+    }while(M->REG[PC] != M->REG[LR]); 
     /*while pc ne revoit pas vers la derniere case*/
     
     
