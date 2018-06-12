@@ -28,14 +28,6 @@ int interpreter(Machine *M){
     do{    
         instruction = 0;
         
-    /*int octet1;
-    int octet2;
-    int octet3;
-    int octet4;*/
-    
-        
-        printf("\n%02x %02x %02x %02x\n",M->FLASH[M->REG[PC]],M->FLASH[M->REG[PC]+ 1] ,M->FLASH[M->REG[PC]+ 2] ,M->FLASH[M->REG[PC]+ 3] );
-        
         instruction = instruction + (M->FLASH[M->REG[PC]]) ;
         instruction = instruction + (M->FLASH[M->REG[PC] + 1]) * pow(2,8);
         instruction = instruction + (M->FLASH[M->REG[PC] + 2]) * pow(2,16);
@@ -67,8 +59,6 @@ int interpreter(Machine *M){
     int adress = instruction & ~(0xFFFFF000);
     int l = hex2 & ~(0xE);
     
-    
-    printf("\ninstruction:\t%08x\n",instruction);
     switch (hex1){
         /*mov(reg),mvm(reg),ops(reg),décalages(val),tests(reg)*/
         case 0xE:
@@ -262,7 +252,7 @@ int interpreter(Machine *M){
                 } else {
                     printf("erreur à l'instruction 0x%08x\n",M->REG[PC]);
                     erreur = 1;
-                    M->REG[PC] = M->REG[LR];
+                    M->REG[PC] = 0xFF;
                 }
             }
             
@@ -279,7 +269,7 @@ int interpreter(Machine *M){
                 } else {
                     printf("erreur à l'instruction 0x%08x\n",M->REG[PC]);
                     erreur = 1;
-                    M->REG[PC] = M->REG[LR];
+                    M->REG[PC] = 0xFF;
                 }
             }
             
@@ -509,7 +499,7 @@ int interpreter(Machine *M){
         default:
             printf("erreur à l'instruction 0x%08x\n",M->REG[PC]);
             erreur = 1;
-            M->REG[PC] = M->REG[LR];
+            M->REG[PC] = 0xFF;
             break;
             
         }
@@ -692,7 +682,7 @@ int interpreter(Machine *M){
         default:
             printf("erreur à l'instruction 0x%08x\n",M->REG[PC]);
             erreur = 1;
-            M->REG[PC] = M->REG[LR];
+            M->REG[PC] = 0xFF;
             break;
                 
                 
@@ -700,14 +690,9 @@ int interpreter(Machine *M){
         }
         
     
-        
-        
+    M->REG[PC] = M->REG[PC] + 0x3 ;
     
-    
-    
-    M->REG[PC] = M->REG[PC] + 0x4 ;
-    
-    }while(M->REG[PC] - 0x4  != 0xFF ); 
+    }while(M->REG[PC] - 0x3  != 0xFF ); 
     /*while pc ne revoit pas vers la derniere case*/
     
     
