@@ -34,10 +34,10 @@ int interpreter(Machine *M){
     do{    
         instruction = 0;
         
-        instruction = instruction + (M->FLASH[M->REG[PC]] + 1) * pow(2,24);
-        instruction = instruction + (M->FLASH[M->REG[PC]]) * pow(2,16);
-        instruction = instruction + (M->FLASH[M->REG[PC]] + 3) * pow(2,8);
-        instruction = instruction + (M->FLASH[M->REG[PC]] + 2);
+        instruction = instruction + (M->FLASH[M->REG[PC]]) ;
+        instruction = instruction + (M->FLASH[M->REG[PC]] + 1) * pow(2,8);
+        instruction = instruction + (M->FLASH[M->REG[PC]] + 3) * pow(2,16);
+        instruction = instruction + (M->FLASH[M->REG[PC]] + 2) * pow(2,24);
 
     int code = (instruction & ~(0xFE1FFFFF)) / pow(2,20); /*code d'une opération*/
     int psr = (instruction & ~(0xFFEFFFFF)) / pow(2,20); /*bit informant de l'actualisation duPSR*/
@@ -62,7 +62,7 @@ int interpreter(Machine *M){
     int xxxyy = ((hex5*pow(2,2)) + (hex7 & 0xC));
     int val = (val1 * pow(2,4)) + val2_regv;
     int XYZ = hex8 * pow(2,8) + hex5 * pow(2,4) + hex6;
-    int adress = instruction & ~(0xFF000000);
+    int adress = instruction & ~(0xFFFFF000);
     int l = hex2 & ~(0xE);
     
     
@@ -135,6 +135,17 @@ int interpreter(Machine *M){
                     mvn(M, regd, M->FLASH[val2_regv], psr);
                 }
             }
+            else if (hex3 + hex4 == 0 && hex5){
+                    /*bal*/
+                if (l){
+                    printf("blal 0x%08x\n",adress);
+                    
+                } else {
+                    printf("bal 0x%08x\n",adress);
+                }
+                branch(M, AL, l, adress);   
+            }
+            
             /*ops (reg)*/
             else {
                 switch (code) {
@@ -478,17 +489,34 @@ int interpreter(Machine *M){
         
         case 0x5:
         /*pop*/
-            printf("pop{r%d}\n",regd);
-            pop(M,regd);
+            if (hex3 == 0xF){
+                printf("pop{r%d}\n",regd);
+                pop(M,regd);
+            }
             break;
         
         case 0x4:
         /*push*/
-            printf("psuh{r%d}\n",regd);
-            push(M,regd);
+            if (hex3 == 0xF){
+                printf("psuh{r%d}\n",regd);
+                push(M,regd);
+            }
             break;
             
-        case 0x0:
+        default:
+            printf("erreur à l'instruction 0x%08x\n",M->REG[PC]);
+            erreur = 1;
+            M->REG[PC] = M->REG[LR];
+            break;
+            
+        }
+        
+        
+        /****************************************/
+        /*branchements*/
+        if(hex3 + hex4 == 0){
+            switch(hex1){
+                case 0x0:
         /*beq*/
             if (l){
                 printf("bleq 0x%08x\n",adress);
@@ -535,6 +563,30 @@ int interpreter(Machine *M){
         
             break;
             
+        case 0x4:
+        /*bmi*/
+            if (l){
+                printf("blmi 0x%08x\n",adress);
+                
+            } else {
+                printf("bmi 0x%08x\n",adress);
+            }
+            branch(M, MI, l, adress);   
+        
+            break;
+            
+        case 0x5:
+        /*bpl*/
+            if (l){
+                printf("blpl 0x%08x\n",adress);
+                
+            } else {
+                printf("bpl 0x%08x\n",adress);
+            }
+            branch(M, PL, l, adress);   
+        
+            break;
+            
             
         case 0x6:
         /*bvs*/
@@ -561,6 +613,77 @@ int interpreter(Machine *M){
         
             break;
             
+        case 0x8:
+        /*bhi*/
+            if (l){
+                printf("blhi 0x%08x\n",adress);
+                
+            } else {
+                printf("bhi 0x%08x\n",adress);
+            }
+            branch(M, HI, l, adress);   
+        
+            break;
+        
+        case 0x9:
+        /*bls*/
+            if (l){
+                printf("blls 0x%08x\n",adress);
+                
+            } else {
+                printf("bls 0x%08x\n",adress);
+            }
+            branch(M, LS, l, adress);   
+        
+            break;
+            
+        case 0xA:
+        /*bge*/
+            if (l){
+                printf("blge 0x%08x\n",adress);
+                
+            } else {
+                printf("bge 0x%08x\n",adress);
+            }
+            branch(M, GE, l, adress);   
+        
+            break;
+            
+        case 0xB:
+        /*blt*/
+            if (l){
+                printf("bllt 0x%08x\n",adress);
+                
+            } else {
+                printf("blt 0x%08x\n",adress);
+            }
+            branch(M, LT, l, adress);   
+        
+            break;
+            
+        case 0xC:
+        /*bgt*/
+            if (l){
+                printf("blgt 0x%08x\n",adress);
+                
+            } else {
+                printf("bgt 0x%08x\n",adress);
+            }
+            branch(M, GT, l, adress);   
+        
+            break;
+            
+        case 0xD:
+        /*ble*/
+            if (l){
+                printf("blle 0x%08x\n",adress);
+                
+            } else {
+                printf("ble 0x%08x\n",adress);
+            }
+            branch(M, LE, l, adress);   
+        
+            break;
             
             
         default:
@@ -568,8 +691,15 @@ int interpreter(Machine *M){
             erreur = 1;
             M->REG[PC] = M->REG[LR];
             break;
+                
+                
+            }
+        }
         
-    }
+    
+        
+        
+    
     
     
     M->REG[PC] = M->REG[PC] + 0x4;
