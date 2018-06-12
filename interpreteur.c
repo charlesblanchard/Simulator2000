@@ -58,6 +58,9 @@ int interpreter(Machine *M){
     int XYZ = hex8 * pow(2,8) + hex5 * pow(2,4) + hex6;
     int adress = instruction & ~(0xFFFFF000);
     int l = hex2 & ~(0xE);
+   
+   
+   
     
     switch (hex1){
         /*mov(reg),mvm(reg),ops(reg),décalages(val),tests(reg)*/
@@ -80,7 +83,7 @@ int interpreter(Machine *M){
             }
             else if (rego_z == 0xF){
                 /*décalages (val)*/
-                if(hex5 + val1 != 0xF) {
+                if(hex5 + val1 != 0x0) {
                     switch (pp) {
                         case(0x0):
                             if (psr)
@@ -690,9 +693,9 @@ int interpreter(Machine *M){
         }
         
     
-    M->REG[PC] = M->REG[PC] + 0x3 ;
+    M->REG[PC] = M->REG[PC] + 0x4 ;
     
-    }while(M->REG[PC] - 0x3  != 0xFF ); 
+    }while(M->REG[PC] - 0x4  != 0xFF ); 
     /*while pc ne revoit pas vers la derniere case*/
     
     
