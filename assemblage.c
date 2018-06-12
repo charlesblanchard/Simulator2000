@@ -733,9 +733,9 @@ int lecture_fichier(FILE* f_s, FILE* f_hex){
                             address = e[i].valeur_label;
                     }
                     if(address!=-1){
-                        fprintf(f_hex,"fa%06x\n",address);
+                        fprintf(f_hex,"ea%06x\n",address);
                     } else {
-                        fprintf(f_hex,"fa%-*s\n",6,operande1);
+                        fprintf(f_hex,"ea%-*s\n",6,operande1);
                         strcpy( (e_manquant[taille_label_manquant]).nom_label, operande1);
                         taille_label_manquant = taille_label_manquant+1;
                     }
