@@ -16,7 +16,7 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
     
     uint32_t instruction = 0x0;
     /*lorsqu'on aura mis en place un système d'erreurs*/
-    int erreur = 0;
+
     /*[ATTENTION] les opérations de décalages sous la forme de "<<" ou "">>" s'appliquent uniquement à des nombres booleans. Pour faire un décalage d'un nombre entier il faut  effectuer les opperations suivantes :
      * << n correspond à * 2^(n)
      * >> n correspond à / 2^(n)
@@ -693,12 +693,7 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
         
             break;
             
-            
-        default:
-            sprintf(Programme[ M->REG[PC]/4 ],"erreur at 0x%08x",M->REG[PC]);
-            erreur = 1;
-            M->REG[PC] = 0xFF;
-            break;
+
                 
                 
             }
