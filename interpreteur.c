@@ -186,7 +186,7 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
                             else
                                 sprintf(Programme[ M->REG[PC]/4 ],"add r%d, r%d, r%d",regd, rego_z,val2_regv);
                             
-                            add(M, M->FLASH[regd], M->FLASH[rego_z], M->FLASH[val2_regv], psr);
+                            add(M, regd, M->FLASH[rego_z], M->FLASH[val2_regv], psr);
                             break;
                         
                         case(0xA):
