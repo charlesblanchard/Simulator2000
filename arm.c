@@ -164,6 +164,7 @@ void rsb(Machine *M, int8_t rd, int32_t op1, int32_t op2, bool s){
 
 /* RD = (OP1 * OP2)%2^32 */
 void mul(Machine *M, int8_t rd, int32_t op1, int32_t op2){
+    printf("op1= %i - op2 =%i\n",op1,op2);
     M->REG[rd] = (op1 * op2)%((int32_t)pow(2,32));
 }
 
