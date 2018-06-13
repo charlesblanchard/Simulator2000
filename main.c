@@ -41,6 +41,9 @@ int main(int argc, char *argv[]){
             interpreter(m,Programme,1);
         }
     }
+    
+    printf("\nPROGRAMME TERMINÉ\n\n");
+    
     free(m);
     return 0;
 }

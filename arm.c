@@ -100,8 +100,11 @@ void eor(Machine *M, int8_t rd, int32_t op1, int32_t op2, bool s){
 
 /* RD = (OP1 + OP2)%2^32 */
 void add(Machine *M, int8_t rd, int32_t op1, int32_t op2, bool s){
-    M->REG[rd] = (op1 + op2)%((int32_t)pow(2,32));
+    /*M->REG[rd] = (op1 + op2)%((int32_t)pow(2,32));*/
+    printf("op1= %i - op2 =%i\n",op1,op2);
+    M->REG[rd] = (op1 + op2);
     int64_t res = op1 + op2;
+    
     if(s){
         M->PSR[Z] = res==0;
         M->PSR[N] = res<0;
@@ -292,6 +295,7 @@ void branch(Machine *M, int8_t cond, int8_t l, int8_t adresse){
     if(l==1){
         M->REG[LR] = M->REG[PC]+4;
     }
+    adresse *= 4;
     switch(cond){
         case EQ:
             if(M->PSR[Z]==1)
