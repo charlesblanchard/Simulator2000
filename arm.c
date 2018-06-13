@@ -297,6 +297,7 @@ void branch(Machine *M, int8_t cond, int8_t l, int8_t adresse){
         M->REG[LR] = M->REG[PC]+4;
     }
     adresse *= 4;
+    adresse -= 4;
     switch(cond){
         case EQ:
             if(M->PSR[Z]==1)

@@ -421,6 +421,7 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
                             
                             sprintf(Programme[ M->REG[PC]/4 ],"mul r%d, r%d, r%d",regd, rego_z, val2_regv);
                             mul(M, regd,M->REG[rego_z], M->REG[val2_regv]);
+                            printf("rego_z %x, reg(reo_z) %x, val2_regv %x, reg(val2_regv) %x\n",rego_z, M->REG[rego_z], val2_regv,M->REG[val2_regv]);
                         }
                     }
                 }
