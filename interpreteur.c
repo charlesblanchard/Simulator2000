@@ -72,7 +72,7 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
                                 else
                                     sprintf(Programme[ M->REG[PC]/4 ],"lsl r%d, r%d, #0x%x",regd, val2_regv,xxxyy);
                                 
-                                lsl(M, regd,M->FLASH[val2_regv],xxxyy, psr);
+                                lsl(M, regd,M->REG[val2_regv],xxxyy, psr);
                                 break;
                             
                             case(0x1):
@@ -81,7 +81,7 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
                                 else
                                     sprintf(Programme[ M->REG[PC]/4 ],"lsr r%d, r%d, #0x%x",regd, val2_regv,xxxyy);
                                 
-                                lsr(M, regd,M->FLASH[val2_regv],xxxyy, psr);
+                                lsr(M, regd,M->REG[val2_regv],xxxyy, psr);
                                 break;
                             
                             case(0x2):
@@ -90,7 +90,7 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
                                 else
                                     sprintf(Programme[ M->REG[PC]/4 ],"asr r%d, r%d, #0x%x",regd, val2_regv,xxxyy);
                                 
-                                asr(M, regd,M->FLASH[val2_regv],xxxyy, psr);
+                                asr(M, regd,M->REG[val2_regv],xxxyy, psr);
                                 break;
                         }
                     } else {
@@ -100,7 +100,7 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
                         else
                             sprintf(Programme[ M->REG[PC]/4 ],"mvn r%d, r%d",regd, val2_regv);
                         
-                        mvn(M, regd, M->FLASH[val2_regv], psr);
+                        mvn(M, regd, M->REG[val2_regv], psr);
                     }
                     
                 } else if (hex3 == 0x4 || hex3 == 0x5){
@@ -112,7 +112,7 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
                     else
                         sprintf(Programme[ M->REG[PC]/4 ],"mov r%d, r%d",regd, val2_regv);
                     
-                    mov(M, regd, M->FLASH[val2_regv], psr);
+                    mov(M, regd, M->REG[val2_regv], psr);
                 
                 } 
                 
@@ -124,12 +124,12 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
                     switch (code){
                         case(0x0):
                             sprintf(Programme[ M->REG[PC]/4 ],"tst r%d,r%d",rego_z,val2_regv);
-                            tst(M, M->FLASH[rego_z], M->FLASH[val2_regv]);
+                            tst(M, M->REG[rego_z], M->REG[val2_regv]);
                             break;
                         
                         case(0xD):
                             sprintf(Programme[ M->REG[PC]/4 ],"cmp r%d,r%d",rego_z,val2_regv);
-                            cmp(M, M->FLASH[rego_z],  M->FLASH[val2_regv]);
+                            cmp(M, M->REG[rego_z],  M->REG[val2_regv]);
                             break;
                     }
                 } else {
@@ -142,7 +142,7 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
                             else
                                 sprintf(Programme[ M->REG[PC]/4 ],"and r%d, r%d, r%d",regd, rego_z,val2_regv);
                             
-                            and(M, regd, M->FLASH[rego_z], M->FLASH[val2_regv], psr);
+                            and(M, regd, M->REG[rego_z], M->REG[val2_regv], psr);
                             break;
                         
                         case(0x1):
@@ -151,7 +151,7 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
                             else
                                 sprintf(Programme[ M->REG[PC]/4 ],"bic r%d, r%d, r%d",regd, rego_z,val2_regv);
                             
-                            bic(M, regd, M->FLASH[rego_z], M->FLASH[val2_regv], psr);
+                            bic(M, regd, M->REG[rego_z], M->REG[val2_regv], psr);
                             break;
                         
                         case(0x2):
@@ -160,7 +160,7 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
                             else
                                 sprintf(Programme[ M->REG[PC]/4 ],"orr r%d, r%d, r%d",regd, rego_z,val2_regv);
                         
-                            orr(M, regd, M->FLASH[rego_z], M->FLASH[val2_regv], psr);
+                            orr(M, regd, M->REG[rego_z], M->REG[val2_regv], psr);
                             break;
                         
                         case(0x3):
@@ -168,7 +168,7 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
                                 sprintf(Programme[ M->REG[PC]/4 ],"orns r%d, r%d, r%d",regd, rego_z,val2_regv);
                             else
                                 sprintf(Programme[ M->REG[PC]/4 ],"orn r%d, r%d, r%d",regd, rego_z,val2_regv);
-                            orn(M, regd, M->FLASH[rego_z], M->FLASH[val2_regv], psr);
+                            orn(M, regd, M->REG[rego_z], M->REG[val2_regv], psr);
                             break;
                         
                         case(0x4):
@@ -177,7 +177,7 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
                             else
                                 sprintf(Programme[ M->REG[PC]/4 ],"eor r%d, r%d, r%d",regd, rego_z,val2_regv);
                             
-                            eor(M, regd, M->FLASH[rego_z], M->FLASH[val2_regv], psr);
+                            eor(M, regd, M->REG[rego_z], M->REG[val2_regv], psr);
                             break;
                         
                         case(0x8):
@@ -186,7 +186,8 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
                             else
                                 sprintf(Programme[ M->REG[PC]/4 ],"add r%d, r%d, r%d",regd, rego_z,val2_regv);
                             
-                            add(M, regd, M->FLASH[rego_z], M->FLASH[val2_regv], psr);
+                            add(M, regd, M->REG[rego_z], M->REG[val2_regv], psr);
+                            printf("val2_regv %x, reg(val2_regv) %x\n",val2_regv,M->REG[val2_regv]);
                             break;
                         
                         case(0xA):
@@ -195,7 +196,7 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
                             else
                                 sprintf(Programme[ M->REG[PC]/4 ],"adc r%d, r%d, r%d",regd, rego_z,val2_regv);
                             
-                            adc(M, regd, M->FLASH[rego_z], M->FLASH[val2_regv], psr);
+                            adc(M, regd, M->REG[rego_z], M->REG[val2_regv], psr);
                             break;
                         
                         case(0xB):
@@ -204,7 +205,7 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
                             else
                                 sprintf(Programme[ M->REG[PC]/4 ],"sbc r%d, r%d, r%d",regd, rego_z,val2_regv);
                             
-                            sbc(M, regd, M->FLASH[rego_z], M->FLASH[val2_regv], psr);
+                            sbc(M, regd, M->REG[rego_z], M->REG[val2_regv], psr);
                             break;
                     
                         case(0xD):
@@ -213,7 +214,7 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
                             else
                                 sprintf(Programme[ M->REG[PC]/4 ],"sub r%d, r%d, r%d",regd, rego_z,val2_regv);
                             
-                            sub(M, regd, M->FLASH[rego_z], M->FLASH[val2_regv], psr);
+                            sub(M, regd, M->REG[rego_z], M->REG[val2_regv], psr);
                             break;
                         
                         case(0xE):
@@ -221,7 +222,7 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
                                 sprintf(Programme[ M->REG[PC]/4 ],"rsbs r%d, r%d, r%d",regd, rego_z,val2_regv);
                             else
                                 sprintf(Programme[ M->REG[PC]/4 ],"rsbs r%d, r%d, r%d",regd, rego_z,val2_regv);
-                            rsb(M, regd, M->FLASH[rego_z], M->FLASH[val2_regv], psr);
+                            rsb(M, regd, M->REG[rego_z], M->REG[val2_regv], psr);
                             break;
                     }
                 }
@@ -278,11 +279,11 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
                         switch (code){
                             case(0x0):
                                 sprintf(Programme[ M->REG[PC]/4 ],"tst r%d, #0x%08x", rego_z, val);
-                                tst(M, M->FLASH[rego_z], val);
+                                tst(M, M->REG[rego_z], val);
                                 break;
                             case(0xD):
                                 sprintf(Programme[ M->REG[PC]/4 ],"cmp r%d, #0x%08x", rego_z, val);
-                                cmp(M, M->FLASH[rego_z], val);
+                                cmp(M, M->REG[rego_z], val);
                                 break;
                         }
                     } else {
@@ -294,7 +295,7 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
                                 else
                                     sprintf(Programme[ M->REG[PC]/4 ],"and r%d, r%d, #0x%08x",regd, rego_z, val);
                                 
-                                and(M, regd, M->FLASH[rego_z], val, psr);
+                                and(M, regd, M->REG[rego_z], val, psr);
                                 break;
                             
                             case(0x1):
@@ -303,7 +304,7 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
                                 else
                                     sprintf(Programme[ M->REG[PC]/4 ],"bic r%d, r%d, #0x%08x",regd, rego_z, val);
                                 
-                                bic(M, regd, M->FLASH[rego_z], val, psr);
+                                bic(M, regd, M->REG[rego_z], val, psr);
                                 break;
                             
                             case(0x2):
@@ -312,7 +313,7 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
                                 else
                                     sprintf(Programme[ M->REG[PC]/4 ],"orr r%d, r%d, #0x%08x",regd, rego_z, val);
                                 
-                                orr(M, regd, M->FLASH[rego_z], val, psr);
+                                orr(M, regd, M->REG[rego_z], val, psr);
                                 break;
                             
                             case(0x3):
@@ -321,7 +322,7 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
                                 else
                                     sprintf(Programme[ M->REG[PC]/4 ],"orn r%d, r%d, #0x%08x",regd, rego_z, val);
                                 
-                                orn(M, regd, M->FLASH[rego_z], val, psr);
+                                orn(M, regd, M->REG[rego_z], val, psr);
                                 break;
                             
                             case(0x4):
@@ -330,7 +331,7 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
                                 else
                                     sprintf(Programme[ M->REG[PC]/4 ],"eor r%d, r%d, #0x%08x",regd, rego_z, val);
                                 
-                                eor(M, regd, M->FLASH[rego_z], val, psr);
+                                eor(M, regd, M->REG[rego_z], val, psr);
                                 break;
                             
                             case(0x8):
@@ -339,7 +340,7 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
                                 else
                                     sprintf(Programme[ M->REG[PC]/4 ],"add r%d, r%d, #0x%08x",regd, rego_z, val);
                                 
-                                add(M, regd, M->FLASH[rego_z], val, psr);
+                                add(M, regd, M->REG[rego_z], val, psr);
                                 break;
                             
                             case(0xA):
@@ -348,7 +349,7 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
                                 else
                                     sprintf(Programme[ M->REG[PC]/4 ],"adc r%d, r%d, #0x%08x",regd, rego_z, val);
                                 
-                                adc(M, regd, M->FLASH[rego_z], val, psr);
+                                adc(M, regd, M->REG[rego_z], val, psr);
                                 break;
                             
                             case(0xB):
@@ -357,7 +358,7 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
                                 else
                                     sprintf(Programme[ M->REG[PC]/4 ],"sbc r%d, r%d, #0x%08x",regd, rego_z, val);
                                 
-                                sbc(M, regd, M->FLASH[rego_z], val, psr);
+                                sbc(M, regd, M->REG[rego_z], val, psr);
                                 break;
                         
                             case(0xD):
@@ -366,7 +367,7 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
                                 else
                                     sprintf(Programme[ M->REG[PC]/4 ],"sub r%d, r%d, #0x%08x",regd, rego_z, val);
                                 
-                                sub(M, regd, M->FLASH[rego_z], val, psr);
+                                sub(M, regd, M->REG[rego_z], val, psr);
                                 break;
                             
                             case(0xE):
@@ -375,7 +376,7 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
                                 else
                                     sprintf(Programme[ M->REG[PC]/4 ],"rsb r%d, r%d, #0x%08x",regd, rego_z, val);
                                 
-                                rsb(M, regd, M->FLASH[rego_z], val, psr);
+                                rsb(M, regd, M->REG[rego_z], val, psr);
                                 break;
                         }
                     }
@@ -393,7 +394,7 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
                                     else
                                         sprintf(Programme[ M->REG[PC]/4 ],"lsl r%d, r%d, r%d",regd, rego_z, val2_regv);
                                     
-                                    lsl(M, regd, M->FLASH[rego_z],M->FLASH[val2_regv],s);
+                                    lsl(M, regd, M->REG[rego_z],M->REG[val2_regv],s);
                                     break;
                                 case 0x1:
                                     if (s)
@@ -401,7 +402,7 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
                                     else
                                         sprintf(Programme[ M->REG[PC]/4 ],"lsr r%d, r%d, r%d",regd, rego_z, val2_regv);                        
                                     
-                                    lsr(M, regd, M->FLASH[rego_z],M->FLASH[val2_regv],s);
+                                    lsr(M, regd, M->REG[rego_z],M->REG[val2_regv],s);
                                     break;
                                 case 0x2:
                                     if (s)
@@ -410,7 +411,7 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
                                         sprintf(Programme[ M->REG[PC]/4 ],"asr r%d, r%d, r%d",regd, rego_z, val2_regv);
                                     
                                     sprintf(Programme[ M->REG[PC]/4 ],"asr r%d, r%d, r%d",regd, rego_z, val2_regv);
-                                    asr(M, regd, M->FLASH[rego_z],M->FLASH[val2_regv],s);
+                                    asr(M, regd, M->REG[rego_z],M->REG[val2_regv],s);
                                     break;
                             }
                         }
@@ -419,7 +420,7 @@ int interpreter(Machine *M, char Programme[64][30], int8_t pas_a_pas){
                             /*mul(reg)*/
                             
                             sprintf(Programme[ M->REG[PC]/4 ],"mul r%d, r%d, r%d",regd, rego_z, val2_regv);
-                            mul(M, regd,M->FLASH[rego_z], M->FLASH[val2_regv]);
+                            mul(M, regd,M->REG[rego_z], M->REG[val2_regv]);
                         }
                     }
                 }
